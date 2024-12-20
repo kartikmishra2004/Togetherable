@@ -1,12 +1,9 @@
-import React, { useState } from 'react'
-// import { getDatabase, ref, set } from "firebase/database";
-import { app } from './firebase.js'
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'
-
-// const db = getDatabase(app);
-const auth = getAuth(app);
+import React, { useState } from 'react';
+import { useFirebase } from './context/firebase';
 
 const App = () => {
+
+  const firebase = useFirebase()
 
   const [formData, setFormData] = useState({
     email: '',
@@ -22,18 +19,18 @@ const App = () => {
     })
   }
 
-  const signupUser = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    createUserWithEmailAndPassword(auth, formData.email, formData.password)
-      .then((response) => console.log(response));
-
+    firebase.signupWithEmailAndPassword(formData.email, formData.password)
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
   }
 
   return (
     <div className="flex flex-col items-center justify-center h-screen font-sans">
       <h2 className="mb-6 text-2xl font-semibold">User Information Form</h2>
       <form
-        onSubmit={signupUser}
+        onSubmit={handleSubmit}
         className="flex flex-col gap-4 w-72"
       >
         <input
