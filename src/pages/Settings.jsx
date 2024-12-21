@@ -1,8 +1,8 @@
-import React from 'react';
+import React from 'react'
 import { Navigate } from 'react-router-dom';
 import { useFirebase } from '../context/firebase';
 
-const Profile = () => {
+const Settings = () => {
 
   const { user } = useFirebase();
 
@@ -11,9 +11,9 @@ const Profile = () => {
   }
   return (
     <div>
-      Profile
+      Settings
     </div>
   )
 }
 
-export default Profile
+export default Settings
