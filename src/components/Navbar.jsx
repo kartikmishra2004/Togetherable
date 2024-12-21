@@ -71,7 +71,7 @@ const Navbar = () => {
                         </>
                     )}
                 </nav>
-                <div onClick={handleMenu} className="flex gap-3 items-center cursor-pointer">
+                <div onClick={handleMenu} className={`${user === null ? 'hidden' : 'flex'} gap-3 items-center cursor-pointer`}>
                     <img className="w-5 h-5 opacity-80" src={gear} alt="" />
                 </div>
             </div>
@@ -81,7 +81,7 @@ const Navbar = () => {
                 <div className={`w-full ${menu ? 'flex' : 'hidden'}  justify-end fixed md:px-52`}>
                     <div
                         tabIndex="0"
-                        className={`z-[1] border border-zinc-800 p-2 shadow bg-secondary rounded-md w-100 my-2`}
+                        className={`z-[1] border border-zinc-800 p-2 shadow bg-secondary rounded-lg w-100 my-2`}
                     >
                         <div className="rounded-lg bg-base-300 p-3 drop-shadow-xl divide-y divide-[#989898]">
                             <div className="flex space-x-4 items-center p-4">
@@ -129,7 +129,7 @@ const Navbar = () => {
                                             handleMenu();
                                         }}
                                         className={
-                                            'mr-5 rounded-md px-2 py-1 text-red-400 text-center justify-center w-full'
+                                            'mr-5 rounded-lg px-2 py-1 text-red-400 text-center justify-center w-full'
                                         }
                                     >
                                         Logout

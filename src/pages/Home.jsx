@@ -1,5 +1,5 @@
 import React from 'react';
-// import unity from '../assets/unity.jpg'
+import unity from '../assets/unity.jpg'
 import { Link } from 'react-router-dom';
 import { useFirebase } from '../context/firebase.jsx'
 
@@ -12,7 +12,7 @@ const Home = () => {
       <section class="text-primary body-font px-52 font-main">
         <div class="container mx-auto flex px-5 py-44 md:flex-row flex-col items-center">
           <div class="lg:max-w-lg lg:w-full md:w-1/2 w-5/6 mb-10 md:mb-0">
-            <img class="object-cover object-center rounded-lg" alt="hero" src='https://dummyimage.com/720x600'/>
+            <img class="object-cover object-center rounded-lg" alt="hero" src={unity}/>
           </div>
           <div class="lg:flex-grow md:w-1/2 lg:pl-24 md:pl-16 flex flex-col md:items-start md:text-left items-center text-center">
             <h1 class="title-font sm:text-4xl text-3xl mb-4 font-bold">Empowering Lives,
