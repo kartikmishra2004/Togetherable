@@ -44,7 +44,7 @@ const Navbar = () => {
                     <img className="w-8" src={logo} alt="logo" />
                     <span className="ml-2 text-primary text-2xl font-logo">Togetherable</span>
                 </Link>
-                <nav className="md:mr-auto md:ml-10 md:py-1 md:pl-10 md:border-l md:border-gray-400 md:flex hidden flex-wrap items-center text-base justify-center gap-10">
+                <nav className="md:mr-auto md:ml-10 md:py-1 md:pl-10 md:border-l md:border-gray-400 lg:flex hidden flex-wrap items-center text-base justify-center gap-10">
                     <Link to={'/'} className={`mr-5 ${isActive('/') ? `text-primary` : ''}`}>
                         Home
                     </Link>
