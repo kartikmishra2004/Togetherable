@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import logo from '../assets/logo.png';
 import { useFirebase } from '../context/firebase';
 import { signOut } from 'firebase/auth';
+import gear from '../assets/gear.png'
 
 const Navbar = () => {
     const location = useLocation();
@@ -11,10 +12,16 @@ const Navbar = () => {
 
     const { user, firebaseAuth } = useFirebase();
 
+    const [menu, setMenu] = useState(false);
+
+    const handleMenu = () => {
+        setMenu(!menu);
+    }
+
     return (
         <header className="text-gray-500 body-font font-main">
-            <div className="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
-                <Link to={'/'} className="flex justify-center title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
+            <div className="container mx-auto flex flex-wrap p-5 flex-row justify-between xl:px-52 items-center">
+                <Link to={'/'} className="flex justify-center title-font font-medium items-center text-gray-900 md:mb-0">
                     <img className='w-8' src={logo} alt="logo" />
                     <span className="ml-2 text-primary text-2xl font-logo">Togetherable</span>
                 </Link>
@@ -52,14 +59,41 @@ const Navbar = () => {
                         </>)}
 
                 </nav>
-
-                {user === null ? '' : (<button
-                    onClick={() => signOut(firebaseAuth)}
-                    className={"mr-5 rounded-md px-2 py-1 text-primary"}>
-                    Logout
-                </button>)}
+                <div onClick={handleMenu} className='flex gap-3 items-center cursor-pointer'>
+                    <img className='w-5 h-5 opacity-80' src={gear} alt="" />
+                </div>
             </div>
-        </header>
+            {user === null ? '' : (
+                <div className={`w-full ${menu ? 'flex' : 'hidden'}  justify-end fixed px-4`}>
+                    <div tabIndex="0" className={`z-[1] border border-zinc-800 p-2 shadow bg-secondary rounded-md w-100`}>
+                        <div className="rounded-lg bg-base-300 p-3 drop-shadow-xl divide-y divide-[#989898]">
+                            <div className="flex space-x-4 items-center p-4">
+                                <div className="flex mr-auto items-center space-x-4">
+                                    <img src={user.photoURL ? user.photoURL : 'https://res.cloudinary.com/dlwudcsu1/image/upload/v1723743051/Picsart_24-08-15_23-00-10-662_bix7iy.png'} alt="Name" className="w-10 h-10 shrink-0 rounded-full" />
+                                    <div className="space-y-2 flex flex-col flex-1 truncate">
+                                        <p className="font-normal text-base leading-tight truncate">{user.email}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div aria-label="navigation" className="py-2">
+                                <nav className="grid gap-4 py-3 px-2">
+                                    <Link onClick={handleMenu} to={'/'}>Home</Link>
+                                    <Link onClick={handleMenu} to={'/about'}>About</Link>
+                                    <Link onClick={handleMenu} to={'/profile'}>Profile</Link>
+                                    <Link onClick={handleMenu} to={'/settings'}>Settings</Link>
+                                </nav>
+                            </div>
+                            <div className="pt-2">
+                                {user === null ? '' : (<button
+                                    onClick={() => {signOut(firebaseAuth); handleMenu()}}
+                                    className={"mr-5 rounded-md px-2 py-1 text-red-400"}>
+                                    Logout
+                                </button>)}
+                            </div>
+                        </div>
+                    </div>
+                </div>)}
+        </header >
     );
 }
 
