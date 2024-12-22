@@ -21,7 +21,7 @@ const Home = () => {
   }, [unity, call]);
 
   return (
-    <main className='h-[200vh]'>
+    <main className='h-[250vh]'>
       <section className="text-primary body-font lg:px-52 font-main">
         <div className="container mx-auto flex px-5 lg:py-44 py-32 md:flex-row flex-col items-center">
           <div className="lg:max-w-lg lg:w-full md:w-1/2 w-5/6 mb-10 md:mb-0 lg:block hidden">
@@ -50,7 +50,7 @@ const Home = () => {
               </h1>}
             <p className="mb-8 leading-relaxed text-gray-400">A safe space for individuals with diverse abilities to connect, share their journeys, and support each other. Join a community that thrives on empathy, empowerment, and inclusivity.</p>
             <div className="flex lg:flex-row flex-col lg:gap-0 gap-5 justify-center">
-              <Link to={user === null ? '/login' : '/communities'} className="inline-flex text-white bg-main border-0 py-2 px-6 focus:outline-none rounded-lg lg:text-lg">Join the Community</Link>
+              <Link to={user === null ? '/login' : '/communities'} className="inline-flex text-white bg-main border-0 hover:bg-[#9036c8] py-2 px-6 focus:outline-none rounded-lg lg:text-lg">Join the Community</Link>
               <Link to={'/about'} className="lg:ml-4 flex justify-center lg:inline-flex text-center text-gray-700 bg-gray-100 border-0 py-2 px-6 focus:outline-none hover:bg-gray-200 rounded-lg lg:text-lg">Learn More</Link>
             </div>
           </div>
@@ -64,9 +64,9 @@ const Home = () => {
               <div className="h-full w-6 absolute inset-0 flex items-center justify-center">
                 <div className="h-full w-1 bg-gray-200 pointer-events-none"></div>
               </div>
-              <div className="flex-shrink-0 w-6 h-6 rounded-full mt-10 sm:mt-0 inline-flex items-center justify-center bg-indigo-500 text-white relative z-10 title-font font-medium text-sm">1</div>
+              <div className="flex-shrink-0 w-6 h-6 rounded-full mt-10 sm:mt-0 inline-flex items-center justify-center bg-main text-white relative z-10 title-font font-medium text-sm">1</div>
               <div className="flex-grow md:pl-8 pl-6 flex sm:items-center items-start flex-col sm:flex-row">
-                <Link to={user === null ? '/login' : '/profile'} className="flex-shrink-0 w-24 h-24 bg-indigo-100 text-indigo-500 rounded-full inline-flex items-center justify-center cursor-pointer">
+                <Link to={user === null ? '/login' : '/profile'} className="flex-shrink-0 w-24 h-24 bg-indigo-100 text-main rounded-full inline-flex items-center justify-center cursor-pointer">
                   <FaRegUser size={40} />
                 </Link>
                 <div className="flex-grow sm:pl-6 mt-6 sm:mt-0">
@@ -79,9 +79,9 @@ const Home = () => {
               <div className="h-full w-6 absolute inset-0 flex items-center justify-center">
                 <div className="h-full w-1 bg-gray-200 pointer-events-none"></div>
               </div>
-              <div className="flex-shrink-0 w-6 h-6 rounded-full mt-10 sm:mt-0 inline-flex items-center justify-center bg-indigo-500 text-white relative z-10 title-font font-medium text-sm">2</div>
+              <div className="flex-shrink-0 w-6 h-6 rounded-full mt-10 sm:mt-0 inline-flex items-center justify-center bg-main text-white relative z-10 title-font font-medium text-sm">2</div>
               <div className="flex-grow md:pl-8 pl-6 flex sm:items-center items-start flex-col sm:flex-row">
-                <Link to={user === null ? '/login' : '/communities'} className="flex-shrink-0 w-24 h-24 bg-indigo-100 text-indigo-500 rounded-full inline-flex items-center justify-center cursor-pointer">
+                <Link to={user === null ? '/login' : '/communities'} className="flex-shrink-0 w-24 h-24 bg-indigo-100 text-main rounded-full inline-flex items-center justify-center cursor-pointer">
                   <svg fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-12 h-12" viewBox="0 0 24 24">
                     <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
                   </svg>
@@ -96,9 +96,9 @@ const Home = () => {
               <div className="h-full w-6 absolute inset-0 flex items-center justify-center">
                 <div className="h-full w-1 bg-gray-200 pointer-events-none"></div>
               </div>
-              <div className="flex-shrink-0 w-6 h-6 rounded-full mt-10 sm:mt-0 inline-flex items-center justify-center bg-indigo-500 text-white relative z-10 title-font font-medium text-sm">3</div>
+              <div className="flex-shrink-0 w-6 h-6 rounded-full mt-10 sm:mt-0 inline-flex items-center justify-center bg-main text-white relative z-10 title-font font-medium text-sm">3</div>
               <div className="flex-grow md:pl-8 pl-6 flex sm:items-center items-start flex-col sm:flex-row">
-                <Link to={user === null ? '/login' : '/explore'} className="flex-shrink-0 w-24 h-24 bg-indigo-100 text-indigo-500 rounded-full inline-flex items-center justify-center cursor-pointer">
+                <Link to={user === null ? '/login' : '/explore'} className="flex-shrink-0 w-24 h-24 bg-indigo-100 text-main rounded-full inline-flex items-center justify-center cursor-pointer">
                   <PiPlugsConnectedBold size={40} />
                 </Link>
                 <div className="flex-grow sm:pl-6 mt-6 sm:mt-0">
@@ -111,9 +111,9 @@ const Home = () => {
               <div className="h-full w-6 absolute inset-0 flex items-center justify-center">
                 <div className="h-full w-1 bg-gray-200 pointer-events-none"></div>
               </div>
-              <div className="flex-shrink-0 w-6 h-6 rounded-full mt-10 sm:mt-0 inline-flex items-center justify-center bg-indigo-500 text-white relative z-10 title-font font-medium text-sm">4</div>
+              <div className="flex-shrink-0 w-6 h-6 rounded-full mt-10 sm:mt-0 inline-flex items-center justify-center bg-main text-white relative z-10 title-font font-medium text-sm">4</div>
               <div className="flex-grow md:pl-8 pl-6 flex sm:items-center items-start flex-col sm:flex-row">
-                <Link to={user === null ? '/login' : '/explore'} className="flex-shrink-0 w-24 h-24 bg-indigo-100 text-indigo-500 rounded-full inline-flex items-center justify-center cursor-pointer">
+                <Link to={user === null ? '/login' : '/explore'} className="flex-shrink-0 w-24 h-24 bg-indigo-100 text-main rounded-full inline-flex items-center justify-center cursor-pointer">
                   <TbCirclesRelation size={40} />
                 </Link>
                 <div className="flex-grow sm:pl-6 mt-6 sm:mt-0">

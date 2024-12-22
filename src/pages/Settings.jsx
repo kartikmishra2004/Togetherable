@@ -10,7 +10,7 @@ const Settings = () => {
     return <Navigate to={'/login'} />
   }
   return (
-    <div>
+    <div className='w-full h-screen'>
       Settings
     </div>
   )

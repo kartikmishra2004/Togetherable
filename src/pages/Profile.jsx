@@ -10,7 +10,7 @@ const Profile = () => {
     return <Navigate to={'/login'} />
   }
   return (
-    <div>
+    <div className='w-full h-screen'>
       Profile
     </div>
   )

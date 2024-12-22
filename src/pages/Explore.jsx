@@ -11,7 +11,7 @@ const Explore = () => {
   }
 
   return (
-    <div>
+    <div className='w-full h-screen'>
       Explore
     </div>
   )

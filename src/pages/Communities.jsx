@@ -11,7 +11,7 @@ const Communities = () => {
   }
 
   return (
-    <div>
+    <div className='w-full h-screen'>
       Communities
     </div>
   )
