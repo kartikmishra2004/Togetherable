@@ -2,7 +2,7 @@ import React from 'react'
 import { Navigate } from 'react-router-dom';
 import { useFirebase } from '../context/firebase';
 
-const Communities = () => {
+const Explore = () => {
 
   const { user } = useFirebase();
 
@@ -12,9 +12,9 @@ const Communities = () => {
 
   return (
     <div>
-      Communities
+      Explore
     </div>
   )
 }
 
-export default Communities
+export default Explore

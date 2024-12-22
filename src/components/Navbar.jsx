@@ -35,9 +35,8 @@ const Navbar = () => {
 
     return (
         <header
-            className={`text-gray-500 body-font font-main fixed w-full z-50 ${
-                scrolled ? 'bg-secondary border-b border-zinc-800' : 'bg-transparent'
-            }`}
+            className={`text-gray-500 body-font font-main fixed w-full z-50 ${scrolled ? 'bg-secondary border-b border-zinc-800' : 'bg-transparent'
+                }`}
         >
             <div className="container mx-auto flex flex-wrap p-5 flex-row justify-between xl:px-52 items-center">
                 <Link to={'/'} className="flex justify-center title-font font-medium items-center text-gray-900 md:mb-0">
@@ -59,6 +58,9 @@ const Navbar = () => {
                         </>
                     ) : (
                         <>
+                            <Link to={'/explore'} className={`mr-5 ${isActive('/explore') ? 'text-primary' : ''}`}>
+                                Explore
+                            </Link>
                             <Link to={'/communities'} className={`mr-5 ${isActive('/communities') ? 'text-primary' : ''}`}>
                                 Communities
                             </Link>
@@ -105,11 +107,14 @@ const Navbar = () => {
                                     <Link onClick={handleMenu} to={'/'}>
                                         Home
                                     </Link>
-                                    <Link onClick={handleMenu} to={'/communities'}>
-                                        Communities
-                                    </Link>
                                     <Link onClick={handleMenu} to={'/about'}>
                                         About
+                                    </Link>
+                                    <Link onClick={handleMenu} to={'/explore'}>
+                                        Explore
+                                    </Link>
+                                    <Link onClick={handleMenu} to={'/communities'}>
+                                        Communities
                                     </Link>
                                     <Link onClick={handleMenu} to={'/profile'}>
                                         Profile
