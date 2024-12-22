@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { initializeApp } from "firebase/app";
-import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { getDatabase, set, ref } from 'firebase/database'
 
 const firebaseConfig = {
@@ -14,7 +14,9 @@ const firebaseConfig = {
 };
 const firebaseApp = initializeApp(firebaseConfig);
 const firebaseAuth = getAuth(firebaseApp);
+firebaseAuth.languageCode = 'en';
 const database = getDatabase();
+const provider = new GoogleAuthProvider();
 
 const FirebaseContext = createContext(null);
 
@@ -32,6 +34,22 @@ export const FirebaseProvider = (props) => {
     // Method for login
     const signinWithEmailAndPassword = (email, password) => {
         return signInWithEmailAndPassword(firebaseAuth, email, password)
+    }
+
+    // Method for login with google
+    const continueWithGoogle = () => {
+        signInWithPopup(firebaseAuth, provider)
+            .then((result) => {
+                const credential = GoogleAuthProvider.credentialFromResult(result);
+                const user = result.user;
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                const email = error.customData.email;
+                const credential = GoogleAuthProvider.credentialFromError(error);
+                console.log(error);
+            });
     }
 
     // Method for putting data into realtime DB
@@ -56,6 +74,7 @@ export const FirebaseProvider = (props) => {
             value={{
                 signupWithEmailAndPassword,
                 signinWithEmailAndPassword,
+                continueWithGoogle,
                 putData,
                 user,
                 firebaseAuth
