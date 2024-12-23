@@ -8,6 +8,7 @@ const Signup = () => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
+    fullName: '',
   });
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -24,7 +25,7 @@ const Signup = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
-    firebase.signupWithEmailAndPassword(formData.email, formData.password)
+    firebase.signupWithEmailAndPassword(formData.email, formData.password, { fullName: formData.fullName })
       .then(() => setLoading(false))
       .catch((err) => { alert(err); setLoading(false) });
   };
@@ -37,12 +38,21 @@ const Signup = () => {
 
   if (user === null) {
     return (
-      <div className="flex h-[100vh] flex-col items-center justify-center font-main">
+      <div className="flex h-[100vh] pt-10 flex-col items-center justify-center font-main">
         <div className='flex  flex-col items-center justify-center border border-zinc-800 bg-secondary p-14 rounded-lg'>
           <h2 className="mb-6 text-2xl font-semibold">Signup</h2>
           <form
             onSubmit={handleSubmit}
             className="flex flex-col gap-4 w-72">
+            <input
+              autoComplete="off"
+              type="text"
+              name="fullName"
+              placeholder="Full Name"
+              value={formData.fullName}
+              onChange={handleChange}
+              className="px-2 py-3 border rounded-lg focus:outline-none bg-transparent text-primary placeholder:text-zinc-700 border-zinc-500"
+            />
             <input
               autoComplete="off"
               type="email"

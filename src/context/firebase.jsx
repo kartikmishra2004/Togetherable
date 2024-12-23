@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { initializeApp } from "firebase/app";
 import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { getDatabase, set, ref } from 'firebase/database'
+import { getFirestore, doc, setDoc } from "firebase/firestore"; // Firestore imports
 
 const firebaseConfig = {
     apiKey: "AIzaSyBR0he9feN636824JXry5H6vzUK5CSeDmI",
@@ -10,54 +10,51 @@ const firebaseConfig = {
     storageBucket: "sample-app-b0863.firebasestorage.app",
     messagingSenderId: "185289007087",
     appId: "1:185289007087:web:b3c5646be3dd2fa0eae01a",
-    databaseURL: 'https://sample-app-b0863-default-rtdb.firebaseio.com/'
 };
 const firebaseApp = initializeApp(firebaseConfig);
 const firebaseAuth = getAuth(firebaseApp);
 firebaseAuth.languageCode = 'en';
-const database = getDatabase();
+const firestore = getFirestore(firebaseApp);
 const provider = new GoogleAuthProvider();
 
 const FirebaseContext = createContext(null);
 
 export const useFirebase = () => {
     return useContext(FirebaseContext);
-}
+};
 
 export const FirebaseProvider = (props) => {
 
     // Methood for signup
-    const signupWithEmailAndPassword = (email, password) => {
+    const signupWithEmailAndPassword = async (email, password, additionalData) => {
         return createUserWithEmailAndPassword(firebaseAuth, email, password)
-    }
+            .then(async (userCredential) => {
+                const user = userCredential.user;
+                // Save additional user data to Firestore
+                await setDoc(doc(firestore, "users", user.uid), {
+                    email: user.email,
+                    ...additionalData
+                });
+            });
+    };
 
     // Method for login
     const signinWithEmailAndPassword = (email, password) => {
-        return signInWithEmailAndPassword(firebaseAuth, email, password)
-    }
+        return signInWithEmailAndPassword(firebaseAuth, email, password);
+    };
 
     // Method for login with google
     const continueWithGoogle = () => {
         signInWithPopup(firebaseAuth, provider)
             .then((result) => {
-                const credential = GoogleAuthProvider.credentialFromResult(result);
                 const user = result.user;
+                // Save additional user data to Firestore if needed
             })
             .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                const email = error.customData.email;
-                const credential = GoogleAuthProvider.credentialFromError(error);
                 console.log(error);
             });
-    }
+    };
 
-    // Method for putting data into realtime DB
-    const putData = (key, data) => {
-        return set(ref(database, key), data)
-    }
-
-    // Checking users auth state
     const [user, setUser] = useState(null);
     useEffect(() => {
         onAuthStateChanged(firebaseAuth, (user) => {
@@ -66,8 +63,8 @@ export const FirebaseProvider = (props) => {
             } else {
                 setUser(null);
             }
-        })
-    }, [])
+        });
+    }, []);
 
     return (
         <FirebaseContext.Provider
@@ -75,11 +72,10 @@ export const FirebaseProvider = (props) => {
                 signupWithEmailAndPassword,
                 signinWithEmailAndPassword,
                 continueWithGoogle,
-                putData,
                 user,
                 firebaseAuth
             }}>
             {props.children}
         </FirebaseContext.Provider>
-    )
-}
+    );
+};
