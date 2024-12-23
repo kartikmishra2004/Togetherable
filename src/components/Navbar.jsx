@@ -8,7 +8,7 @@ import gear from '../assets/gear.png';
 const Navbar = () => {
     const location = useLocation();
     const isActive = (path) => location.pathname === path;
-    const { user, firebaseAuth } = useFirebase();
+    const { user, firebaseAuth, userData } = useFirebase();
 
     const [menu, setMenu] = useState(false);
     const [scrolled, setScrolled] = useState(false);
@@ -95,9 +95,10 @@ const Navbar = () => {
                                                 : 'https://res.cloudinary.com/dlwudcsu1/image/upload/v1723743051/Picsart_24-08-15_23-00-10-662_bix7iy.png'
                                         }
                                         alt="Name"
-                                        className="w-10 h-10 shrink-0 rounded-full"
+                                        className="w-16 h-16 shrink-0 rounded-full"
                                     />
                                     <div className="space-y-2 flex flex-col flex-1 truncate">
+                                    <h1>{userData ? userData.fullName : user.displayName}</h1>
                                         <p className="font-normal text-base leading-tight truncate">{user.email}</p>
                                     </div>
                                 </div>

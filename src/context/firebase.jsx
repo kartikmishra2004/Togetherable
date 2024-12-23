@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { initializeApp } from "firebase/app";
 import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { getFirestore, doc, setDoc } from "firebase/firestore"; // Firestore imports
+import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore"; // Firestore imports
 
 const firebaseConfig = {
     apiKey: "AIzaSyBR0he9feN636824JXry5H6vzUK5CSeDmI",
@@ -55,13 +55,28 @@ export const FirebaseProvider = (props) => {
             });
     };
 
+    const [userData, setUserData] = useState(null);
+    // Function to fetch user data from Firestore
+    const fetchUserData = async (uid) => {
+        const userDocRef = doc(firestore, "users", uid);
+        const docSnap = await getDoc(userDocRef);
+        if (docSnap.exists()) {
+            setUserData(docSnap.data());
+        } else {
+            console.log("No such document!");
+        }
+    };
+
+    // Method for user state change
     const [user, setUser] = useState(null);
     useEffect(() => {
         onAuthStateChanged(firebaseAuth, (user) => {
             if (user) {
                 setUser(user);
+                fetchUserData(user.uid);
             } else {
                 setUser(null);
+                setUserData(null);
             }
         });
     }, []);
@@ -73,7 +88,8 @@ export const FirebaseProvider = (props) => {
                 signinWithEmailAndPassword,
                 continueWithGoogle,
                 user,
-                firebaseAuth
+                firebaseAuth,
+                userData
             }}>
             {props.children}
         </FirebaseContext.Provider>
