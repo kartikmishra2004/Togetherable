@@ -62,8 +62,6 @@ export const FirebaseProvider = (props) => {
         const docSnap = await getDoc(userDocRef);
         if (docSnap.exists()) {
             setUserData(docSnap.data());
-        } else {
-            console.log("No such document!");
         }
     };
 
@@ -89,7 +87,8 @@ export const FirebaseProvider = (props) => {
                 continueWithGoogle,
                 user,
                 firebaseAuth,
-                userData
+                userData,
+                firestore
             }}>
             {props.children}
         </FirebaseContext.Provider>

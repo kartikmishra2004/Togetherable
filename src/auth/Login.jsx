@@ -38,7 +38,7 @@ const Login = () => {
   if (user === null) {
     return (
       <div className="flex h-[100vh] flex-col items-center justify-center font-main">
-        <div className='flex  flex-col items-center justify-center border border-zinc-800 bg-secondary p-14 rounded-lg'>
+        <div className='flex  flex-col items-center justify-center lg:border lg:border-zinc-800 lg:bg-secondary lg:p-14 p-4 rounded-lg'>
           <h2 className="mb-6 text-2xl font-semibold">Login</h2>
           <form
             onSubmit={handleSubmit}
