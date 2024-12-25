@@ -1,11 +1,51 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useFirebase } from '../context/firebase';
 
 const Profile = () => {
   const { user, loading } = useFirebase();
-  
+
   const pfp = user?.photoURL?.replace(/=s\d+/, "=s720") || 'https://res.cloudinary.com/dlwudcsu1/image/upload/v1723743051/Picsart_24-08-15_23-00-10-662_bix7iy.png';
+
+  // Fetching the location
+  const [geoLocation, setGeoLocation] = useState('');
+
+  useEffect(() => {
+    const location = localStorage.getItem('geolocation');
+    setGeoLocation(location);
+  }, [])
+
+  const handleGeoLoation = () => {
+    try {
+      navigator.geolocation.getCurrentPosition(async (res) => {
+        const lat = res.coords.latitude;
+        const lon = res.coords.longitude;
+        try {
+          const resp = await fetch(`https://api.geoapify.com/v1/geocode/reverse?lat=${lat}&lon=${lon}&apiKey=06e1c3306eb145dca623f15270dff053`, {
+            method: "GET",
+          });
+          const json_resp = await resp.json();
+  
+          if (json_resp.features && json_resp.features.length > 0) {
+            setGeoLocation(json_resp.features[0].properties.formatted);
+            localStorage.setItem('geolocation', json_resp.features[0].properties.formatted)
+            console.log(json_resp.features[0].properties)
+          } else {
+            console.log("No geolocation data found.");
+          }
+        } catch (error) {
+          console.error("Error fetching geolocation!!");
+        }
+      }, 
+      (err) => {
+        console.error("Error accessing location services:", err.message);
+      }, 
+      { enableHighAccuracy: true });
+    } catch (error) {
+      console.error("Error fetching location!!");
+    }
+  };
+  
 
   if (loading) {
     return (
@@ -57,7 +97,7 @@ const Profile = () => {
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-main dark:text-blue-900" viewBox="0 0 20 20" fill="currentColor">
                   <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
                 </svg>
-                {user.location || <button className='hover:text-main'>Add location</button>}
+                {geoLocation || <button onClick={handleGeoLoation} className='hover:text-main'>Add location</button>}
               </li>
             </ul>
           </div>
