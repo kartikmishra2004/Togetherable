@@ -1,7 +1,14 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { initializeApp } from "firebase/app";
-import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore"; // Firestore imports
+import { 
+    getAuth, 
+    createUserWithEmailAndPassword, 
+    onAuthStateChanged, 
+    signInWithEmailAndPassword, 
+    GoogleAuthProvider, 
+    signInWithPopup 
+} from "firebase/auth";
+import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
 
 const firebaseConfig = {
     apiKey: "AIzaSyBR0he9feN636824JXry5H6vzUK5CSeDmI",
@@ -11,73 +18,102 @@ const firebaseConfig = {
     messagingSenderId: "185289007087",
     appId: "1:185289007087:web:b3c5646be3dd2fa0eae01a",
 };
+
+// Initialize Firebase
 const firebaseApp = initializeApp(firebaseConfig);
 const firebaseAuth = getAuth(firebaseApp);
-firebaseAuth.languageCode = 'en';
+firebaseAuth.languageCode = "en";
 const firestore = getFirestore(firebaseApp);
 const provider = new GoogleAuthProvider();
 
+// Create context
 const FirebaseContext = createContext(null);
 
+// Hook to access context
 export const useFirebase = () => {
     return useContext(FirebaseContext);
 };
 
+// Firebase Provider
 export const FirebaseProvider = (props) => {
-
-    // Methood for signup
-    const signupWithEmailAndPassword = async (email, password, additionalData) => {
-        return createUserWithEmailAndPassword(firebaseAuth, email, password)
-            .then(async (userCredential) => {
-                const user = userCredential.user;
-                // Save additional user data to Firestore
-                await setDoc(doc(firestore, "users", user.uid), {
-                    email: user.email,
-                    ...additionalData
-                });
-            });
-    };
-
-    // Method for login
-    const signinWithEmailAndPassword = (email, password) => {
-        return signInWithEmailAndPassword(firebaseAuth, email, password);
-    };
-
-    // Method for login with google
-    const continueWithGoogle = () => {
-        signInWithPopup(firebaseAuth, provider)
-            .then((result) => {
-                const user = result.user;
-                // Save additional user data to Firestore if needed
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    };
-
+    const [user, setUser] = useState(null);
     const [userData, setUserData] = useState(null);
+    const [loading, setLoading] = useState(true);
+
     // Function to fetch user data from Firestore
     const fetchUserData = async (uid) => {
-        const userDocRef = doc(firestore, "users", uid);
-        const docSnap = await getDoc(userDocRef);
-        if (docSnap.exists()) {
-            setUserData(docSnap.data());
+        try {
+            const userDocRef = doc(firestore, "users", uid);
+            const docSnap = await getDoc(userDocRef);
+            if (docSnap.exists()) {
+                setUserData(docSnap.data());
+            }
+        } catch (error) {
+            console.error("Error fetching user data:", error);
         }
     };
 
-    // Method for user state change
-    const [user, setUser] = useState(null);
+    // Handle auth state changes
     useEffect(() => {
-        onAuthStateChanged(firebaseAuth, (user) => {
+        const unsubscribe = onAuthStateChanged(firebaseAuth, async (user) => {
             if (user) {
                 setUser(user);
-                fetchUserData(user.uid);
+                await fetchUserData(user.uid);
             } else {
                 setUser(null);
                 setUserData(null);
             }
+            setLoading(false);
         });
+
+        // Cleanup subscription on unmount
+        return () => unsubscribe();
     }, []);
+
+    // Method for signup
+    const signupWithEmailAndPassword = async (email, password, additionalData) => {
+        try {
+            const userCredential = await createUserWithEmailAndPassword(firebaseAuth, email, password);
+            const user = userCredential.user;
+            // Save additional user data to Firestore
+            await setDoc(doc(firestore, "users", user.uid), {
+                email: user.email,
+                ...additionalData,
+            });
+        } catch (error) {
+            console.error("Error during signup:", error);
+            throw error;
+        }
+    };
+
+    // Method for login
+    const signinWithEmailAndPassword = async (email, password) => {
+        try {
+            return await signInWithEmailAndPassword(firebaseAuth, email, password);
+        } catch (error) {
+            console.error("Error during signin:", error);
+            throw error;
+        }
+    };
+
+    // Method for login with Google
+    const continueWithGoogle = async () => {
+        try {
+            const result = await signInWithPopup(firebaseAuth, provider);
+            const user = result.user;
+        } catch (error) {
+            console.error("Error during Google login:", error);
+        }
+    };
+
+    // Logout method
+    const logout = async () => {
+        try {
+            await firebaseAuth.signOut();
+        } catch (error) {
+            console.error("Error during logout:", error);
+        }
+    };
 
     return (
         <FirebaseContext.Provider
@@ -85,11 +121,14 @@ export const FirebaseProvider = (props) => {
                 signupWithEmailAndPassword,
                 signinWithEmailAndPassword,
                 continueWithGoogle,
+                logout,
                 user,
-                firebaseAuth,
                 userData,
-                firestore
-            }}>
+                loading,
+                firebaseAuth,
+                firestore,
+            }}
+        >
             {props.children}
         </FirebaseContext.Provider>
     );

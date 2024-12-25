@@ -14,7 +14,7 @@ import NotFound from './components/Notfound.jsx';
 
 const Layout = ({ children }) => {
   const location = useLocation();
-  const hideFooterRoutes = ['/login', '/signup'];
+  const hideFooterRoutes = ['/login', '/signup', '/profile'];
 
   return (
     <>

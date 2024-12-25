@@ -10,6 +10,8 @@ const Navbar = () => {
     const isActive = (path) => location.pathname === path;
     const { user, firebaseAuth, userData } = useFirebase();
 
+    const pfp = user?.photoURL?.replace(/=s\d+/, "=s400") || 'https://res.cloudinary.com/dlwudcsu1/image/upload/v1723743051/Picsart_24-08-15_23-00-10-662_bix7iy.png';
+
     const [menu, setMenu] = useState(false);
     const [scrolled, setScrolled] = useState(false);
 
@@ -90,8 +92,8 @@ const Navbar = () => {
                                 <div className="flex mr-auto items-center space-x-4">
                                     <img
                                         src={
-                                            user.photoURL
-                                                ? user.photoURL
+                                            pfp
+                                                ? pfp
                                                 : 'https://res.cloudinary.com/dlwudcsu1/image/upload/v1723743051/Picsart_24-08-15_23-00-10-662_bix7iy.png'
                                         }
                                         alt="Name"

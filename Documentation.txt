@@ -1,0 +1,17 @@
+Context : 
+
+Peer support community platform where people with different disabilities can share their experiences, offer support, and form communities. Features could include message boards, video chat rooms, and group discussions that are fully accessible to people with visual or hearing impairments.
+
+Features:
+
+1.	Create / join existing communities.
+2.	Post (text and media) in the communities.
+3.	Group chat (text and media) in communities.
+4.	Group audio / video chat in communities.
+5.	Text to speech (TTS) and speech to text (STT) in group chat.
+6.	AI chat assistant for any help or emergency.
+7.	Anonymous chat with a random person.
+8.	Sentimental analysis of the chats.
+9.	AI based motivational quotes image generation.
+10.	Realtime sign language translation.
+11. Navigate locaions of community members with map.
