@@ -3,7 +3,8 @@ import { Navigate } from 'react-router-dom';
 import { useFirebase } from '../context/firebase';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
-import Modal from '../components/Modal.jsx'
+import Modal from '../components/Modal.jsx';
+import Offline from '../components/Offline.jsx';
 
 const Profile = () => {
   const { user, loading, userData, putLocation, deleteLocation } = useFirebase();
@@ -92,7 +93,7 @@ const Profile = () => {
   if (loading) {
     return (
       <div className="w-full h-screen pt-32 font-main">
-        <div className="lg:bg-secondary h-[70vh] max-w-[90vw] mx-auto lg:border lg:py-20 lg:border-zinc-800 rounded-lg shadow-2xl w-full lg:p-8">
+        <div className="lg:bg-secondary h-[70vh] max-w-[80vw] mx-auto lg:border lg:py-20 lg:border-zinc-800 rounded-lg shadow-2xl w-full lg:p-8">
           <SkeletonTheme baseColor="#14141c" highlightColor="#232234">
             <div className='flex lg:flex-row flex-col'>
               <div className="lg:w-1/3 text-center mb-8 lg:mb-0">
@@ -111,6 +112,12 @@ const Profile = () => {
     );
   }
 
+  if(!userData){
+    return(
+      <Offline />
+    )
+  }
+
   if (!user) {
     return <Navigate to="/login" />;
   }
@@ -119,7 +126,7 @@ const Profile = () => {
     <>
       {modal && <Modal setModal={setModal} completionPercentage={completionPercentage} />}
       <div className="w-full h-screen pt-32 font-main">
-        <div className="lg:bg-secondary h-[70vh] max-w-[90vw] mx-auto lg:border lg:py-20 lg:border-zinc-800 rounded-lg shadow-2xl w-full lg:p-8">
+        <div className="lg:bg-secondary h-[70vh] max-w-[80vw] mx-auto lg:border lg:py-20 lg:border-zinc-800 rounded-lg shadow-2xl w-full lg:p-8">
           <div className="flex flex-col lg:flex-row">
             <div className="lg:w-1/3 text-center lg:mb-8 mb-2">
               <img
@@ -150,10 +157,10 @@ const Profile = () => {
                   {userData?.phone || 'No phone number added'}
                 </li>
                 <li className="flex lg:justify-start text-center justify-center items-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-main dark:text-blue-900" viewBox="0 0 20 20" fill="currentColor">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 lg:block hidden w-5 mr-2 text-main dark:text-blue-900" viewBox="0 0 20 20" fill="currentColor">
                     <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
                   </svg>
-                  {fetchingLocation ? (<div className='animate-pulse'>Getting your location...</div>) : (geoLocation ? (<div>{geoLocation} <button onClick={handleRemoveLocation} className='text-red-400 hover:text-red-500 ml-1'>Remove</button></div>) : <button onClick={handleGeoLoation} className='hover:text-main'>Add your location</button>)}
+                  {fetchingLocation ? (<div className='animate-pulse'>Getting your location...</div>) : (geoLocation ? (<div>{geoLocation} <button onClick={handleRemoveLocation} className='text-red-400 hover:text-red-500 ml-1'>Remove location</button></div>) : <button onClick={handleGeoLoation} className='hover:text-main'>Add your location</button>)}
                 </li>
                 <li>
                   {/* Progress Bar */}
