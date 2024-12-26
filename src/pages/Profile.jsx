@@ -6,60 +6,84 @@ import 'react-loading-skeleton/dist/skeleton.css';
 import Modal from '../components/Modal.jsx'
 
 const Profile = () => {
-  const { user, loading, userData } = useFirebase();
+  const { user, loading, userData, putLocation, deleteLocation } = useFirebase();
 
   // Fetching the location
   const [geoLocation, setGeoLocation] = useState('');
   const [completionPercentage, setCompletionPercentage] = useState(0);
   const [modal, setModal] = useState(false);
 
-  useEffect(() => {
-    const location = localStorage.getItem('geolocation');
-    setGeoLocation(location);
-
-    // Calculate profile completion percentage
+  // Profile % bar
+  const updateCompletionPercentage = (data) => {
     const fields = [
-      userData?.photoURL,
-      userData?.fullName || user?.displayName,
-      userData?.bio,
-      userData?.email,
-      userData?.phone,
-      geoLocation,
+      data?.photoURL,
+      data?.fullName || user?.displayName,
+      data?.bio,
+      data?.email,
+      data?.phone,
+      data?.location,
     ];
     const completedFields = fields.filter((field) => field && field.trim() !== '');
     setCompletionPercentage(Math.round((completedFields.length / fields.length) * 100));
-  }, [userData, user, geoLocation]);
+  };
+
+  useEffect(() => {
+    setGeoLocation(userData?.location);
+    updateCompletionPercentage(userData);
+  }, [userData, user]);
 
   const handleGeoLoation = () => {
-    try {
-      navigator.geolocation.getCurrentPosition(async (res) => {
+    navigator.geolocation.getCurrentPosition(
+      async (res) => {
         const lat = res.coords.latitude;
         const lon = res.coords.longitude;
+  
         try {
           const resp = await fetch(
-            `https://api.geoapify.com/v1/geocode/reverse?lat=${lat}&lon=${lon}&apiKey=06e1c3306eb145dca623f15270dff053`,
-            { method: "GET" }
+            `https://api.geoapify.com/v1/geocode/reverse?lat=${lat}&lon=${lon}&apiKey=06e1c3306eb145dca623f15270dff053`
           );
           const json_resp = await resp.json();
-
+  
           if (json_resp.features && json_resp.features.length > 0) {
-            setGeoLocation(json_resp.features[0].properties.formatted);
-            localStorage.setItem('geolocation', json_resp.features[0].properties.formatted);
+            const newLocation = json_resp.features[0].properties.formatted;
+  
+            setGeoLocation(newLocation);
+            await putLocation(newLocation);
+  
+            // Update progress bar with new location
+            updateCompletionPercentage({
+              ...userData,
+              location: newLocation,
+            });
           } else {
             console.log("No geolocation data found.");
           }
         } catch (error) {
-          console.error("Error fetching geolocation!!");
+          console.error("Error fetching geolocation!!", error);
         }
       },
-        (err) => {
-          console.error("Error accessing location services:", err.message);
-        },
-        { enableHighAccuracy: true });
+      (err) => {
+        console.error("Error accessing location services:", err.message);
+      },
+      { enableHighAccuracy: true }
+    );
+  };
+  
+  const handleRemoveLocation = async () => {
+    try {
+      setGeoLocation('');
+      await deleteLocation();
+  
+      // Update progress bar after removing location
+      updateCompletionPercentage({
+        ...userData,
+        location: '',
+      });
     } catch (error) {
-      console.error("Error fetching location!!");
+      console.error("Error removing location!!", error);
     }
   };
+  
 
   if (loading) {
     return (
@@ -89,7 +113,7 @@ const Profile = () => {
 
   return (
     <>
-      {modal && <Modal setModal={setModal} completionPercentage={completionPercentage}/>}
+      {modal && <Modal setModal={setModal} completionPercentage={completionPercentage} />}
       <div className="w-full h-screen pt-32 font-main">
         <div className="lg:bg-secondary h-[70vh] max-w-[90vw] mx-auto lg:border lg:py-20 lg:border-zinc-800 rounded-lg shadow-2xl w-full lg:p-8">
           <div className="flex flex-col lg:flex-row">
@@ -125,14 +149,14 @@ const Profile = () => {
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-main dark:text-blue-900" viewBox="0 0 20 20" fill="currentColor">
                     <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
                   </svg>
-                  {geoLocation ? (<div>{geoLocation} <button onClick={() => { localStorage.removeItem('geolocation'); setGeoLocation('') }} className='text-red-400 hover:text-red-500 ml-1'>Remove</button></div>) : <button onClick={handleGeoLoation} className='hover:text-main'>Add location</button>}
+                  {geoLocation ? (<div>{geoLocation} <button onClick={handleRemoveLocation} className='text-red-400 hover:text-red-500 ml-1'>Remove</button></div>) : <button onClick={handleGeoLoation} className='hover:text-main'>Add your location</button>}
                 </li>
                 <li>
                   {/* Progress Bar */}
                   <div className="my-6 flex flex-col justify-center lg:items-start items-center">
                     <div className="w-full lg:max-w-[30vw] bg-gray-300 rounded-full h-5 dark:bg-gray-700">
                       <div
-                        className="bg-main h-5 rounded-full text-center flex justify-center items-center text-xs font-bold text-white"
+                        className="bg-main h-5 transition-all ease-in-out duration-500 rounded-full text-center flex justify-center items-center text-xs font-bold text-white"
                         style={{ width: `${completionPercentage}%` }}>
                         {completionPercentage}%
                       </div>

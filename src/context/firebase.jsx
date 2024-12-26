@@ -8,7 +8,7 @@ import {
     GoogleAuthProvider,
     signInWithPopup
 } from "firebase/auth";
-import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
+import { getFirestore, doc, setDoc, getDoc, updateDoc, deleteField } from "firebase/firestore";
 
 const firebaseConfig = {
     apiKey: "AIzaSyBR0he9feN636824JXry5H6vzUK5CSeDmI",
@@ -120,6 +120,36 @@ export const FirebaseProvider = (props) => {
         }
     };
 
+    // saving location
+    const putLocation = async (location) => {
+        if (!user?.uid) {
+            console.log("User not authenticated!");
+            return;
+        }
+        try {
+            await updateDoc(doc(firestore, "users", user.uid), {
+                location: location,
+            });
+        } catch (error) {
+            console.error("Failed to save location:", error);
+        }
+    };
+
+    // Deleting location
+    const deleteLocation = async () => {
+        if (!user?.uid) {
+            console.log("User not authenticated!");
+            return;
+        }
+        try {
+            await updateDoc(doc(firestore, "users", user.uid), {
+                location: deleteField(),
+            });
+        } catch (error) {
+            console.error("Failed to save location:", error);
+        }
+    };
+
     return (
         <FirebaseContext.Provider
             value={{
@@ -127,6 +157,8 @@ export const FirebaseProvider = (props) => {
                 signinWithEmailAndPassword,
                 continueWithGoogle,
                 logout,
+                putLocation,
+                deleteLocation,
                 user,
                 userData,
                 loading,
