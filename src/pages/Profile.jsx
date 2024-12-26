@@ -12,6 +12,7 @@ const Profile = () => {
   const [geoLocation, setGeoLocation] = useState('');
   const [completionPercentage, setCompletionPercentage] = useState(0);
   const [modal, setModal] = useState(false);
+  const [fetchingLocation, setFetchingLocation] = useState(false);
 
   // Profile % bar
   const updateCompletionPercentage = (data) => {
@@ -33,47 +34,50 @@ const Profile = () => {
   }, [userData, user]);
 
   const handleGeoLoation = () => {
+    setFetchingLocation(true);
     navigator.geolocation.getCurrentPosition(
       async (res) => {
         const lat = res.coords.latitude;
         const lon = res.coords.longitude;
-  
         try {
           const resp = await fetch(
             `https://api.geoapify.com/v1/geocode/reverse?lat=${lat}&lon=${lon}&apiKey=06e1c3306eb145dca623f15270dff053`
           );
           const json_resp = await resp.json();
-  
+
           if (json_resp.features && json_resp.features.length > 0) {
             const newLocation = json_resp.features[0].properties.formatted;
-  
             setGeoLocation(newLocation);
             await putLocation(newLocation);
-  
+
             // Update progress bar with new location
             updateCompletionPercentage({
               ...userData,
               location: newLocation,
             });
+            setFetchingLocation(false);
           } else {
             console.log("No geolocation data found.");
+            setFetchingLocation(false);
           }
         } catch (error) {
           console.error("Error fetching geolocation!!", error);
+          setFetchingLocation(false);
         }
       },
       (err) => {
         console.error("Error accessing location services:", err.message);
+        setFetchingLocation(false);
       },
       { enableHighAccuracy: true }
     );
   };
-  
+
   const handleRemoveLocation = async () => {
     try {
       setGeoLocation('');
       await deleteLocation();
-  
+
       // Update progress bar after removing location
       updateCompletionPercentage({
         ...userData,
@@ -83,7 +87,7 @@ const Profile = () => {
       console.error("Error removing location!!", error);
     }
   };
-  
+
 
   if (loading) {
     return (
@@ -149,7 +153,7 @@ const Profile = () => {
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-main dark:text-blue-900" viewBox="0 0 20 20" fill="currentColor">
                     <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
                   </svg>
-                  {geoLocation ? (<div>{geoLocation} <button onClick={handleRemoveLocation} className='text-red-400 hover:text-red-500 ml-1'>Remove</button></div>) : <button onClick={handleGeoLoation} className='hover:text-main'>Add your location</button>}
+                  {fetchingLocation ? (<div className='animate-pulse'>Getting your location...</div>) : (geoLocation ? (<div>{geoLocation} <button onClick={handleRemoveLocation} className='text-red-400 hover:text-red-500 ml-1'>Remove</button></div>) : <button onClick={handleGeoLoation} className='hover:text-main'>Add your location</button>)}
                 </li>
                 <li>
                   {/* Progress Bar */}
