@@ -94,7 +94,7 @@ const Navbar = () => {
                                     />
                                     <div className="space-y-2 flex flex-col flex-1 truncate">
                                         <h1 className='text-primary text-lg'>{userData ? userData.fullName : user.displayName}</h1>
-                                        <p className="font-normal text-base leading-tight truncate">{user.email}</p>
+                                        <p className="font-normal text-base leading-tight truncate">{userData?.email}</p>
                                     </div>
                                 </div>
                             </div>
