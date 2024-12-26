@@ -1,12 +1,12 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { initializeApp } from "firebase/app";
-import { 
-    getAuth, 
-    createUserWithEmailAndPassword, 
-    onAuthStateChanged, 
-    signInWithEmailAndPassword, 
-    GoogleAuthProvider, 
-    signInWithPopup 
+import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    onAuthStateChanged,
+    signInWithEmailAndPassword,
+    GoogleAuthProvider,
+    signInWithPopup
 } from "firebase/auth";
 import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
 
@@ -101,6 +101,11 @@ export const FirebaseProvider = (props) => {
         try {
             const result = await signInWithPopup(firebaseAuth, provider);
             const user = result.user;
+            await setDoc(doc(firestore, "users", user.uid), {
+                photoURL: user.photoURL ? user.photoURL.replace(/=s\d+/, "=s720") : null,
+                fullName: user.displayName,
+                email: user.email,
+            });
         } catch (error) {
             console.error("Error during Google login:", error);
         }
