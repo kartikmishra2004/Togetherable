@@ -62,9 +62,19 @@ const Profile = () => {
   if (loading) {
     return (
       <div className="w-full h-screen pt-32 font-main">
-        <div className="bg-secondary h-[65vh] max-w-[90vw] mx-auto border py-20 border-zinc-800 rounded-lg shadow-2xl w-full p-8">
-          <SkeletonTheme baseColor="#202020" highlightColor="#444">
-            <Skeleton height={100} width="100%" />
+        <div className="bg-secondary h-[70vh] max-w-[90vw] mx-auto border py-20 border-zinc-800 rounded-lg shadow-2xl w-full p-8">
+          <SkeletonTheme baseColor="#14141c" highlightColor="#232234">
+            <div className='flex'>
+              <div className="md:w-1/3 text-center mb-8 md:mb-0">
+                <Skeleton height={192} width={192} borderRadius={100} />
+                <Skeleton height={40} width={180} style={{ marginTop: 10 }} />
+              </div>
+              <div className="pl-8">
+                <Skeleton height={70} width={350} />
+                <Skeleton height={200} width={600} style={{ marginTop: 10 }}/>
+                <Skeleton height={45} width={160} style={{ marginTop: 10 }} />
+              </div>
+            </div>
           </SkeletonTheme>
         </div>
       </div>
@@ -77,7 +87,7 @@ const Profile = () => {
 
   return (
     <div className="w-full h-screen pt-32 font-main">
-      <div className="bg-secondary h-[75vh] max-w-[90vw] mx-auto border py-20 border-zinc-800 rounded-lg shadow-2xl w-full p-8">
+      <div className="bg-secondary h-[70vh] max-w-[90vw] mx-auto border py-20 border-zinc-800 rounded-lg shadow-2xl w-full p-8">
         <div className="flex flex-col md:flex-row">
           <div className="md:w-1/3 text-center mb-8 md:mb-0">
             <img
