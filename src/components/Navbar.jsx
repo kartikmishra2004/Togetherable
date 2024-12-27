@@ -37,7 +37,7 @@ const Navbar = () => {
     if (loading) {
         return (
             <header
-                className='text-gray-500 body-font font-main fixed w-full h-[4.5rem] z-50 bg-secondary border-b border-zinc-800'>
+                className='text-gray-500 body-font font-main fixed w-full h-[4.5rem] z-50 bg-secondary border-b border-zinc-800 lg:block hidden'>
                 <SkeletonTheme baseColor="#14141c" highlightColor="#232234">
                     <div className="flex justify-evenly w-full h-full items-center">
                         <div className="flex justify-center items-center">
@@ -49,7 +49,7 @@ const Navbar = () => {
                             </div>
                         </div>
                         <div className="">
-                        <Skeleton height={30} width={30} circle={true} />
+                            <Skeleton height={30} width={30} circle={true} />
                         </div>
                     </div>
                 </SkeletonTheme>
