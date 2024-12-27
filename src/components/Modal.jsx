@@ -25,7 +25,7 @@ const Modal = ({ setModal, completionPercentage, userData }) => {
         <div className='font-main'>
             <div className="fixed inset-0 z-40 min-h-full overflow-y-auto overflow-x-hidden transition flex items-center">
                 <div aria-hidden="true" className="fixed inset-0 w-full h-full bg-black/60 backdrop-blur-sm cursor-pointer"></div>
-                <div className="relative w-full cursor-pointer pointer-events-none transition my-auto p-4">
+                <div className="relative w-full cursor-pointer pointer-events-none transition my-auto lg:p-4 p-1">
                     <div className="w-full py-2 bg-secondary border border-zinc-800 cursor-default pointer-events-auto dark:bg-gray-800 relative rounded-lg mx-auto max-w-[30rem]">
                         <button onClick={() => setModal(false)} type="button" className="absolute cursor-pointer top-2 right-2 rtl:right-auto rtl:left-2">
                             <svg xlinkTitle="Close" className="h-6 w-6 text-gray-400"

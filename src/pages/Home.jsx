@@ -16,6 +16,10 @@ const Home = () => {
   const { user } = useFirebase();
 
   useEffect(() => {
+    window.scroll(0, 0);
+  }, [])
+
+  useEffect(() => {
     if (!unity) setIsUnityLoaded(false);
     if (!call) setIsCallLoaded(false);
   }, [unity, call]);

@@ -4,11 +4,13 @@ import logo from '../assets/logo.png';
 import { useFirebase } from '../context/firebase';
 import { signOut } from 'firebase/auth';
 import gear from '../assets/gear.png';
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 const Navbar = () => {
     const location = useLocation();
     const isActive = (path) => location.pathname === path;
-    const { user, firebaseAuth, userData } = useFirebase();
+    const { user, firebaseAuth, userData, loading } = useFirebase();
     const [menu, setMenu] = useState(false);
     const [scrolled, setScrolled] = useState(false);
 
@@ -31,6 +33,29 @@ const Navbar = () => {
             window.removeEventListener('scroll', handleScroll);
         };
     }, []);
+
+    if (loading) {
+        return (
+            <header
+                className='text-gray-500 body-font font-main fixed w-full h-[4.5rem] z-50 bg-secondary border-b border-zinc-800'>
+                <SkeletonTheme baseColor="#14141c" highlightColor="#232234">
+                    <div className="flex justify-evenly w-full h-full items-center">
+                        <div className="flex justify-center items-center">
+                            <div className="">
+                                <Skeleton height={30} width={240} style={{ marginRight: 30 }} />
+                            </div>
+                            <div className="flex">
+                                <Skeleton height={30} width={600} />
+                            </div>
+                        </div>
+                        <div className="">
+                        <Skeleton height={30} width={30} circle={true} />
+                        </div>
+                    </div>
+                </SkeletonTheme>
+            </header>
+        )
+    }
 
     return (
         <header
@@ -72,75 +97,82 @@ const Navbar = () => {
                         </>
                     )}
                 </nav>
-                <div onClick={handleMenu} className={`${user === null ? 'hidden' : 'flex'} gap-3 items-center cursor-pointer`}>
+                <div onClick={handleMenu} className={`flex gap-3 items-center cursor-pointer`}>
                     <img className="w-5 h-5 opacity-80" src={gear} alt="" />
                 </div>
             </div>
-            {user === null ? (
-                ''
-            ) : (
-                <div className={`w-full ${menu ? 'flex' : 'hidden'}  justify-end fixed md:px-52`}>
-                    <div
-                        tabIndex="0"
-                        className={`z-[1] border border-zinc-800 p-2 shadow bg-secondary rounded-lg w-100 my-2`}
-                    >
-                        <div className="rounded-lg bg-base-300 p-3 drop-shadow-xl divide-y divide-[#989898]">
-                            <div className="flex space-x-4 items-center p-4">
-                                <div className="flex mr-auto items-center space-x-4">
+
+            <div className={`w-full ${menu ? 'flex' : 'hidden'}  justify-end fixed md:px-52`}>
+                <div
+                    tabIndex="0"
+                    className={`z-[1] border border-zinc-800 p-2 shadow bg-secondary lg:rounded-lg w-full ${user === null ? 'lg:w-72' : 'lg:w-max'} lg:my-2`}
+                >
+                    <div className={`rounded-lg bg-base-300 p-3 drop-shadow-xl  ${user === null ? '' : 'divide-y divide-[#989898]'}`}>
+                        <div className="flex space-x-4 items-center p-4">
+                            <div className={`${user === null ? 'hidden' : 'flex'} mr-auto items-center space-x-4`}>
+                                <Link onClick={handleMenu} to={'/profile'}>
                                     <img
                                         src={userData?.photoURL || 'https://res.cloudinary.com/dlwudcsu1/image/upload/v1723743051/Picsart_24-08-15_23-00-10-662_bix7iy.png'}
                                         alt="Name"
-                                        className="w-20 h-20 shrink-0 rounded-full"
-                                    />
-                                    <div className="space-y-2 flex flex-col flex-1 truncate">
-                                        <h1 className='text-primary text-lg'>{userData ? userData.fullName : user.displayName}</h1>
-                                        <p className="font-normal text-base leading-tight truncate">{userData?.email}</p>
+                                        className="lg:w-20 lg:h-20 w-10 h-10 shrink-0 rounded-full" />
+                                </Link>
+                                <Link onClick={handleMenu} to={'/profile'}>
+                                    <div className="flex flex-col flex-1 truncate">
+                                        <h1 className='text-primary lg:text-lg'>{user === null ? '' : (userData ? userData.fullName : user.displayName)}</h1>
+                                        <p className="font-normal lg:text-base text-sm leading-tight truncate">{user === null ? '' : userData?.email}</p>
                                     </div>
-                                </div>
+                                </Link>
                             </div>
-                            <div aria-label="navigation" className="py-2">
-                                <nav className="grid gap-4 py-3 px-2 justify-center text-center">
-                                    <Link onClick={handleMenu} to={'/'}>
-                                        Home
-                                    </Link>
-                                    <Link onClick={handleMenu} to={'/about'}>
-                                        About
-                                    </Link>
-                                    <Link onClick={handleMenu} to={'/explore'}>
-                                        Explore
-                                    </Link>
-                                    <Link onClick={handleMenu} to={'/communities'}>
-                                        Communities
-                                    </Link>
-                                    <Link onClick={handleMenu} to={'/profile'}>
-                                        Profile
-                                    </Link>
-                                    <Link onClick={handleMenu} to={'/settings'}>
-                                        Settings
-                                    </Link>
-                                </nav>
-                            </div>
-                            <div className="pt-2">
-                                {user === null ? (
-                                    ''
-                                ) : (
-                                    <button
-                                        onClick={() => {
-                                            signOut(firebaseAuth);
-                                            handleMenu();
-                                        }}
-                                        className={
-                                            'mr-5 rounded-lg px-2 py-1 text-red-400 hover:text-red-500 text-center justify-center w-full'
-                                        }
-                                    >
-                                        Logout
-                                    </button>
-                                )}
-                            </div>
+                        </div>
+                        <div aria-label="navigation" className="py-2">
+                            <nav className="grid gap-4 py-3 px-2 justify-center text-center">
+                                <Link onClick={handleMenu} to={'/'}>
+                                    Home
+                                </Link>
+                                <Link onClick={handleMenu} to={'/about'}>
+                                    About
+                                </Link>
+                                {user === null ?
+                                    (<>
+                                        <Link onClick={handleMenu} to={'/login'}>
+                                            Login
+                                        </Link>
+                                    </>) :
+                                    (<>
+                                        <Link onClick={handleMenu} to={'/explore'}>
+                                            Explore
+                                        </Link>
+                                        <Link onClick={handleMenu} to={'/communities'}>
+                                            Communities
+                                        </Link>
+                                        <Link onClick={handleMenu} to={'/settings'}>
+                                            Settings
+                                        </Link>
+                                    </>)}
+
+                            </nav>
+                        </div>
+                        <div className="pt-2">
+                            {user === null ? (
+                                ''
+                            ) : (
+                                <button
+                                    onClick={() => {
+                                        signOut(firebaseAuth);
+                                        handleMenu();
+                                    }}
+                                    className={
+                                        'mr-5 rounded-lg px-2 py-1 text-red-400 hover:text-red-500 text-center justify-center w-full'
+                                    }
+                                >
+                                    Logout
+                                </button>
+                            )}
                         </div>
                     </div>
                 </div>
-            )}
+            </div>
+
         </header>
     );
 };
