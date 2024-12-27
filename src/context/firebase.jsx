@@ -105,7 +105,8 @@ export const FirebaseProvider = (props) => {
                 photoURL: user.photoURL ? user.photoURL.replace(/=s\d+/, "=s720") : null,
                 fullName: user.displayName,
                 email: user.email,
-            });
+            },
+                { merge: true });
         } catch (error) {
             console.error("Error during Google login:", error);
         }
@@ -150,6 +151,22 @@ export const FirebaseProvider = (props) => {
         }
     };
 
+    // Edit / complete profile
+    const updateProfile = async (updatedData) => {
+        if (!user?.uid) {
+            console.log("User not authenticated!");
+            return;
+        }
+        try {
+            await setDoc(doc(firestore, "users", user.uid), updatedData,
+                { merge: true });
+
+            location.reload();
+        } catch (error) {
+            console.log("Failed to update profile")
+        }
+    }
+
     return (
         <FirebaseContext.Provider
             value={{
@@ -159,6 +176,7 @@ export const FirebaseProvider = (props) => {
                 logout,
                 putLocation,
                 deleteLocation,
+                updateProfile,
                 user,
                 userData,
                 loading,
