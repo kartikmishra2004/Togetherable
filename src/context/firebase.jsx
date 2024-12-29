@@ -101,12 +101,18 @@ export const FirebaseProvider = (props) => {
         try {
             const result = await signInWithPopup(firebaseAuth, provider);
             const user = result.user;
-            await setDoc(doc(firestore, "users", user.uid), {
-                photoURL: user.photoURL ? user.photoURL.replace(/=s\d+/, "=s720") : null,
-                fullName: user.displayName,
-                email: user.email,
-            },
-                { merge: true });
+
+            const userDocRef = doc(firestore, "users", user.uid);
+            const userDocSnap = await getDoc(userDocRef);
+
+            if (!userDocSnap.exists()) {
+                // The user is signing up for the first time
+                await setDoc(userDocRef, {
+                    photoURL: user.photoURL ? user.photoURL.replace(/=s\d+/, "=s720") : null,
+                    fullName: user.displayName,
+                    email: user.email,
+                });
+            }
         } catch (error) {
             console.error("Error during Google login:", error);
         }
@@ -160,10 +166,27 @@ export const FirebaseProvider = (props) => {
         try {
             await setDoc(doc(firestore, "users", user.uid), updatedData,
                 { merge: true });
-
             location.reload();
         } catch (error) {
             console.log("Failed to update profile")
+        }
+    }
+
+    // Upload image to cloudinary
+    const uploadImage = async (photo) => {
+        const data = new FormData();
+        data.append("file", photo);
+        data.append("upload_preset", "Togatherable");
+        data.append("cloud_name", "dlwudcsu1");
+        try {
+            const uploadResult = await fetch('https://api.cloudinary.com/v1_1/dlwudcsu1/image/upload', {
+                method: "POST",
+                body: data
+            });
+            const result = await uploadResult.json();
+            return result.url;
+        } catch (error) {
+            console.log("Failed to upload to cloudinary!!")
         }
     }
 
@@ -177,6 +200,7 @@ export const FirebaseProvider = (props) => {
                 putLocation,
                 deleteLocation,
                 updateProfile,
+                uploadImage,
                 user,
                 userData,
                 loading,

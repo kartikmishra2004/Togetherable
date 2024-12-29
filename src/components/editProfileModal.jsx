@@ -2,15 +2,17 @@ import React, { useState } from 'react'
 import { useFirebase } from '../context/firebase';
 
 const Modal = ({ setModal, completionPercentage, userData }) => {
-
-    const { updateProfile } = useFirebase();
+    const { updateProfile, uploadImage } = useFirebase();
 
     const [data, setData] = useState({
         fullName: userData.fullName || '',
         email: userData.email || '',
         phone: userData.phone || '',
         bio: userData.bio || '',
+        photoURL: userData.photoURL || '',
     });
+    const [previewPhoto, setPreviewPhoto] = useState(userData.photoURL);
+    const [photoUploading, setPhotoUploading] = useState(false);
 
     const handleChange = (e) => {
         const value = e.target.value;
@@ -18,15 +20,30 @@ const Modal = ({ setModal, completionPercentage, userData }) => {
         setData({
             ...data,
             [name]: value,
-        })
-    }
+        });
+    };
+
+    const handlePhotoChange = async (e) => {
+        setPhotoUploading(true);
+        const file = e.target.files[0];
+        if (file) {
+            const url = await uploadImage(file);
+            setPreviewPhoto(URL.createObjectURL(file));
+            setPhotoUploading(false);
+            setData({
+                ...data,
+                photoURL: url ,
+            });
+        }
+    };
 
     return (
         <div className='font-main'>
-            <div className="fixed inset-0 z-40 min-h-full overflow-y-auto overflow-x-hidden transition flex items-center">
+            <div className="fixed inset-0 z-40 min-h-full mt-4 overflow-y-auto overflow-x-hidden transition flex items-center">
                 <div aria-hidden="true" className="fixed inset-0 w-full h-full bg-black/60 backdrop-blur-sm cursor-pointer"></div>
                 <div className="relative w-full cursor-pointer pointer-events-none transition my-auto lg:p-4 p-1">
                     <div className="w-full py-2 bg-secondary border border-zinc-800 cursor-default pointer-events-auto dark:bg-gray-800 relative rounded-lg mx-auto max-w-[30rem]">
+
                         <button onClick={() => setModal(false)} type="button" className="absolute cursor-pointer top-2 right-2 rtl:right-auto rtl:left-2">
                             <svg xlinkTitle="Close" className="h-6 w-6 text-gray-400"
                                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -48,7 +65,13 @@ const Modal = ({ setModal, completionPercentage, userData }) => {
 
                         <div className="space-y-2">
                             <div aria-hidden="true" className="border-t border-gray-700 px-2"></div>
-
+                            <div className="flex justify-evenly items-center">
+                                <img src={previewPhoto || 'https://res.cloudinary.com/dlwudcsu1/image/upload/v1723743051/Picsart_24-08-15_23-00-10-662_bix7iy.png'} className={`rounded-full w-24 h-24 object-contain bg-primary ${photoUploading ? 'animate-pulse' : ''}`} />
+                                <input accept="image/*" id='editPhoto' type="file" className='hidden' onChange={handlePhotoChange} />
+                                <label htmlFor={`${photoUploading ? '' : 'editPhoto'}`}>
+                                    <div className={`w-max ${photoUploading ? 'bg-gray-800 cursor-not-allowed' : 'bg-main hover:bg-[#9036c8]'} h-max  text-white px-4 py-2 rounded-lg`}>Select photo</div>
+                                </label>
+                            </div>
                             <div className="grid grid-cols-1 place-items-center px-4 py-2">
                                 <form noValidate className="space-y-4">
                                     <input
@@ -97,12 +120,11 @@ const Modal = ({ setModal, completionPercentage, userData }) => {
                                         Cancel
                                     </button>
 
-                                    <button onClick={() => { setModal(false); updateProfile(data); }} type="submit"
-                                        className="inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg min-h-[2.25rem] px-4 text-sm text-primary shadow bg-main hover:bg-[#9036c8]">
-
+                                    <button disabled={photoUploading ? true : false} onClick={() => { setModal(false); updateProfile(data); }} type="submit"
+                                        className="inline-flex items-center disabled:bg-gray-800 disabled:cursor-not-allowed justify-center py-1 gap-1 font-medium rounded-lg min-h-[2.25rem] px-4 text-sm text-primary shadow bg-main hover:bg-[#9036c8]">
                                         <span className="flex items-center gap-1">
                                             <span className="">
-                                                Save
+                                                {photoUploading ? 'Please wait...' : 'Save'}
                                             </span>
                                         </span>
                                     </button>
@@ -115,5 +137,6 @@ const Modal = ({ setModal, completionPercentage, userData }) => {
         </div>
     )
 }
+
 
 export default Modal
