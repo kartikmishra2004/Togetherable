@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Link, Navigate } from 'react-router-dom';
 import { useFirebase } from '../context/firebase';
-import CreateCommunityModal from '../components/createCommunityModal';
+import CreateCommunityModal from '../components/CreateCommunityModal.jsx';
 
 const Communities = () => {
 
