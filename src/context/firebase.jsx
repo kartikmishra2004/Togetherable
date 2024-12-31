@@ -8,7 +8,7 @@ import {
     GoogleAuthProvider,
     signInWithPopup
 } from "firebase/auth";
-import { getFirestore, doc, setDoc, getDoc, updateDoc, deleteField } from "firebase/firestore";
+import { getFirestore, doc, setDoc, getDoc, updateDoc, deleteField, addDoc, collection, arrayUnion, getDocs } from "firebase/firestore";
 
 const firebaseConfig = {
     apiKey: "AIzaSyBR0he9feN636824JXry5H6vzUK5CSeDmI",
@@ -190,6 +190,33 @@ export const FirebaseProvider = (props) => {
         }
     }
 
+    // Method for creating community
+    const createCommunity = async (data) => {
+        try {
+            const communityRef = await addDoc(collection(firestore, 'communities'), {
+                ...data,
+                members: [user.uid],
+                createdBy: user.uid,
+            });
+            await setDoc(doc(firestore, 'users', user.uid), {
+                joinedCommunities: arrayUnion(communityRef.id)
+            }, { merge: true });
+            location.reload();
+        } catch (error) {
+            console.log("Failed to create community!!", error)
+        }
+    }
+
+    // Method for fetching all joinned communities
+    const fetchCommunities = async () => {
+        try {
+            const communities = await getDocs(collection(firestore, 'communities'));
+            return communities.docs.map((doc) => doc.data());
+        } catch (error) {
+            console.log("Failed to fetch communities!!");
+        }
+    }
+
     return (
         <FirebaseContext.Provider
             value={{
@@ -201,6 +228,8 @@ export const FirebaseProvider = (props) => {
                 deleteLocation,
                 updateProfile,
                 uploadImage,
+                createCommunity,
+                fetchCommunities,
                 user,
                 userData,
                 loading,

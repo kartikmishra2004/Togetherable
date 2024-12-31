@@ -1,18 +1,91 @@
-import React from 'react'
-import { Navigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react'
+import { Link, Navigate } from 'react-router-dom';
 import { useFirebase } from '../context/firebase';
+import CreateCommunityModal from '../components/createCommunityModal';
 
 const Communities = () => {
 
-  const { user } = useFirebase();
+  const [showModal, setShowModal] = useState(false);
+
+  const { user, fetchCommunities, loading } = useFirebase();
+  const [communities, setCommunities] = useState([]);
+
+  useEffect(() => {
+    fetchCommunities()
+      .then((res) => setCommunities(res))
+  }, [])
+
+  if (loading || !communities.length) {
+    return (
+      <div className="w-full h-screen flex justify-center items-center font-main">
+        loading...
+      </div>
+    )
+  }
 
   if (user === null) {
     return <Navigate to={'/login'} />
   }
 
+  if (communities.length > 0) {
+    return (
+      <section id="testimonies" className="flex justify-center py-44 w-full font-main">
+        {showModal && <CreateCommunityModal setShowModal={setShowModal} />}
+        <div className="max-w-6xl flex flex-col justify-center items-center mx-8 md:mx-10 lg:mx-20 xl:mx-auto">
+          <div className="transition duration-500 ease-in-out transform scale-100 translate-x-0 translate-y-0 opacity-100">
+            <div className="mb-12 space-y-5 md:mb-16 md:text-center">
+              <h1 className="mb-5 text-4xl font-bold text-white md:text-center">
+                Become Part of Communities
+              </h1>
+              <p className="text-xl text-gray-100 md:text-center md:text-2xl">
+                Find your support network.
+              </p>
+            </div>
+          </div>
+          <ul className="space-y-8">
+            {communities.map((data, key) => (
+              <li key={key} className="text-sm leading-6">
+                <div className="relative group">
+                  <div
+                    className="absolute transition rounded-lg opacity-25 inset-1 bg-gradient-to-r from-purple-600 to-[#9036c8] duration-400 group-hover:opacity-100 group-hover:duration-200">
+                  </div><Link to="/" className="cursor-pointer">
+                    <div
+                      className="relative p-6 space-y-6 leading-none rounded-lg bg-secondary border border-zinc-800 hover:shadow-sm hover:shadow-main transition-all duration-300 ease-in-out">
+                      <div className="flex items-center space-x-4"><img
+                        src={data.communityImage}
+                        className="w-12 h-12 bg-center bg-primary object-cover rounded-full" alt="Kanye West" />
+                        <div>
+                          <h3 className="text-lg font-semibold text-white">{data.name}</h3>
+                          <p className="text-gray-500 text-md">{data.members.length} members</p>
+                        </div>
+                      </div>
+                      <p className="leading-normal text-gray-300 text-md">{data.description}</p>
+                    </div>
+                  </Link>
+                </div>
+              </li>
+            ))}
+          </ul>
+          <div className="w-full h-[1px] bg-zinc-500 my-10 flex justify-center items-center"></div>
+          <div className="flex justify-evenly w-full items-center">
+            <h1 className="text-xl text-gray-100 md:text-center md:text-2xl">
+              Create a community
+            </h1>
+            <button onClick={() => setShowModal(true)} className='inline-flex text-white bg-main border-0 hover:bg-[#9036c8] py-2 px-6 focus:outline-none rounded-lg lg:text-lg'>Create Communituy</button>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
   return (
-    <div className='w-full h-screen'>
-      Communities
+    <div className='w-full h-screen flex flex-col items-center pt-28 font-main'>
+      {showModal && <CreateCommunityModal setShowModal={setShowModal} />}
+      <h1 className='text-3xl font-bold pb-10'>
+        Communities
+      </h1>
+      You have not joinned any community!!
+      <button onClick={() => setShowModal(true)} className='inline-flex mt-3 text-white bg-main border-0 hover:bg-[#9036c8] py-2 px-6 focus:outline-none rounded-lg lg:text-lg'>Create Communituy</button>
     </div>
   )
 }
