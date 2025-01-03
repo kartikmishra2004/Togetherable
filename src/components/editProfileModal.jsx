@@ -66,7 +66,7 @@ const Modal = ({ setModal, completionPercentage, userData }) => {
                         <div className="space-y-2">
                             <div aria-hidden="true" className="border-t border-gray-700 px-2"></div>
                             <div className="flex justify-evenly items-center">
-                                <img src={previewPhoto || 'https://res.cloudinary.com/dlwudcsu1/image/upload/v1723743051/Picsart_24-08-15_23-00-10-662_bix7iy.png'} className={`rounded-full w-24 h-24 object-contain bg-primary ${photoUploading ? 'animate-pulse' : ''}`} />
+                                <img src={previewPhoto || 'https://res.cloudinary.com/dlwudcsu1/image/upload/v1723743051/Picsart_24-08-15_23-00-10-662_bix7iy.png'} className={`rounded-full w-24 h-24 object-cover bg-primary ${photoUploading ? 'animate-pulse' : ''}`} />
                                 <input accept="image/*" id='editPhoto' type="file" className='hidden' onChange={handlePhotoChange} />
                                 <label htmlFor={`${photoUploading ? '' : 'editPhoto'}`}>
                                     <div className={`w-max ${photoUploading ? 'bg-gray-800 cursor-not-allowed' : 'bg-main hover:bg-[#9036c8]'} h-max  text-white px-4 py-2 rounded-lg`}>Select photo</div>

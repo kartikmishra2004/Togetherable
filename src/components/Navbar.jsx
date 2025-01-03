@@ -114,7 +114,7 @@ const Navbar = () => {
                                     <img
                                         src={userData?.photoURL || 'https://res.cloudinary.com/dlwudcsu1/image/upload/v1723743051/Picsart_24-08-15_23-00-10-662_bix7iy.png'}
                                         alt="Name"
-                                        className="lg:w-20 lg:h-20 w-10 h-10 shrink-0 rounded-full object-contain bg-primary" />
+                                        className="lg:w-20 lg:h-20 w-10 h-10 shrink-0 rounded-full object-cover bg-primary" />
                                 </Link>
                                 <Link onClick={handleMenu} to={'/profile'}>
                                     <div className="flex flex-col flex-1 truncate">

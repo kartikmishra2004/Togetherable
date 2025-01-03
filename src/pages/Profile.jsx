@@ -140,12 +140,12 @@ const Profile = () => {
         <div className="lg:bg-secondary h-[75vh] flex items-center max-w-[80vw] mx-auto lg:border lg:py-10 lg:border-zinc-800 rounded-lg shadow-2xl w-full lg:p-8">
           <div className="flex flex-col w-full items-center justify-center lg:flex-row">
             <div className="lg:w-1/3 text-center lg:mb-8 mb-2">
-                <img
-                  src={userData?.photoURL || 'https://res.cloudinary.com/dlwudcsu1/image/upload/v1723743051/Picsart_24-08-15_23-00-10-662_bix7iy.png'}
-                  alt="Profile"
-                  title='Edit profile'
-                  className="rounded-full lg:w-60 lg:h-60 w-32 h-32 mx-auto mb-4 object-contain bg-primary"
-                />
+              <img
+                src={userData?.photoURL || 'https://res.cloudinary.com/dlwudcsu1/image/upload/v1723743051/Picsart_24-08-15_23-00-10-662_bix7iy.png'}
+                alt="Profile"
+                title='Edit profile'
+                className="rounded-full lg:w-60 lg:h-60 w-32 h-32 mx-auto mb-4 object-cover bg-primary"
+              />
             </div>
             <div className="lg:w-2/3 lg:pl-8 w-full">
               <h1 className="lg:text-4xl text-2xl tracking-wide font-extrabold lg:my-2 py-2 text-primary border-b border-zinc-600 text-center lg:text-left">{(userData?.fullName || user?.displayName) || 'Name'}</h1>

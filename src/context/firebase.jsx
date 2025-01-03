@@ -211,11 +211,30 @@ export const FirebaseProvider = (props) => {
     const fetchCommunities = async () => {
         try {
             const communities = await getDocs(collection(firestore, 'communities'));
-            return communities.docs.map((doc) => doc.data());
+            return communities.docs.map((doc) => ({
+                id: doc.id,
+                ...doc.data(),
+            }));
         } catch (error) {
             console.log("Failed to fetch communities!!");
         }
     }
+
+    const getUser = async (id) => {
+        try {
+            const userDoc = await getDoc(doc(firestore, "users", id));
+            if (userDoc.exists()) {
+                return userDoc.data();
+            } else {
+                console.log("User not found!");
+                return null;
+            }
+        } catch (error) {
+            console.log("Failed to find user:", error);
+            return null;
+        }
+    }
+    
 
     return (
         <FirebaseContext.Provider
@@ -230,6 +249,7 @@ export const FirebaseProvider = (props) => {
                 uploadImage,
                 createCommunity,
                 fetchCommunities,
+                getUser,
                 user,
                 userData,
                 loading,

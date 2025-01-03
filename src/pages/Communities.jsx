@@ -13,7 +13,11 @@ const Communities = () => {
   useEffect(() => {
     fetchCommunities()
       .then((res) => setCommunities(res))
-  }, [])
+  }, []);
+
+  useEffect(() => {
+    window.scroll(0, 0);
+  }, []);
 
   if (loading || !communities.length) {
     return (
@@ -34,7 +38,7 @@ const Communities = () => {
         <div className="max-w-6xl flex flex-col justify-center items-center mx-8 md:mx-10 lg:mx-20 xl:mx-auto">
           <div className="transition duration-500 ease-in-out transform scale-100 translate-x-0 translate-y-0 opacity-100">
             <div className="mb-12 space-y-5 md:mb-16 md:text-center">
-              <h1 className="mb-5 text-4xl font-bold text-white md:text-center">
+              <h1 className="mb-5 text-4xl font-bold text-primary md:text-center">
                 Become Part of Communities
               </h1>
               <p className="text-xl text-gray-100 md:text-center md:text-2xl">
@@ -48,14 +52,14 @@ const Communities = () => {
                 <div className="relative group">
                   <div
                     className="absolute transition rounded-lg opacity-25 inset-1 bg-gradient-to-r from-purple-600 to-[#9036c8] duration-400 group-hover:opacity-100 group-hover:duration-200">
-                  </div><Link to="/" className="cursor-pointer">
+                  </div><Link to={`/communities/${data.id}`} state={{ id: data.id, name: data.name, description: data.description, communityImage: data.communityImage, createdBy: data.createdBy, members: data.members }} className="cursor-pointer">
                     <div
                       className="relative p-6 space-y-6 leading-none rounded-lg bg-secondary border border-zinc-800 hover:shadow-sm hover:shadow-main transition-all duration-300 ease-in-out">
                       <div className="flex items-center space-x-4"><img
                         src={data.communityImage}
                         className="w-12 h-12 bg-center bg-primary object-cover rounded-full" alt="Kanye West" />
                         <div>
-                          <h3 className="text-lg font-semibold text-white">{data.name}</h3>
+                          <h3 className="text-lg font-semibold text-primary">{data.name}</h3>
                           <p className="text-gray-500 text-md">{data.members.length} members</p>
                         </div>
                       </div>
@@ -66,12 +70,12 @@ const Communities = () => {
               </li>
             ))}
           </ul>
-          <div className="w-full h-[1px] bg-zinc-500 my-10 flex justify-center items-center"></div>
+          <div className="w-full h-[1px] bg-zinc-700 my-10 flex justify-center items-center"></div>
           <div className="flex justify-evenly w-full items-center">
             <h1 className="text-xl text-gray-100 md:text-center md:text-2xl">
               Create a community
             </h1>
-            <button onClick={() => setShowModal(true)} className='inline-flex text-white bg-main border-0 hover:bg-[#9036c8] py-2 px-6 focus:outline-none rounded-lg lg:text-lg'>Create Communituy</button>
+            <button onClick={() => setShowModal(true)} className='inline-flex text-primary bg-main border-0 hover:bg-[#9036c8] py-2 px-6 focus:outline-none rounded-lg lg:text-lg'>Create Communituy</button>
           </div>
         </div>
       </section>
@@ -85,7 +89,7 @@ const Communities = () => {
         Communities
       </h1>
       You have not joinned any community!!
-      <button onClick={() => setShowModal(true)} className='inline-flex mt-3 text-white bg-main border-0 hover:bg-[#9036c8] py-2 px-6 focus:outline-none rounded-lg lg:text-lg'>Create Communituy</button>
+      <button onClick={() => setShowModal(true)} className='inline-flex mt-3 text-primary bg-main border-0 hover:bg-[#9036c8] py-2 px-6 focus:outline-none rounded-lg lg:text-lg'>Create Communituy</button>
     </div>
   )
 }

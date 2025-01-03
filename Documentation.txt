@@ -15,3 +15,4 @@ Features:
 9.	AI based motivational quotes image generation.
 10.	Realtime sign language translation.
 11. Navigate locaions of community members with map.
+12. Fill the input fields with voice commands.
