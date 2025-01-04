@@ -8,7 +8,7 @@ import {
     GoogleAuthProvider,
     signInWithPopup
 } from "firebase/auth";
-import { getFirestore, doc, setDoc, getDoc, updateDoc, deleteField, addDoc, collection, arrayUnion, getDocs, Timestamp, arrayRemove } from "firebase/firestore";
+import { getFirestore, doc, setDoc, getDoc, updateDoc, deleteField, addDoc, collection, arrayUnion, getDocs, Timestamp, arrayRemove, deleteDoc } from "firebase/firestore";
 
 const firebaseConfig = {
     apiKey: "AIzaSyBR0he9feN636824JXry5H6vzUK5CSeDmI",
@@ -207,6 +207,15 @@ export const FirebaseProvider = (props) => {
         }
     }
 
+    // Method for deleting a community 
+    const deleteCommunity = async (communityId) => {
+        try {
+            await deleteDoc(doc(firestore, 'communities', communityId));
+        } catch (error) {
+            console.log("Failed to delete community!!")
+        }
+    }
+
     // Method for fetching all joinned communities
     const fetchCommunities = async () => {
         try {
@@ -270,6 +279,7 @@ export const FirebaseProvider = (props) => {
             await updateDoc(doc(firestore, "communities", communityId), {
                 members: arrayUnion(userId),
             })
+            location.reload();
         } catch (error) {
             console.log("Failed to join community!!", error)
         }
@@ -281,6 +291,7 @@ export const FirebaseProvider = (props) => {
             await updateDoc(doc(firestore, "communities", communityId), {
                 members: arrayRemove(userId),
             })
+            location.reload();
         } catch (error) {
             console.log("Failed to join community!!", error)
         }
@@ -298,6 +309,7 @@ export const FirebaseProvider = (props) => {
                 updateProfile,
                 uploadImage,
                 createCommunity,
+                deleteCommunity,
                 fetchCommunities,
                 getUser,
                 createPost,

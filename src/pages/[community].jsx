@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Navigate, useParams, useLocation } from 'react-router-dom';
+import { Navigate, useParams, useLocation, useNavigate } from 'react-router-dom';
 import { useFirebase } from '../context/firebase';
 import RelativeTime from "../utils/Moment.jsx";
 
 const CommunityPage = () => {
-    const { user, getUser, loading, uploadImage, createPost, fetchPosts, joinCommuniy, leaveCommuniy } = useFirebase();
+    const { user, getUser, loading, uploadImage, createPost, fetchPosts, joinCommuniy, leaveCommuniy, deleteCommunity } = useFirebase();
+    const navigate = useNavigate()
     const { community } = useParams();
     const location = useLocation();
-    const { name, description, communityImage, createdBy, members } = location.state || {};
+    const { createdBy } = location.state || {};
     const [posts, setPosts] = useState([]);
     const [admin, setAdmin] = useState(null);
     const [previewPhoto, setPreviewPhoto] = useState('');
@@ -16,21 +17,25 @@ const CommunityPage = () => {
         photoURL: '',
     });
     const [photoUploading, setPhotoUploading] = useState(false);
+    const [communityData, setcommunityData] = useState({});
 
     useEffect(() => {
         // Fetch posts and then fetch user data for each post
         const fetchCommunityPosts = async () => {
             const res = await fetchPosts(community);
-            const sortedPosts = res.posts.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            setcommunityData(res);
+            if (res.posts?.length > 0) {
+                const sortedPosts = res.posts.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 
-            // Fetch user data for each post
-            const postsWithUserData = await Promise.all(
-                sortedPosts.map(async (post) => {
-                    const userData = await getUser(post.postedBy);
-                    return { ...post, postedByFullName: userData.fullName, postedByPhotoURL: userData.photoURL };
-                })
-            );
-            setPosts(postsWithUserData);
+                // Fetch user data for each post
+                const postsWithUserData = await Promise.all(
+                    sortedPosts.map(async (post) => {
+                        const userData = await getUser(post.postedBy);
+                        return { ...post, postedByFullName: userData.fullName, postedByPhotoURL: userData.photoURL };
+                    })
+                );
+                setPosts(postsWithUserData);
+            }
         };
 
         fetchCommunityPosts();
@@ -67,6 +72,11 @@ const CommunityPage = () => {
         setPreviewPhoto('');
     };
 
+    const handleDeleteCommunity = async () => {
+        await deleteCommunity(community)
+        navigate('/communities')
+    }
+
     if (loading) {
         return (
             <div className="flex justify-center items-center w-full h-screen">
@@ -81,13 +91,13 @@ const CommunityPage = () => {
 
     return (
         <div className="container w-[75vw] mx-auto py-16 font-main">
-            <div className="w-full py-12 text-center text-4xl font-bold">Welcome to {name}</div>
+            <div className="w-full py-12 text-center text-4xl font-bold">Welcome to {communityData.name}</div>
             <div className="flex gap-6">
                 {/* Left Sidebar - Community Details */}
                 <div className="w-1/3 bg-secondary rounded-lg border border-zinc-800 p-6">
                     <div className="flex items-center gap-3 pb-4">
-                        <img className="w-14 h-14 object-cover rounded-full" src={communityImage} alt="" />
-                        <h2 className="text-2xl font-bold text-primary">{name}</h2>
+                        <img className="w-14 h-14 object-cover rounded-full" src={communityData.communityImage} alt="" />
+                        <h2 className="text-2xl font-bold text-primary">{communityData.name}</h2>
                     </div>
                     <div className="space-y-4">
                         <div className="flex items-center space-x-2">
@@ -96,11 +106,11 @@ const CommunityPage = () => {
                         </div>
                         <div className="flex items-center space-x-2">
                             <span className="text-gray-400">Members:</span>
-                            <span className="text-primary">{members.length}</span>
+                            <span className="text-primary">{communityData?.members?.length}</span>
                         </div>
                         <div className="text-gray-400">
                             <h3 className="text-lg font-semibold text-main mb-2">About</h3>
-                            <p>{description}</p>
+                            <p>{communityData.description}</p>
                         </div>
                         <div className="text-gray-400">
                             <h3 className="text-lg font-semibold text-main mb-2">Rules</h3>
@@ -110,20 +120,24 @@ const CommunityPage = () => {
                                 <li>Follow community guidelines</li>
                             </ul>
                         </div>
-                        {!members.includes(user.uid) ? (
+                        {!communityData?.members?.includes(user.uid) ? (
                             <div className="pt-2">
                                 <button onClick={() => joinCommuniy(community, user.uid)} className='px-6 py-2 bg-main rounded-lg hover:bg-[#9036c8] disabled:bg-gray-800'>Join community</button>
                             </div>
-                        ) : (
+                        ) : (createdBy === user.uid ? (
                             <div className="pt-2">
-                                <button onClick={() => leaveCommuniy(community, user.uid)} className=' text-red-400 rounded-lg hover:text-red-500'>Leave community</button>
-                            </div>)}
+                                <button onClick={handleDeleteCommunity} className=' text-red-400 rounded-lg hover:text-red-500'>Delete community</button>
+                            </div>
+                        ) : (<div className="pt-2">
+                            <button onClick={() => leaveCommuniy(community, user.uid)} className=' text-red-400 rounded-lg hover:text-red-500'>Leave community</button>
+                        </div>
+                        ))}
                     </div>
                 </div>
                 {/* Right Content Area */}
                 <div className="w-2/3 space-y-6">
                     {/* Create Post Box */}
-                    {members.includes(user.uid) && (
+                    {communityData?.members?.includes(user.uid) && (
                         <div className="bg-secondary rounded-lg border border-zinc-800 p-6">
                             <div className="w-full pb-4">
                                 <img
@@ -134,6 +148,7 @@ const CommunityPage = () => {
                             </div>
                             <h3 className="text-xl font-semibold text-primary">Create a Post</h3>
                             <textarea
+                                disabled={photoUploading ? true : false}
                                 onChange={(e) => setFormData({ ...formData, content: e.target.value })}
                                 name="content"
                                 value={formData.content}
@@ -201,14 +216,20 @@ const CommunityPage = () => {
                                     {post.photoURL && <img src={post.photoURL} className="w-60 rounded-lg" alt="" />}
                                     <p className="text-primary text-xl my-4">{post.content}</p>
                                     <div className="flex space-x-4 text-gray-400">
-                                        <button className="flex items-center space-x-2 hover:text-main">
+                                        <button className="flex items-center space-x-1 hover:text-main">
                                             <span>👍</span>
                                             <span>123</span>
                                         </button>
-                                        <button className="flex items-center space-x-2 hover:text-main">
+                                        <button className="flex items-center space-x-1 hover:text-main">
                                             <span>💾</span>
                                             <span>save</span>
                                         </button>
+                                        {post.postedBy === user.uid ? (
+                                            <button className="flex items-center space-x-1 hover:text-main">
+                                                <span>🗑️</span>
+                                                <span>delete</span>
+                                            </button>
+                                        ) : ''}
                                     </div>
                                 </div>
                             ))
