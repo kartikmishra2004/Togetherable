@@ -33,7 +33,7 @@ const Communities = () => {
 
   if (communities.length > 0) {
     return (
-      <section id="testimonies" className="flex justify-center py-16 w-full font-main">
+      <section id="testimonies" className="flex justify-center min-h-screen py-16 w-full font-main">
         {showModal && <CreateCommunityModal setShowModal={setShowModal} />}
         <div className="max-w-6xl flex flex-col justify-center items-center py-12 mx-8 md:mx-10 lg:mx-20 xl:mx-auto">
           <div className="transition duration-500 ease-in-out transform scale-100 translate-x-0 translate-y-0 opacity-100">

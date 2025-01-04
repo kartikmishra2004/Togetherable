@@ -39,7 +39,7 @@ const CommunityPage = () => {
         };
 
         fetchCommunityPosts();
-    }, [previewPhoto, community, fetchPosts, getUser]);
+    }, [community, fetchPosts, getUser, formData]);
 
     useEffect(() => {
         getUser(createdBy).then((res) => setAdmin(res));
@@ -73,7 +73,7 @@ const CommunityPage = () => {
     };
 
     const handleDeleteCommunity = async () => {
-        await deleteCommunity(community)
+        await deleteCommunity(community, user.uid)
         navigate('/communities')
     }
 
@@ -213,8 +213,8 @@ const CommunityPage = () => {
                                             <RelativeTime timestamp={post.timestamp} className="text-sm"></RelativeTime>
                                         </div>
                                     </div>
-                                    {post.photoURL && <img src={post.photoURL} className="w-60 rounded-lg" alt="" />}
                                     <p className="text-primary text-xl my-4">{post.content}</p>
+                                    {post.photoURL && <img src={post.photoURL} className="w-60 rounded-lg" alt="" />}
                                     <div className="flex space-x-4 text-gray-400">
                                         <button className="flex items-center space-x-1 hover:text-main">
                                             <span>👍</span>

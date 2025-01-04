@@ -208,9 +208,12 @@ export const FirebaseProvider = (props) => {
     }
 
     // Method for deleting a community 
-    const deleteCommunity = async (communityId) => {
+    const deleteCommunity = async (communityId, userId) => {
         try {
             await deleteDoc(doc(firestore, 'communities', communityId));
+            await updateDoc(doc(firestore, 'users', userId), {
+                joinedCommunities: arrayRemove(communityId)
+            })
         } catch (error) {
             console.log("Failed to delete community!!")
         }
@@ -279,6 +282,9 @@ export const FirebaseProvider = (props) => {
             await updateDoc(doc(firestore, "communities", communityId), {
                 members: arrayUnion(userId),
             })
+            await updateDoc(doc(firestore, 'users', userId), {
+                joinedCommunities: arrayUnion(communityId)
+            })
             location.reload();
         } catch (error) {
             console.log("Failed to join community!!", error)
@@ -290,6 +296,9 @@ export const FirebaseProvider = (props) => {
         try {
             await updateDoc(doc(firestore, "communities", communityId), {
                 members: arrayRemove(userId),
+            })
+            await updateDoc(doc(firestore, 'users', userId), {
+                joinedCommunities: arrayRemove(communityId)
             })
             location.reload();
         } catch (error) {
