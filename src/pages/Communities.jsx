@@ -52,7 +52,7 @@ const Communities = () => {
                 <div className="relative group">
                   <div
                     className="absolute transition rounded-lg opacity-25 inset-1 bg-gradient-to-r from-purple-600 to-[#9036c8] duration-400 group-hover:opacity-100 group-hover:duration-200">
-                  </div><Link to={`/communities/${data.id}`} state={{ name: data.name, description: data.description, communityImage: data.communityImage, createdBy: data.createdBy, members: data.members, posts: data.posts }} className="cursor-pointer">
+                  </div><Link to={`/communities/${data.id}`} state={{ name: data.name, description: data.description, communityImage: data.communityImage, createdBy: data.createdBy, members: data.members }} className="cursor-pointer">
                     <div
                       className="relative p-6 space-y-6 leading-none rounded-lg bg-secondary border border-zinc-800 hover:shadow-sm hover:shadow-main transition-all duration-300 ease-in-out">
                       <div className="flex items-center space-x-4"><img

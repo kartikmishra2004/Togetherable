@@ -8,7 +8,7 @@ import {
     GoogleAuthProvider,
     signInWithPopup
 } from "firebase/auth";
-import { getFirestore, doc, setDoc, getDoc, updateDoc, deleteField, addDoc, collection, arrayUnion, getDocs, Timestamp } from "firebase/firestore";
+import { getFirestore, doc, setDoc, getDoc, updateDoc, deleteField, addDoc, collection, arrayUnion, getDocs, Timestamp, arrayRemove } from "firebase/firestore";
 
 const firebaseConfig = {
     apiKey: "AIzaSyBR0he9feN636824JXry5H6vzUK5CSeDmI",
@@ -247,9 +247,42 @@ export const FirebaseProvider = (props) => {
             await updateDoc(doc(firestore, 'communities', communityId), {
                 posts: arrayUnion(post),
             })
-            location.reload();
         } catch (error) {
             console.log("Failed to create post !!", error)
+        }
+    }
+
+    // Method for getting all posts in community 
+    const fetchPosts = async (communityId) => {
+        try {
+            const community = await getDoc(doc(firestore, 'communities', communityId))
+            if (community.exists()) {
+                return community.data();
+            }
+        } catch (error) {
+            console.log("Failed to fetch posts !!", error)
+        }
+    }
+
+    // Method for joining a commuunity 
+    const joinCommuniy = async (communityId, userId) => {
+        try {
+            await updateDoc(doc(firestore, "communities", communityId), {
+                members: arrayUnion(userId),
+            })
+        } catch (error) {
+            console.log("Failed to join community!!", error)
+        }
+    }
+
+    // Method for leaving a commuunity 
+    const leaveCommuniy = async (communityId, userId) => {
+        try {
+            await updateDoc(doc(firestore, "communities", communityId), {
+                members: arrayRemove(userId),
+            })
+        } catch (error) {
+            console.log("Failed to join community!!", error)
         }
     }
 
@@ -268,6 +301,9 @@ export const FirebaseProvider = (props) => {
                 fetchCommunities,
                 getUser,
                 createPost,
+                fetchPosts,
+                joinCommuniy,
+                leaveCommuniy,
                 user,
                 userData,
                 loading,
