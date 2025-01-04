@@ -8,7 +8,7 @@ import {
     GoogleAuthProvider,
     signInWithPopup
 } from "firebase/auth";
-import { getFirestore, doc, setDoc, getDoc, updateDoc, deleteField, addDoc, collection, arrayUnion, getDocs } from "firebase/firestore";
+import { getFirestore, doc, setDoc, getDoc, updateDoc, deleteField, addDoc, collection, arrayUnion, getDocs, Timestamp } from "firebase/firestore";
 
 const firebaseConfig = {
     apiKey: "AIzaSyBR0he9feN636824JXry5H6vzUK5CSeDmI",
@@ -220,6 +220,7 @@ export const FirebaseProvider = (props) => {
         }
     }
 
+    // Method for getting user by id
     const getUser = async (id) => {
         try {
             const userDoc = await getDoc(doc(firestore, "users", id));
@@ -234,7 +235,23 @@ export const FirebaseProvider = (props) => {
             return null;
         }
     }
-    
+
+    // Method for creating post in community 
+    const createPost = async (communityId, data) => {
+        try {
+            const post = {
+                ...data,
+                postedBy: user.uid,
+                timestamp: new Date().toISOString(),
+            }
+            await updateDoc(doc(firestore, 'communities', communityId), {
+                posts: arrayUnion(post),
+            })
+            location.reload();
+        } catch (error) {
+            console.log("Failed to create post !!", error)
+        }
+    }
 
     return (
         <FirebaseContext.Provider
@@ -250,6 +267,7 @@ export const FirebaseProvider = (props) => {
                 createCommunity,
                 fetchCommunities,
                 getUser,
+                createPost,
                 user,
                 userData,
                 loading,

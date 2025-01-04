@@ -17,7 +17,7 @@ const Communities = () => {
 
   useEffect(() => {
     window.scroll(0, 0);
-  }, []);
+  }, [location]);
 
   if (loading || !communities.length) {
     return (
@@ -33,9 +33,9 @@ const Communities = () => {
 
   if (communities.length > 0) {
     return (
-      <section id="testimonies" className="flex justify-center py-44 w-full font-main">
+      <section id="testimonies" className="flex justify-center py-16 w-full font-main">
         {showModal && <CreateCommunityModal setShowModal={setShowModal} />}
-        <div className="max-w-6xl flex flex-col justify-center items-center mx-8 md:mx-10 lg:mx-20 xl:mx-auto">
+        <div className="max-w-6xl flex flex-col justify-center items-center py-12 mx-8 md:mx-10 lg:mx-20 xl:mx-auto">
           <div className="transition duration-500 ease-in-out transform scale-100 translate-x-0 translate-y-0 opacity-100">
             <div className="mb-12 space-y-5 md:mb-16 md:text-center">
               <h1 className="mb-5 text-4xl font-bold text-primary md:text-center">
@@ -52,7 +52,7 @@ const Communities = () => {
                 <div className="relative group">
                   <div
                     className="absolute transition rounded-lg opacity-25 inset-1 bg-gradient-to-r from-purple-600 to-[#9036c8] duration-400 group-hover:opacity-100 group-hover:duration-200">
-                  </div><Link to={`/communities/${data.id}`} state={{ id: data.id, name: data.name, description: data.description, communityImage: data.communityImage, createdBy: data.createdBy, members: data.members }} className="cursor-pointer">
+                  </div><Link to={`/communities/${data.id}`} state={{ name: data.name, description: data.description, communityImage: data.communityImage, createdBy: data.createdBy, members: data.members, posts: data.posts }} className="cursor-pointer">
                     <div
                       className="relative p-6 space-y-6 leading-none rounded-lg bg-secondary border border-zinc-800 hover:shadow-sm hover:shadow-main transition-all duration-300 ease-in-out">
                       <div className="flex items-center space-x-4"><img
