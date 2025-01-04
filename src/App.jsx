@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import Navbar from './components/Navbar.jsx';
 import Footer from './components/Footer.jsx';
 import Home from './pages/Home.jsx';
-import Explore from './pages/Explore.jsx';
 import Communities from './pages/Communities.jsx';
 import About from './pages/About.jsx';
 import Profile from './pages/Profile.jsx';
@@ -33,7 +32,6 @@ const App = () => (
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
         <Route path="/" element={<Home />} />
-        <Route path="/explore" element={<Explore />} />
         <Route path="/communities" element={<Communities />} />
         <Route path="/about" element={<About />} />
         <Route path="/profile" element={<Profile />} />

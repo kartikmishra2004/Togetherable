@@ -82,9 +82,6 @@ const Navbar = () => {
                         </>
                     ) : (
                         <>
-                            <Link to={'/explore'} className={`mr-5 ${isActive('/explore') ? 'text-primary' : ''}`}>
-                                Explore
-                            </Link>
                             <Link to={'/communities'} className={`mr-5 ${isActive('/communities') ? 'text-primary' : ''}`}>
                                 Communities
                             </Link>
@@ -139,9 +136,6 @@ const Navbar = () => {
                                         </Link>
                                     </>) :
                                     (<>
-                                        <Link onClick={handleMenu} to={'/explore'}>
-                                            Explore
-                                        </Link>
                                         <Link onClick={handleMenu} to={'/communities'}>
                                             Communities
                                         </Link>
