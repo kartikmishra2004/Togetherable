@@ -96,7 +96,7 @@ const CreateCommunityModal = ({ setShowModal }) => {
                                         className="inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border border-zinc-500 min-h-[2.25rem] px-4 text-sm text-primary bg-secondary">
                                         Cancel
                                     </button>
-                                    <button disabled={photoUploading ? true : false} onClick={() => { setShowModal(false); createCommunity(formData) }} type="submit"
+                                    <button disabled={photoUploading || !formData.name || !formData.description ? true : false} onClick={() => { setShowModal(false); createCommunity(formData) }} type="submit"
                                         className="inline-flex items-center disabled:bg-gray-800 disabled:cursor-not-allowed justify-center py-1 gap-1 font-medium rounded-lg min-h-[2.25rem] px-4 text-sm text-primary shadow bg-main hover:bg-[#9036c8]">
                                         <span className="flex items-center gap-1">
                                             <span className="">

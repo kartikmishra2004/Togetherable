@@ -181,10 +181,9 @@ const CommunityPage = () => {
                                     </label>
                                 </div>
                                 <button
-                                    disabled={photoUploading}
+                                    disabled={photoUploading || !formData.content}
                                     onClick={post}
-                                    className={`px-6 ${photoUploading ? 'cursor-not-allowed' : 'cursor-pointer'} py-2 bg-main rounded-lg hover:bg-[#9036c8] disabled:bg-gray-800`}
-                                >
+                                    className={`px-6 disabled:cursor-not-allowed py-2 bg-main rounded-lg hover:bg-[#9036c8] disabled:bg-gray-800`}>
                                     {photoUploading ? 'Please wait...' : 'Post'}
                                 </button>
                             </div>
