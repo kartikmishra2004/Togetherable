@@ -11,6 +11,7 @@ import Login from './auth/Login.jsx';
 import Settings from './pages/Settings.jsx';
 import NotFound from './components/Notfound.jsx';
 import CommunityPage from './pages/[community].jsx';
+import Call from './pages/Call.jsx';
 
 const Layout = ({ children }) => {
   const location = useLocation();
@@ -38,6 +39,7 @@ const App = () => (
         <Route path="/settings" element={<Settings />} />
         <Route path="*" element={<NotFound />} />
         <Route path="/communities/:community" element={<CommunityPage />} />
+        <Route path="/call" element={<Call />} />
       </Routes>
     </Layout>
   </Router>
