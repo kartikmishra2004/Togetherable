@@ -21,7 +21,7 @@ const Call = () => {
     // Function to fetch token from our server
     const fetchToken = async (channelName) => {
         try {
-            const response = await fetch('http://togetherable-agoratoken-server.vercel.app/generate-token', {
+            const response = await fetch('https://togetherable-agoratoken-server.vercel.app/generate-token', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
