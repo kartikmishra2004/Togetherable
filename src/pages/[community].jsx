@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Navigate, useParams, useLocation, useNavigate } from 'react-router-dom';
+import { Navigate, useParams, useLocation, useNavigate, Link } from 'react-router-dom';
 import { useFirebase } from '../context/firebase';
 import RelativeTime from "../utils/Moment.jsx";
+import phonecall from '../assets/phone-call.png'
 
 const CommunityPage = () => {
     const { user, getUser, loading, uploadImage, createPost, fetchPosts, joinCommuniy, leaveCommuniy, deleteCommunity } = useFirebase();
@@ -132,6 +133,16 @@ const CommunityPage = () => {
                             <button onClick={() => leaveCommuniy(community, user.uid)} className=' text-red-400 rounded-lg hover:text-red-500'>Leave community</button>
                         </div>
                         ))}
+                        <div title='Make a phone call in community.' className="flex items-center space-x-2">
+                            {communityData?.members?.includes(user.uid) &&
+                                (
+                                    <Link to={`/communities/${community}/call`}>
+                                        <div className='bg-main rounded-lg px-4 py-2 hover:bg-[#9036c8]'>
+                                            Group call
+                                        </div>
+                                    </Link>
+                                )}
+                        </div>
                     </div>
                 </div>
                 {/* Right Content Area */}

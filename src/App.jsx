@@ -39,7 +39,7 @@ const App = () => (
         <Route path="/settings" element={<Settings />} />
         <Route path="*" element={<NotFound />} />
         <Route path="/communities/:community" element={<CommunityPage />} />
-        <Route path="/call" element={<Call />} />
+        <Route path="/communities/:community/call" element={<Call />} />
       </Routes>
     </Layout>
   </Router>
