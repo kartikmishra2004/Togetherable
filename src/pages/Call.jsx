@@ -70,7 +70,6 @@ const Call = () => {
                     <div className="flex gap-5 p-10 h-[60vh] w-[60vw]">
                         <div className="w-72 h-54 border border-gray-600">
                             <LocalUser
-                                audioTrack={localMicrophoneTrack}
                                 cameraOn={cameraOn}
                                 micOn={micOn}
                                 videoTrack={localCameraTrack}
