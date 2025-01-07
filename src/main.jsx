@@ -5,7 +5,7 @@ import App from './App.jsx'
 import { FirebaseProvider } from './context/firebase.jsx'
 import AgoraRTC, { AgoraRTCProvider } from "agora-rtc-react";
 
-AgoraRTC.setLogLevel(4);
+AgoraRTC.setLogLevel(5);
 // In video call, set mode to "rtc"
 const client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
 

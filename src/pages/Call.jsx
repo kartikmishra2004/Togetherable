@@ -21,7 +21,7 @@ const Call = () => {
     const [token, setToken] = useState("");
     const [readyToJoin, setReadyToJoin] = useState(false);
 
-    const [micOn, setMic] = useState(false);
+    const [micOn, setMic] = useState(true);
     const [cameraOn, setCamera] = useState(false);
 
     // Always create the microphone track, but control its enabled state
@@ -97,7 +97,7 @@ const Call = () => {
                             </LocalUser>
                         </div>
                         {remoteUsers.map((user) => (
-                            <div className="w-72 h-54 border border-gray-600" key={user.uid}>
+                            <div className="w-[28rem] h-[21rem] border border-gray-600" key={user.uid}>
                                 <RemoteUser cover="https://www.agora.io/en/wp-content/uploads/2022/10/3d-spatial-audio-icon.svg" user={user}>
                                     <span className="absolute bottom-0 z-10 inline-flex items-center gap-1 px-1 text-sm text-white bg-black">{user.uid}</span>
                                 </RemoteUser>
