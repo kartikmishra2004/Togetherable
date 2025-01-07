@@ -81,9 +81,6 @@ const Communities = () => {
           </ul>
           <div className="w-full h-[1px] bg-zinc-700 my-10 flex justify-center items-center"></div>
           <div className="flex justify-evenly w-full items-center">
-            <h1 className="text-xl text-gray-100 md:text-center md:text-2xl">
-              Create a community
-            </h1>
             <button onClick={() => setShowModal(true)} className='inline-flex text-primary bg-main border-0 hover:bg-[#9036c8] py-2 px-6 focus:outline-none rounded-lg lg:text-lg'>Create Communituy</button>
           </div>
         </div>
