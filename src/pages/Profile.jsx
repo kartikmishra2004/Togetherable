@@ -91,35 +91,18 @@ const Profile = () => {
 
   if (loading) {
     return (
-      <>
-        <div className="w-full h-screen pt-28 font-main overflow-x-hidden xl:block hidden">
-          <div className="lg:bg-secondary h-[75vh] flex items-center justify-center max-w-[80vw] mx-auto lg:border lg:py-10 lg:border-zinc-800 rounded-lg shadow-2xl w-full lg:p-8">
-            <SkeletonTheme baseColor="#14141c" highlightColor="#232234">
-              <div className="flex flex-col w-full items-center justify-center lg:flex-row">
-                <div className="lg:w-1/3 text-center lg:mb-8 mb-2">
-                  <Skeleton circle={true} height={240} width={240} />
-                </div>
-                <div className="lg:w-2/3 lg:pl-8 text-center lg:text-left">
-                  <Skeleton height={48} width={500} className="my-2 py-2 mx-auto lg:mx-0" />
-                  <Skeleton height={24} width={160} className="mt-4 mx-auto lg:mx-0" />
-                  <Skeleton height={24} width={600} className="mt-4 mx-auto lg:mx-0" />
-                  <Skeleton height={24} width={160} className="mt-6 mx-auto lg:mx-0" />
-                  <Skeleton height={24} width={600} className="mt-4 mx-auto lg:mx-0" />
-                  <Skeleton height={24} width={600} className="mt-4 mx-auto lg:mx-0" />
-                  <Skeleton height={24} width={600} className="mt-4 mx-auto lg:mx-0" />
-                  <div className="my-4 flex flex-col justify-center lg:items-start items-center">
-                    <Skeleton height={24} width={450} className="lg:max-w-[30vw]" />
-                    <Skeleton height={45} width={160} className="mt-4" />
-                  </div>
-                </div>
-              </div>
-            </SkeletonTheme>
-          </div>
-        </div>
-        <div className="xl:hidden flex justify-center items-center w-full h-screen">
-          <div className='w-12 h-12 border-t-2 border-main animate-spin duration-500 ease-in-out rounded-full'></div>
-        </div>
-      </>
+      <div class="flex justify-center items-center h-screen">
+        <div class="jelly"></div>
+        <svg width="0" height="0" class="jelly-maker">
+          <defs>
+            <filter id="uib-jelly-ooze">
+              <feGaussianBlur in="SourceGraphic" stdDeviation="6.25" result="blur"></feGaussianBlur>
+              <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7" result="ooze"></feColorMatrix>
+              <feBlend in="SourceGraphic" in2="ooze"></feBlend>
+            </filter>
+          </defs>
+        </svg>
+      </div>
     );
   }
 

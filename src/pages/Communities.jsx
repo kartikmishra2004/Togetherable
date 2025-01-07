@@ -21,8 +21,17 @@ const Communities = () => {
 
   if (loading || !communities.length) {
     return (
-      <div className="w-full h-screen flex justify-center items-center font-main">
-        loading...
+      <div class="flex justify-center items-center h-screen">
+        <div class="jelly"></div>
+        <svg width="0" height="0" class="jelly-maker">
+          <defs>
+            <filter id="uib-jelly-ooze">
+              <feGaussianBlur in="SourceGraphic" stdDeviation="6.25" result="blur"></feGaussianBlur>
+              <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7" result="ooze"></feColorMatrix>
+              <feBlend in="SourceGraphic" in2="ooze"></feBlend>
+            </filter>
+          </defs>
+        </svg>
       </div>
     )
   }
@@ -52,7 +61,7 @@ const Communities = () => {
                 <div className="relative group">
                   <div
                     className="absolute transition rounded-lg opacity-25 inset-1 bg-gradient-to-r from-purple-600 to-[#9036c8] duration-400 group-hover:opacity-100 group-hover:duration-200">
-                  </div><Link to={`/communities/${data.id}`} state={{ createdBy: data.createdBy}} className="cursor-pointer">
+                  </div><Link to={`/communities/${data.id}`} state={{ createdBy: data.createdBy }} className="cursor-pointer">
                     <div
                       className="relative p-6 space-y-6 leading-none rounded-lg bg-secondary border border-zinc-800 hover:shadow-sm hover:shadow-main transition-all duration-300 ease-in-out">
                       <div className="flex items-center space-x-4"><img

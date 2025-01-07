@@ -2,16 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { Navigate, useParams, useLocation, useNavigate, Link } from 'react-router-dom';
 import { useFirebase } from '../context/firebase';
 import RelativeTime from "../utils/Moment.jsx";
-import phonecall from '../assets/phone-call.png'
 
 const CommunityPage = () => {
     const { user, getUser, loading, uploadImage, createPost, fetchPosts, joinCommuniy, leaveCommuniy, deleteCommunity } = useFirebase();
     const navigate = useNavigate()
     const { community } = useParams();
     const location = useLocation();
-    const { createdBy } = location.state || {};
+    // const { createdBy } = location.state || {};
     const [posts, setPosts] = useState([]);
-    const [admin, setAdmin] = useState(null);
+    const [admin, setAdmin] = useState('');
     const [previewPhoto, setPreviewPhoto] = useState('');
     const [formData, setFormData] = useState({
         content: '',
@@ -19,12 +18,15 @@ const CommunityPage = () => {
     });
     const [photoUploading, setPhotoUploading] = useState(false);
     const [communityData, setcommunityData] = useState({});
+    const [dataLoading, setDataLoading] = useState(false);
 
     useEffect(() => {
         // Fetch posts and then fetch user data for each post
         const fetchCommunityPosts = async () => {
+            setDataLoading(true);
             const res = await fetchPosts(community);
             setcommunityData(res);
+            await getUser(res.createdBy).then((res) => setAdmin(res));
             if (res.posts?.length > 0) {
                 const sortedPosts = res.posts.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 
@@ -37,14 +39,10 @@ const CommunityPage = () => {
                 );
                 setPosts(postsWithUserData);
             }
+            setDataLoading(false);
         };
-
         fetchCommunityPosts();
     }, [community, fetchPosts, getUser, formData]);
-
-    useEffect(() => {
-        getUser(createdBy).then((res) => setAdmin(res));
-    }, [createdBy, getUser]);
 
     useEffect(() => {
         window.scroll(0, 0);
@@ -78,10 +76,19 @@ const CommunityPage = () => {
         navigate('/communities')
     }
 
-    if (loading) {
+    if (loading || dataLoading) {
         return (
-            <div className="flex justify-center items-center w-full h-screen">
-                loading...
+            <div class="flex justify-center items-center h-screen">
+                <div class="jelly"></div>
+                <svg width="0" height="0" class="jelly-maker">
+                    <defs>
+                        <filter id="uib-jelly-ooze">
+                            <feGaussianBlur in="SourceGraphic" stdDeviation="6.25" result="blur"></feGaussianBlur>
+                            <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7" result="ooze"></feColorMatrix>
+                            <feBlend in="SourceGraphic" in2="ooze"></feBlend>
+                        </filter>
+                    </defs>
+                </svg>
             </div>
         );
     }
@@ -91,11 +98,11 @@ const CommunityPage = () => {
     }
 
     return (
-        <div className="container w-[75vw] mx-auto py-16 font-main">
+        <div className="container lg:w-[75vw] lg:px-0 px-2 mx-auto py-16 font-main">
             <div className="w-full py-12 text-center text-4xl font-bold">Welcome to {communityData.name}</div>
-            <div className="flex gap-6">
+            <div className="flex lg:flex-row flex-col gap-6">
                 {/* Left Sidebar - Community Details */}
-                <div className="w-1/3 bg-secondary rounded-lg border border-zinc-800 p-6">
+                <div className="lg:w-1/3 bg-secondary rounded-lg border border-zinc-800 p-6">
                     <div className="flex items-center gap-3 pb-4">
                         <img className="w-14 h-14 object-cover rounded-full" src={communityData.communityImage} alt="" />
                         <h2 className="text-2xl font-bold text-primary">{communityData.name}</h2>
@@ -122,18 +129,18 @@ const CommunityPage = () => {
                             </ul>
                         </div>
                         {!communityData?.members?.includes(user.uid) ? (
-                            <div className="pt-2">
+                            <div className="pt-2 w-full flex lg:justify-start justify-center">
                                 <button onClick={() => joinCommuniy(community, user.uid)} className='px-6 py-2 bg-main rounded-lg hover:bg-[#9036c8] disabled:bg-gray-800'>Join community</button>
                             </div>
-                        ) : (createdBy === user.uid ? (
-                            <div className="pt-2">
+                        ) : (communityData.createdBy === user.uid ? (
+                            <div className="pt-2 w-full flex lg:justify-start justify-center">
                                 <button onClick={handleDeleteCommunity} className=' text-red-400 rounded-lg hover:text-red-500'>Delete community</button>
                             </div>
-                        ) : (<div className="pt-2">
+                        ) : (<div className="pt-2 w-full flex lg:justify-start justify-center">
                             <button onClick={() => leaveCommuniy(community, user.uid)} className=' text-red-400 rounded-lg hover:text-red-500'>Leave community</button>
                         </div>
                         ))}
-                        <div title='Make a phone call in community.' className="flex items-center space-x-2">
+                        <div title='Make a phone call in community.' className="flex items-center lg:space-x-2 w-full lg:justify-start justify-center">
                             {communityData?.members?.includes(user.uid) &&
                                 (
                                     <Link to={`/communities/${community}/call`}>
@@ -146,7 +153,7 @@ const CommunityPage = () => {
                     </div>
                 </div>
                 {/* Right Content Area */}
-                <div className="w-2/3 space-y-6">
+                <div className="lg:w-2/3 space-y-6">
                     {/* Create Post Box */}
                     {communityData?.members?.includes(user.uid) && (
                         <div className="bg-secondary rounded-lg border border-zinc-800 p-6">
