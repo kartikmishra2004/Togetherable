@@ -3,9 +3,9 @@ import React from 'react'
 const Offline = () => {
     return (
         <div>
-            <div class="bg-black text-white font-main">
-                <div class="flex h-screen">
-                    <div class="m-auto text-center">
+            <div className="bg-black text-white font-main">
+                <div className="flex h-screen">
+                    <div className="m-auto text-center">
                         <div className='flex justify-center items-center'>
                             <svg className='w-72 h-72' viewBox="0 0 450 338" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <g clip-path="url(#clip0)">
@@ -99,10 +99,10 @@ const Offline = () => {
                                 </defs>
                             </svg>
                         </div>
-                        <p class="text-sm md:text-base text-primary p-2 mb-4">You aren't connected to a working internet
+                        <p className="text-sm md:text-base text-primary p-2 mb-4">You aren't connected to a working internet
                             connection!!</p>
                         <button onClick={() => location.reload()}
-                            class="hover:bg-[#9036c8] bg-main text-primary rounded-lg shadow hover:shadow-lg py-2 px-4">
+                            className="hover:bg-[#9036c8] bg-main text-primary rounded-lg shadow hover:shadow-lg py-2 px-4">
                             Retry</button>
                     </div>
                 </div>

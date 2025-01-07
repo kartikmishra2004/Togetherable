@@ -87,7 +87,7 @@ const Call = () => {
             {isConnected && (
                 <>
                     <div className="flex gap-5 p-10 h-[60vh] w-[60vw]">
-                        <div className="w-72 h-54 border border-gray-600">
+                        <div className="w-[28rem] h-[21rem] border border-gray-600">
                             <LocalUser
                                 cameraOn={cameraOn}
                                 micOn={micOn}

@@ -91,9 +91,9 @@ const Profile = () => {
 
   if (loading) {
     return (
-      <div class="flex justify-center items-center h-screen">
-        <div class="jelly"></div>
-        <svg width="0" height="0" class="jelly-maker">
+      <div className="flex justify-center items-center h-screen">
+        <div className="jelly"></div>
+        <svg width="0" height="0" className="jelly-maker">
           <defs>
             <filter id="uib-jelly-ooze">
               <feGaussianBlur in="SourceGraphic" stdDeviation="6.25" result="blur"></feGaussianBlur>
