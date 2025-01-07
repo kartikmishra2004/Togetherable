@@ -16,10 +16,9 @@ const Call = () => {
     const navigate = useNavigate();
     const appId = '17dcb55f4a1947f795073f276178f08a';
     const { community } = useParams();
+    const channel = community
 
-    const [calling, setCalling] = useState(false);
     const isConnected = useIsConnected();
-    const [channel, setChannel] = useState(community);
     const [token, setToken] = useState("");
     const [readyToJoin, setReadyToJoin] = useState(false);
 
@@ -44,19 +43,17 @@ const Call = () => {
             }
         } catch (error) {
             console.error('Error fetching token:', error);
-            setCalling(false);
         }
     };
 
     const handleJoinChannel = async () => {
-        setCalling(true);
         await fetchToken(channel);
     };
 
     useJoin({ appid: appId, channel: channel, token: token }, readyToJoin);
 
-    const [micOn, setMic] = useState(true);
-    const [cameraOn, setCamera] = useState(true);
+    const [micOn, setMic] = useState(false);
+    const [cameraOn, setCamera] = useState(false);
     const { localMicrophoneTrack } = useLocalMicrophoneTrack(micOn);
     const { localCameraTrack } = useLocalCameraTrack(cameraOn);
     usePublish([localMicrophoneTrack, localCameraTrack]);
@@ -64,7 +61,6 @@ const Call = () => {
     const remoteUsers = useRemoteUsers();
 
     const handleHangup = () => {
-        setCalling(false);
         setReadyToJoin(false);
         setToken("");
         navigate(-1);
@@ -99,7 +95,7 @@ const Call = () => {
                         </div>
                         <div className="w-full flex items-center justify-center gap-3 py-3 px-6 bg-gray-800 text-gray-300">
                             <div className="flex items-center gap-3 flex-1">
-                                <button className="p-2 rounded bg-transparent border border-white/10 hover:bg-gray-700" onClick={() => setMic(!micOn)}>
+                                <button className="p-2 rounded bg-transparent border border-white/10 hover:bg-gray-700" onClick={() => setMic(a => !a)}>
                                     <div className="">{micOn ? "Mic (on)" : "Mic (off)"}</div>
                                 </button>
                                 <button className="p-2 rounded bg-transparent border border-white/10 hover:bg-gray-700" onClick={() => setCamera(a => !a)}>
