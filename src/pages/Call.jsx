@@ -99,8 +99,8 @@ const Call = () => {
                         </div>
                         <div className="w-full flex items-center justify-center gap-3 py-3 px-6 bg-gray-800 text-gray-300">
                             <div className="flex items-center gap-3 flex-1">
-                                <button className="p-2 rounded bg-transparent border border-white/10 hover:bg-gray-700" onClick={() => setMic(a => !a)}>
-                                    <div className="">Mic</div>
+                                <button className="p-2 rounded bg-transparent border border-white/10 hover:bg-gray-700" onClick={() => setMic(!micOn)}>
+                                    <div className="">{micOn ? "Mic (on)" : "Mic (off)"}</div>
                                 </button>
                                 <button className="p-2 rounded bg-transparent border border-white/10 hover:bg-gray-700" onClick={() => setCamera(a => !a)}>
                                     <div className="">Camera</div>
