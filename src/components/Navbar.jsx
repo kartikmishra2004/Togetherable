@@ -36,32 +36,46 @@ const Navbar = () => {
 
     if (loading) {
         return (
-            <header
-                className='text-gray-500 body-font font-main fixed w-full h-[4.5rem] z-50 bg-secondary border-b border-zinc-800 lg:block hidden'>
-                <SkeletonTheme baseColor="#14141c" highlightColor="#232234">
-                    <div className="flex justify-evenly w-full h-full items-center">
-                        <div className="flex justify-center items-center">
+            <>
+                <header
+                    className='text-gray-500 body-font font-main fixed w-full h-[4.5rem] z-50 bg-secondary border-b border-zinc-800 lg:block hidden'>
+                    <SkeletonTheme baseColor="#14141c" highlightColor="#232234">
+                        <div className="flex justify-evenly w-full h-full items-center">
+                            <div className="flex justify-center items-center">
+                                <div className="">
+                                    <Skeleton height={30} width={240} style={{ marginRight: 30 }} />
+                                </div>
+                                <div className="flex">
+                                    <Skeleton height={30} width={600} />
+                                </div>
+                            </div>
                             <div className="">
-                                <Skeleton height={30} width={240} style={{ marginRight: 30 }} />
+                                <Skeleton height={30} width={30} circle={true} />
                             </div>
+                        </div>
+                    </SkeletonTheme>
+                </header>
+                <header
+                    className='text-gray-500 body-font font-main fixed w-full h-[4.5rem] z-50 bg-secondary border-b border-zinc-800 lg:hidden block'>
+                    <SkeletonTheme baseColor="#14141c" highlightColor="#232234">
+                        <div className="flex justify-between items-center w-full h-full px-6">
                             <div className="flex">
-                                <Skeleton height={30} width={600} />
+                                <Skeleton height={35} width={190} />
+                            </div>
+                            <div className="">
+                                <Skeleton height={35} width={40} circle={true} />
                             </div>
                         </div>
-                        <div className="">
-                            <Skeleton height={30} width={30} circle={true} />
-                        </div>
-                    </div>
-                </SkeletonTheme>
-            </header>
+                    </SkeletonTheme>
+                </header>
+            </>
         )
     }
 
     return (
         <header
             className={`text-gray-500 body-font font-main fixed w-full z-50 ${scrolled ? 'bg-secondary border-b border-zinc-800' : 'bg-transparent'
-                }`}
-        >
+                }`}>
             <div className="container mx-auto flex flex-wrap p-5 flex-row justify-between xl:px-52 items-center">
                 <Link to={'/'} className="flex justify-center title-font font-medium items-center text-gray-900 md:mb-0">
                     <img className="w-8" src={logo} alt="logo" />
