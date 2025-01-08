@@ -23,7 +23,7 @@ const Call = () => {
     const [readyToJoin, setReadyToJoin] = useState(false);
 
     const [micOn, setMic] = useState(true);
-    const [cameraOn, setCamera] = useState(true);
+    const [cameraOn, setCamera] = useState(false);
 
     // Always create the microphone track, but control its enabled state
     const { localMicrophoneTrack } = useLocalMicrophoneTrack();
@@ -99,7 +99,7 @@ const Call = () => {
                             videoTrack={localCameraTrack}
                             cover="https://www.agora.io/en/wp-content/uploads/2022/10/3d-spatial-audio-icon.svg">
                         </LocalUser>
-                        <div className="z-20 absolute bottom-0 bg-secondary/30 p-3 w-full">
+                        <div className="z-20 absolute bottom-0 bg-secondary/40 p-3 w-full">
                             <div className="max-w-7xl mx-auto flex items-center justify-between">
                                 <div className="flex items-center gap-2">
                                     <button onClick={toggleMic} className="p-3 rounded-full hover:bg-secondary/40">
@@ -134,10 +134,15 @@ const Call = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="flex flex-col gap-5 h-[27.5rem]">
-                        {['Kartik', 'Sanidhya', 'Nitesh'].map((user, key) => (
-                            <div key={key} className="aspect-video text-gray-300 w-[16.75vw] h-max border border-zinc-800 rounded-lg bg-secondary">
-                                <div className="px-2">{user}</div>
+                    <div style={{
+                            scrollbarWidth: 'thin', // Firefox custom scrollbar width
+                            scrollbarColor: '#9b4dca #2d3748', // Firefox custom thumb and track color
+                        }} className="h-[30rem] space-y-5 overflow-y-auto">
+                        {remoteUsers.map((user) => (
+                            <div key={user.uid} className="aspect-video text-gray-300 w-[16.75vw] h-max overflow-hidden border border-zinc-800 rounded-lg bg-secondary">
+                                <RemoteUser className="rounded-lg scale-x-[-1]" cover="https://www.agora.io/en/wp-content/uploads/2022/10/3d-spatial-audio-icon.svg" user={user}>
+                                    <span className="absolute bottom-0 z-10 inline-flex  scale-x-[-1] items-center gap-1 text-sm bg-black/50 text-white px-3 rounded-br-lg rounded-tl-lg">{user.uid}</span>
+                                </RemoteUser>
                             </div>
                         ))}
                     </div>
