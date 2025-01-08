@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { useFirebase } from '../context/firebase';
-import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
-import 'react-loading-skeleton/dist/skeleton.css';
 import Modal from '../components/editProfileModal.jsx';
 import Offline from '../components/Offline.jsx';
 
