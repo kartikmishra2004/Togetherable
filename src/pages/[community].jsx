@@ -98,7 +98,7 @@ const CommunityPage = () => {
     }
 
     return (
-        <div className="container lg:w-[75vw] lg:px-0 px-2 mx-auto py-16 font-main">
+        <div className="container lg:w-[80vw] lg:px-0 px-2 mx-auto py-16 font-main">
             <div className="w-full py-12 text-center text-4xl font-bold">Welcome to {communityData.name}</div>
             <div className="flex lg:flex-row flex-col gap-6">
                 {/* Left Sidebar - Community Details */}
@@ -213,8 +213,7 @@ const CommunityPage = () => {
                         style={{
                             scrollbarWidth: 'thin', // Firefox custom scrollbar width
                             scrollbarColor: '#9b4dca #2d3748', // Firefox custom thumb and track color
-                        }}
-                    >
+                        }}>
                         {/* Posts */}
                         {posts.length > 0 ? (
                             posts.map((post, key) => (

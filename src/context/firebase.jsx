@@ -8,7 +8,7 @@ import {
     GoogleAuthProvider,
     signInWithPopup
 } from "firebase/auth";
-import { getFirestore, doc, setDoc, getDoc, updateDoc, deleteField, addDoc, collection, arrayUnion, getDocs, Timestamp, arrayRemove, deleteDoc } from "firebase/firestore";
+import { getFirestore, doc, setDoc, getDoc, updateDoc, deleteField, addDoc, collection, arrayUnion, getDocs, Timestamp, arrayRemove, deleteDoc, query, where } from "firebase/firestore";
 
 const firebaseConfig = {
     apiKey: "AIzaSyBR0he9feN636824JXry5H6vzUK5CSeDmI",
@@ -207,19 +207,22 @@ export const FirebaseProvider = (props) => {
         }
     }
 
-    // Method for deleting a community 
+    // Method for deleting a community
     const deleteCommunity = async (communityId, userId) => {
         try {
             await deleteDoc(doc(firestore, 'communities', communityId));
-            await updateDoc(doc(firestore, 'users', userId), {
-                joinedCommunities: arrayRemove(communityId)
-            })
+            const users = await getDocs(collection(firestore, 'users'));
+            users.forEach(async (userDocs) => {
+                await updateDoc(doc(firestore, 'users', userDocs.id), {
+                    joinedCommunities: arrayRemove(communityId)
+                });
+            });
         } catch (error) {
             console.log("Failed to delete community!!")
         }
     }
 
-    // Method for fetching all joinned communities
+    // Method for fetching all communities
     const fetchCommunities = async () => {
         try {
             const communities = await getDocs(collection(firestore, 'communities'));
@@ -231,6 +234,19 @@ export const FirebaseProvider = (props) => {
             console.log("Failed to fetch communities!!");
         }
     }
+
+    // Method for fetching all joined communities
+    const fetchJoinedCommunities = async (userId) => {
+        try {
+            const snapshot = await getDocs(
+                query(collection(firestore, 'communities'), where('members', 'array-contains', userId))
+            );
+            return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        } catch (error) {
+            console.error("Failed to fetch communities!", error);
+            return [];
+        }
+    };
 
     // Method for getting user by id
     const getUser = async (id) => {
@@ -325,6 +341,7 @@ export const FirebaseProvider = (props) => {
                 fetchPosts,
                 joinCommuniy,
                 leaveCommuniy,
+                fetchJoinedCommunities,
                 user,
                 userData,
                 loading,
