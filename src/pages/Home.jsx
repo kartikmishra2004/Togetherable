@@ -26,8 +26,8 @@ const Home = () => {
 
   return (
     <main className=''>
-      <section className="text-primary body-font lg:px-52 font-main">
-        <div className="container mx-auto flex px-5 lg:py-44 py-32 md:flex-row flex-col items-center">
+      <section className="text-primary body-font font-main">
+        <div className="container mx-auto flex px-5 w-[80vw] lg:py-44 py-32 md:flex-row flex-col items-center">
           <div className="lg:max-w-lg lg:w-full md:w-1/2 w-5/6 mb-10 md:mb-0 lg:block hidden">
             {!isUnityLoaded && (
               <SkeletonTheme baseColor="#14141c" highlightColor="#232234">
@@ -60,9 +60,9 @@ const Home = () => {
           </div>
         </div>
       </section>
-      <section className="text-gray-400 body-font lg:px-52 font-main">
+      <section className="text-gray-400 body-font flex flex-col justify-center items-center font-main">
         <h1 className="title-font sm:text-4xl text-3xl mb-4 font-bold w-full text-center text-primary">Your Path to Connection and Support</h1>
-        <div className='flex items-center justify-center'>
+        <div className='flex items-center justify-center w-[80vw]'>
           <div className="container lg:px-5 lg:py-24 py-10 lg:w-[52vw] w-[60vw] flex flex-wrap">
             <div className="flex relative pt-10 pb-20 sm:items-center md:w-2/3">
               <div className="h-full w-6 absolute inset-0 flex items-center justify-center">
