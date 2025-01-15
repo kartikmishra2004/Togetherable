@@ -42,7 +42,7 @@ const CommunityPage = () => {
             setDataLoading(false);
         };
         fetchCommunityPosts();
-    }, [community, fetchPosts, getUser, formData]);
+    }, [community, fetchPosts, getUser]);
 
     useEffect(() => {
         window.scroll(0, 0);
@@ -102,38 +102,37 @@ const CommunityPage = () => {
             <div className="w-full py-12 text-center text-4xl font-bold">Welcome to {communityData.name}</div>
             <div className="flex lg:flex-row flex-col gap-6">
                 {/* Left Sidebar - Community Details */}
-                <div className="lg:w-1/3 bg-secondary rounded-lg border border-zinc-800 p-6">
+                <div className="lg:w-1/5 h-max bg-secondary rounded-lg border border-zinc-800 p-6">
                     <div className="flex items-center gap-3 pb-4">
                         <img className="w-14 h-14 object-cover rounded-full" src={communityData.communityImage} alt="" />
-                        <h2 className="text-2xl font-bold text-primary">{communityData.name}</h2>
+                        <h2 className="text-base font-bold text-primary">{communityData.name}</h2>
                     </div>
-                    <div className="space-y-4">
+                    <div className="space-y-1">
                         <div className="flex items-center space-x-2">
-                            <span className="text-gray-400">Admin:</span>
-                            <span className="text-primary">{admin?.fullName}</span>
+                            <span className="text-gray-400 text-sm">Admin:</span>
+                            <span className="text-primary text-sm">{admin?.fullName}</span>
                         </div>
                         <div className="flex items-center space-x-2">
-                            <span className="text-gray-400">Members:</span>
-                            <span className="text-primary">{communityData?.members?.length}</span>
+                            <span className="text-gray-400 text-sm">Members:</span>
+                            <span className="text-primary text-sm">{communityData?.members?.length}</span>
                         </div>
                         <div className="text-gray-400">
-                            <h3 className="text-lg font-semibold text-main mb-2">About</h3>
-                            <p>{communityData.description}</p>
+                            <h3 className="font-semibold text-main mb-1">About</h3>
+                            <p className='text-sm'>{communityData.description}</p>
                         </div>
                         <div className="text-gray-400">
-                            <h3 className="text-lg font-semibold text-main mb-2">Rules</h3>
-                            <ul className="list-disc list-inside">
+                            <h3 className="font-semibold text-main mb-1">Rules</h3>
+                            <ul className="list-disc list-inside text-sm">
                                 <li>Be respectful to others</li>
                                 <li>No spam or self-promotion</li>
-                                <li>Follow community guidelines</li>
                             </ul>
                         </div>
                         {!communityData?.members?.includes(user.uid) ? (
-                            <div className="pt-2 w-full flex lg:justify-start justify-center">
+                            <div className="pt-2 w-full flex py-2 justify-center">
                                 <button onClick={() => joinCommuniy(community, user.uid)} className='px-6 py-2 bg-main rounded-lg hover:bg-[#9036c8] disabled:bg-gray-800'>Join community</button>
                             </div>
                         ) : (communityData.createdBy === user.uid ? (
-                            <div className="pt-2 w-full flex lg:justify-start justify-center">
+                            <div className="pt-2 w-full flex py-2 justify-center">
                                 <button onClick={handleDeleteCommunity} className=' text-red-400 rounded-lg hover:text-red-500'>Delete community</button>
                             </div>
                         ) : (<div className="pt-2 w-full flex lg:justify-start justify-center">
@@ -143,7 +142,7 @@ const CommunityPage = () => {
                         <div title='Make a phone call in community.' className="flex items-center lg:space-x-2 w-full lg:justify-start justify-center">
                             {communityData?.members?.includes(user.uid) &&
                                 (
-                                    <Link to={`/communities/${community}/call`}>
+                                    <Link className='w-full flex justify-center' to={`/communities/${community}/call`}>
                                         <div className='bg-main rounded-lg px-4 py-2 hover:bg-[#9036c8]'>
                                             Group call
                                         </div>
@@ -153,16 +152,21 @@ const CommunityPage = () => {
                     </div>
                 </div>
                 {/* Right Content Area */}
-                <div className="lg:w-2/3 space-y-6">
+                <div className="lg:w-3/5 space-y-6">
                     {/* Create Post Box */}
                     {communityData?.members?.includes(user.uid) && (
-                        <div className="bg-secondary rounded-lg border border-zinc-800 p-6">
-                            <div className="w-full pb-4">
+                        <div className="bg-secondary rounded-lg border border-zinc-800 p-4">
+                            <div className={`w-full ${previewPhoto ? 'pb-4' : ''}`}>
+                                <div className="relative w-max">
                                 <img
                                     src={previewPhoto}
                                     className={`w-48 rounded-lg ${previewPhoto ? 'border' : ''} border-zinc-800 ${photoUploading ? 'animate-pulse' : ''}`}
                                     alt=""
-                                />
+                                /><button
+                                onClick={() => setPreviewPhoto('')}
+                                className={`absolute top-0 w-5 ${previewPhoto ? 'flex' : "hidden"} justify-center items-center h-5 right-0 bg-red-500/70 hover:bg-red-500/90 pb-0.5 mt-1 mr-1 text-white rounded-full`}
+                              >x</button>
+                              </div>
                             </div>
                             <h3 className="text-xl font-semibold text-primary">Create a Post</h3>
                             <textarea
@@ -208,54 +212,67 @@ const CommunityPage = () => {
                         </div>
                     )}
                     {/* Posts Feed */}
-                    <div
-                        className="bg-secondary rounded-lg border border-zinc-800 p-6 max-h-[90vh] min-h-[75vh] overflow-y-auto"
-                        style={{
-                            scrollbarWidth: 'thin', // Firefox custom scrollbar width
-                            scrollbarColor: '#9b4dca #2d3748', // Firefox custom thumb and track color
-                        }}>
-                        {/* Posts */}
-                        {posts.length > 0 ? (
-                            posts.map((post, key) => (
-                                <div key={key} className="mb-6 last:mb-0 p-4 bg-[#14141c] rounded-lg border border-zinc-800">
-                                    <div className="flex items-center space-x-3 mb-4">
-                                        <img
-                                            className="w-10 h-10 rounded-full object-cover"
-                                            src={post.postedByPhotoURL}
-                                            alt={post.postedByFullName}
-                                        />
-                                        <div>
-                                            <h4 className="text-primary font-semibold">{post.postedByFullName}</h4>
-                                            <RelativeTime timestamp={post.timestamp} className="text-sm"></RelativeTime>
-                                        </div>
-                                    </div>
-                                    <p className="text-primary text-xl my-4">{post.content}</p>
-                                    {post.photoURL && <img src={post.photoURL} className="w-60 rounded-lg" alt="" />}
-                                    <div className="flex space-x-4 text-gray-400">
-                                        <button className="flex items-center space-x-1 hover:text-main">
-                                            <span>👍</span>
-                                            <span>123</span>
-                                        </button>
-                                        <button className="flex items-center space-x-1 hover:text-main">
-                                            <span>💾</span>
-                                            <span>save</span>
-                                        </button>
-                                        {post.postedBy === user.uid ? (
-                                            <button className="flex items-center space-x-1 hover:text-main">
-                                                <span>🗑️</span>
-                                                <span>delete</span>
-                                            </button>
-                                        ) : ''}
+
+                    {/* Posts */}
+                    {posts.length > 0 ? (
+                        posts.map((post, key) => (
+                            <div key={key} className="mb-6 last:mb-0 p-4 bg-[#14141c] rounded-lg border border-zinc-800">
+                                <div className="flex items-center space-x-3 mb-4">
+                                    <img
+                                        className="w-10 h-10 rounded-full object-cover"
+                                        src={post.postedByPhotoURL}
+                                        alt={post.postedByFullName}
+                                    />
+                                    <div>
+                                        <h4 className="text-primary font-semibold">{post.postedByFullName}</h4>
+                                        <RelativeTime timestamp={post.timestamp} className="text-sm"></RelativeTime>
                                     </div>
                                 </div>
-                            ))
-                        ) : (
-                            <div className="h-[80vh] flex justify-center items-center">No posts</div>
-                        )}
-                    </div>
+                                <p className="text-primary text-xl my-4">{post.content}</p>
+                                {post.photoURL && <img src={post.photoURL} className="w-60 rounded-lg border border-zinc-800" alt="" />}
+                                <div className="flex space-x-4 mt-2 text-gray-400">
+                                    <button className="flex items-center space-x-1 hover:text-main">
+                                        <span>👍</span>
+                                        <span>123</span>
+                                    </button>
+                                    <button className="flex items-center space-x-1 hover:text-main">
+                                        <span>💾</span>
+                                        <span>save</span>
+                                    </button>
+                                    {post.postedBy === user.uid ? (
+                                        <button className="flex items-center space-x-1 hover:text-main">
+                                            <span>🗑️</span>
+                                            <span>delete</span>
+                                        </button>
+                                    ) : ''}
+                                </div>
+                            </div>
+                        ))
+                    ) : (
+                        <div className="h-[80vh] flex justify-center items-center">No posts</div>
+                    )}
+                </div>
+                <div className="card w-1/5 hidden lg:block rounded-lg border border-zinc-800 font-main">
+                    <span className="title"
+                    >Pro
+                        <p className="pricing">$8 <span className="pricing-time">/ month</span></p>
+                        <span className="sub-title"
+                        >Everything on Basic plus:
+                            <ul className="list">
+                                <li className="list-item"><span className="check">✓</span> Feature</li>
+                                <li className="list-item"><span className="check">✓</span> Feature</li>
+                                <li className="list-item"><span className="check">✓</span> Feature</li>
+                                <li className="list-item"><span className="check">✓</span> Feature</li>
+                                <li className="list-item"><span className="check">✓</span> Feature</li>
+                            </ul>
+                            <button className="button px-2 py-2 mt-2 bg-main rounded-lg hover:bg-[#9036c8] focus:outline-none text-primary disabled:bg-gray-800">
+                                <span className="text-button">Get pro now</span>
+                            </button>
+                        </span></span
+                    >
                 </div>
             </div>
-        </div>
+        </div >
     );
 };
 

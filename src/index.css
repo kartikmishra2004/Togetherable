@@ -75,3 +75,46 @@
   }
  }
  
+.card {
+  overflow: hidden;
+  position: relative;
+  gap: 0.75rem;
+  padding: 1rem;
+  height: max-content;
+  background-color: #14141c;
+}
+
+.card .title {
+  font-size: 1rem;
+  color: #ebebeb;
+  font-weight: 600;
+}
+
+.card .pricing {
+  font-size: 1.5rem;
+  color: #ebebeb;
+  font-weight: 600;
+}
+
+.card .pricing .pricing-time,
+.card .sub-title {
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.card .list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  color: #ebebeb;
+  font-weight: 500;
+  list-style: none;
+}
+
+.card .list .list-item .check {
+  margin-right: 0.25rem;
+  font-size: 1rem;
+  color: rgb(199, 95, 228);
+  font-weight: 900;
+}

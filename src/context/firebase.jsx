@@ -274,7 +274,8 @@ export const FirebaseProvider = (props) => {
             }
             await updateDoc(doc(firestore, 'communities', communityId), {
                 posts: arrayUnion(post),
-            })
+            });
+            location.reload();
         } catch (error) {
             console.log("Failed to create post !!", error)
         }
