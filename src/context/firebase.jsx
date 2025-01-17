@@ -9,6 +9,7 @@ import {
     signInWithPopup
 } from "firebase/auth";
 import { getFirestore, doc, setDoc, getDoc, updateDoc, deleteField, addDoc, collection, arrayUnion, getDocs, Timestamp, arrayRemove, deleteDoc, query, where } from "firebase/firestore";
+import { v4 as uuidv4 } from 'uuid';
 
 const firebaseConfig = {
     apiKey: "AIzaSyBR0he9feN636824JXry5H6vzUK5CSeDmI",
@@ -268,6 +269,7 @@ export const FirebaseProvider = (props) => {
     const createPost = async (communityId, data) => {
         try {
             const post = {
+                id: uuidv4(),
                 ...data,
                 postedBy: user.uid,
                 timestamp: new Date().toISOString(),
@@ -280,6 +282,21 @@ export const FirebaseProvider = (props) => {
             console.log("Failed to create post !!", error)
         }
     }
+
+    const deletePost = async (communityId, postId) => {
+        try {
+            const communityRef = doc(firestore, 'communities', communityId);
+            const communitySnap = await getDoc(communityRef);
+            if (communitySnap.exists()) {
+                const posts = communitySnap.data().posts || [];
+                const updatedPosts = posts.filter(post => post.id !== postId);
+                await updateDoc(communityRef, { posts: updatedPosts });
+                location.reload();
+            }
+        } catch (error) {
+            console.log("Failed to delete post !!", error);
+        }
+    };
 
     // Method for getting all posts in community 
     const fetchPosts = async (communityId) => {
@@ -339,6 +356,7 @@ export const FirebaseProvider = (props) => {
                 fetchCommunities,
                 getUser,
                 createPost,
+                deletePost,
                 fetchPosts,
                 joinCommuniy,
                 leaveCommuniy,

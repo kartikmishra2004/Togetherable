@@ -5,7 +5,7 @@ import RelativeTime from "../utils/Moment.jsx";
 import DeletePostModal from '../components/DeletePostModal.jsx';
 
 const CommunityPage = () => {
-    const { user, getUser, loading, uploadImage, createPost, fetchPosts, joinCommuniy, leaveCommuniy, deleteCommunity } = useFirebase();
+    const { user, getUser, loading, uploadImage, createPost, deletePost, fetchPosts, joinCommuniy, leaveCommuniy, deleteCommunity } = useFirebase();
     const navigate = useNavigate()
     const { community } = useParams();
     const location = useLocation();
@@ -21,6 +21,7 @@ const CommunityPage = () => {
     const [communityData, setcommunityData] = useState({});
     const [dataLoading, setDataLoading] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [postId, setPostId] = useState('');
 
     useEffect(() => {
         // Fetch posts and then fetch user data for each post
@@ -78,8 +79,6 @@ const CommunityPage = () => {
         navigate('/communities')
     }
 
-
-
     if (loading || dataLoading) {
         return (
             <div className="flex justify-center items-center h-screen">
@@ -103,7 +102,7 @@ const CommunityPage = () => {
 
     return (
         <>
-            {showDeleteModal && <DeletePostModal setShowDeleteModal={setShowDeleteModal}/>}
+            {showDeleteModal && <DeletePostModal setShowDeleteModal={setShowDeleteModal} deletePost={deletePost} communityId={community} postId={postId}/>}
             <div className="container lg:w-[80vw] lg:px-0 px-2 mx-auto py-16 font-main">
                 <div className="w-full py-12 text-center text-4xl font-bold">Welcome to {communityData.name}</div>
                 <div className="flex lg:flex-row flex-col gap-6">
@@ -246,7 +245,7 @@ const CommunityPage = () => {
                                             <span>save</span>
                                         </button>
                                         {post.postedBy === user.uid || communityData.createdBy === user.uid ? (
-                                            <button onClick={() => setShowDeleteModal(!showDeleteModal)} className="flex items-center space-x-1 hover:text-main">
+                                            <button onClick={() => {setShowDeleteModal(!showDeleteModal); setPostId(post.id);}} className="flex items-center space-x-1 hover:text-main">
                                                 <span>🗑️</span>
                                                 <span>delete</span>
                                             </button>
