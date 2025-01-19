@@ -3,6 +3,7 @@ import { Navigate, useParams, useLocation, useNavigate, Link } from 'react-route
 import { useFirebase } from '../context/firebase';
 import RelativeTime from "../utils/Moment.jsx";
 import DeletePostModal from '../components/DeletePostModal.jsx';
+import { Heart, Save, Trash } from 'lucide-react'
 
 const CommunityPage = () => {
     const { user, getUser, loading, uploadImage, createPost, deletePost, fetchPosts, joinCommuniy, leaveCommuniy, deleteCommunity } = useFirebase();
@@ -102,7 +103,7 @@ const CommunityPage = () => {
 
     return (
         <>
-            {showDeleteModal && <DeletePostModal setShowDeleteModal={setShowDeleteModal} deletePost={deletePost} communityId={community} postId={postId}/>}
+            {showDeleteModal && <DeletePostModal setShowDeleteModal={setShowDeleteModal} deletePost={deletePost} communityId={community} postId={postId} />}
             <div className="container lg:w-[80vw] lg:px-0 px-2 mx-auto py-16 font-main">
                 <div className="w-full py-12 text-center text-4xl font-bold">Welcome to {communityData.name}</div>
                 <div className="flex lg:flex-row flex-col gap-6">
@@ -198,8 +199,7 @@ const CommunityPage = () => {
                                                     x="0"
                                                     y="0"
                                                     version="1.1"
-                                                    viewBox="0 0 512 512"
-                                                >
+                                                    viewBox="0 0 512 512">
                                                     <path d="M368 224c26.5 0 48-21.5 48-48s-21.5-48-48-48-48 21.5-48 48 21.5 48 48 48z"></path>
                                                     <path d="M452 64H60c-15.6 0-28 12.7-28 28.3v327.4c0 15.6 12.4 28.3 28 28.3h392c15.6 0 28-12.7 28-28.3V92.3c0-15.6-12.4-28.3-28-28.3zM348.9 261.7c-3-3.5-7.6-6.2-12.8-6.2-5.1 0-8.7 2.4-12.8 5.7L304.6 277c-3.9 2.8-7 4.7-11.5 4.7-4.3 0-8.2-1.6-11-4.1-1-.9-2.8-2.6-4.3-4.1L224 215.3c-4-4.6-10-7.5-16.7-7.5-6.7 0-12.9 3.3-16.8 7.8L64 368.2V107.7c1-6.8 6.3-11.7 13.1-11.7h357.7c6.9 0 12.5 5.1 12.9 12l.3 260.4-99.1-106.7z"></path>
                                                 </svg>
@@ -235,19 +235,19 @@ const CommunityPage = () => {
                                     </div>
                                     <p className="text-primary text-xl my-4">{post.content}</p>
                                     {post.photoURL && <img src={post.photoURL} className="w-60 rounded-lg border border-zinc-800" alt="" />}
-                                    <div className="flex space-x-4 mt-2 text-gray-400">
-                                        <button className="flex items-center space-x-1 hover:text-main">
-                                            <span>👍</span>
-                                            <span>123</span>
+                                    <div className="flex space-x-8 pt-3 mt-2 text-gray-400">
+                                        <button className="flex items-center space-x-1">
+                                            <span><Heart /></span>
+                                            <span>Like</span>
                                         </button>
-                                        <button className="flex items-center space-x-1 hover:text-main">
-                                            <span>💾</span>
-                                            <span>save</span>
+                                        <button className="flex items-center space-x-1">
+                                            <span><Save /></span>
+                                            <span>Save</span>
                                         </button>
                                         {post.postedBy === user.uid || communityData.createdBy === user.uid ? (
-                                            <button onClick={() => {setShowDeleteModal(!showDeleteModal); setPostId(post.id);}} className="flex items-center space-x-1 hover:text-main">
-                                                <span>🗑️</span>
-                                                <span>delete</span>
+                                            <button onClick={() => { setShowDeleteModal(!showDeleteModal); setPostId(post.id); }} className="flex items-center space-x-1">
+                                                <span><Trash /></span>
+                                                <span>Delete</span>
                                             </button>
                                         ) : ''}
                                     </div>
