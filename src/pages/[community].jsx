@@ -135,7 +135,7 @@ const CommunityPage = () => {
                             </div>
                             {!communityData?.members?.includes(user.uid) ? (
                                 <div className="pt-2 w-full flex py-2 justify-center">
-                                    <button onClick={() => joinCommuniy(community, user.uid)} className='px-6 py-2 bg-main rounded-lg hover:bg-[#9036c8] disabled:bg-gray-800'>Join community</button>
+                                    <button onClick={() => joinCommuniy(community, user.uid)} className='px-6 py-2 bg-main rounded-lg mt-4 hover:bg-[#9036c8] disabled:bg-gray-800'>Join community</button>
                                 </div>
                             ) : (communityData.createdBy === user.uid ? (
                                 <div className="pt-2 w-full flex py-2 justify-center">
@@ -149,7 +149,7 @@ const CommunityPage = () => {
                                 {communityData?.members?.includes(user.uid) &&
                                     (
                                         <Link className='w-full flex justify-center' to={`/communities/${community}/call`}>
-                                            <div className='bg-main rounded-lg px-4 py-2 hover:bg-[#9036c8]'>
+                                            <div className='bg-main rounded-lg px-4 mt-4 py-2 hover:bg-[#9036c8]'>
                                                 Group call
                                             </div>
                                         </Link>
@@ -254,7 +254,7 @@ const CommunityPage = () => {
                                 </div>
                             ))
                         ) : (
-                            <div className="h-[80vh] flex justify-center items-center">No posts</div>
+                            <div className="h-[40vh] flex justify-center items-center">No posts</div>
                         )}
                     </div>
                     <div className="card w-1/5 hidden lg:block rounded-lg border border-zinc-800 font-main">

@@ -4,8 +4,8 @@ Peer support community platform where people with different disabilities can sha
 
 Features:
 
-1.	Create / join existing communities.
-2.	Post (text and media) in the communities.
+1.	Create / join existing communities. ✅
+2.	Post (text and media) in the communities. ✅
 3.	Group chat (text and media) in communities.
 4.	Group audio / video chat in communities.
 5.	Text to speech (TTS) and speech to text (STT) in group chat.
@@ -16,4 +16,5 @@ Features:
 10.	Realtime sign language translation.
 11. Navigate locaions of community members with map.
 12. Fill the input fields with voice commands.
-13. Speech on clicking any text in the website.
+13. Speech on clicking any text in the website. ✅
+12. Pro features (payment gateway).
