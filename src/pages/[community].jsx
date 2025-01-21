@@ -3,14 +3,13 @@ import { Navigate, useParams, useLocation, useNavigate, Link } from 'react-route
 import { useFirebase } from '../context/firebase';
 import RelativeTime from "../utils/Moment.jsx";
 import DeletePostModal from '../components/DeletePostModal.jsx';
-import { Heart, Save, Trash } from 'lucide-react'
+import { Heart, Save, Trash, Image } from 'lucide-react'
 
 const CommunityPage = () => {
     const { user, getUser, loading, uploadImage, createPost, deletePost, fetchPosts, joinCommuniy, leaveCommuniy, deleteCommunity } = useFirebase();
-    const navigate = useNavigate()
+    const navigate = useNavigate();
     const { community } = useParams();
     const location = useLocation();
-    // const { createdBy } = location.state || {};
     const [posts, setPosts] = useState([]);
     const [admin, setAdmin] = useState('');
     const [previewPhoto, setPreviewPhoto] = useState('');
@@ -23,6 +22,7 @@ const CommunityPage = () => {
     const [dataLoading, setDataLoading] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [postId, setPostId] = useState('');
+    const [postDone, setPostDone] = useState(false);
 
     useEffect(() => {
         // Fetch posts and then fetch user data for each post
@@ -46,7 +46,7 @@ const CommunityPage = () => {
             setDataLoading(false);
         };
         fetchCommunityPosts();
-    }, [community, fetchPosts, getUser]);
+    }, [community, fetchPosts, getUser, postDone]);
 
     useEffect(() => {
         window.scroll(0, 0);
@@ -73,6 +73,7 @@ const CommunityPage = () => {
             photoURL: '',
         });
         setPreviewPhoto('');
+        setPostDone(!postDone);
     };
 
     const handleDeleteCommunity = async () => {
@@ -80,7 +81,7 @@ const CommunityPage = () => {
         navigate('/communities')
     }
 
-    if (loading || dataLoading) {
+    if (loading) {
         return (
             <div className="flex justify-center items-center h-screen">
                 <div className="jelly"></div>
@@ -103,7 +104,7 @@ const CommunityPage = () => {
 
     return (
         <>
-            {showDeleteModal && <DeletePostModal setShowDeleteModal={setShowDeleteModal} deletePost={deletePost} communityId={community} postId={postId} />}
+            {showDeleteModal && <DeletePostModal setShowDeleteModal={setShowDeleteModal} deletePost={deletePost} communityId={community} postId={postId} postDone={postDone} setPostDone={setPostDone} />}
             <div className="container lg:w-[80vw] lg:px-0 px-2 mx-auto py-16 font-main">
                 <div className="w-full py-12 text-center text-4xl font-bold">Welcome to {communityData.name}</div>
                 <div className="flex lg:flex-row flex-col gap-6">
@@ -186,23 +187,9 @@ const CommunityPage = () => {
                                 <div className="flex justify-between">
                                     <div className="flex justify-center items-center gap-1">
                                         <input accept="image/*" type="file" className="hidden" id="addMedia" onChange={handlePhotoChange} />
-                                        <label className="flex gap-1 cursor-pointer" htmlFor="addMedia">
+                                        <label className="flex gap-1 text-gray-400 cursor-pointer" htmlFor="addMedia">
                                             <div>
-                                                <svg
-                                                    fill="#ebebeb"
-                                                    className="w-6 h-6"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    xmlSpace="preserve"
-                                                    id="image"
-                                                    width="512"
-                                                    height="512"
-                                                    x="0"
-                                                    y="0"
-                                                    version="1.1"
-                                                    viewBox="0 0 512 512">
-                                                    <path d="M368 224c26.5 0 48-21.5 48-48s-21.5-48-48-48-48 21.5-48 48 21.5 48 48 48z"></path>
-                                                    <path d="M452 64H60c-15.6 0-28 12.7-28 28.3v327.4c0 15.6 12.4 28.3 28 28.3h392c15.6 0 28-12.7 28-28.3V92.3c0-15.6-12.4-28.3-28-28.3zM348.9 261.7c-3-3.5-7.6-6.2-12.8-6.2-5.1 0-8.7 2.4-12.8 5.7L304.6 277c-3.9 2.8-7 4.7-11.5 4.7-4.3 0-8.2-1.6-11-4.1-1-.9-2.8-2.6-4.3-4.1L224 215.3c-4-4.6-10-7.5-16.7-7.5-6.7 0-12.9 3.3-16.8 7.8L64 368.2V107.7c1-6.8 6.3-11.7 13.1-11.7h357.7c6.9 0 12.5 5.1 12.9 12l.3 260.4-99.1-106.7z"></path>
-                                                </svg>
+                                                <Image />
                                             </div>
                                             <p>Add media</p>
                                         </label>
@@ -219,7 +206,7 @@ const CommunityPage = () => {
                         {/* Posts Feed */}
 
                         {/* Posts */}
-                        {posts.length > 0 ? (
+                        {dataLoading ? (<div className='w-full flex justify-center h-[20vh] items-center '><span class="loader"></span></div>) : (posts.length > 0 ? (
                             posts.map((post, key) => (
                                 <div key={key} className="mb-6 last:mb-0 p-4 bg-[#14141c] rounded-lg border border-zinc-800">
                                     <div className="flex items-center space-x-3 mb-4">
@@ -255,7 +242,7 @@ const CommunityPage = () => {
                             ))
                         ) : (
                             <div className="h-[40vh] flex justify-center items-center">No posts</div>
-                        )}
+                        ))}
                     </div>
                     <div className="card w-1/5 hidden lg:block rounded-lg border border-zinc-800 font-main">
                         <span className="title"

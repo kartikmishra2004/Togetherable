@@ -277,7 +277,6 @@ export const FirebaseProvider = (props) => {
             await updateDoc(doc(firestore, 'communities', communityId), {
                 posts: arrayUnion(post),
             });
-            location.reload();
         } catch (error) {
             console.log("Failed to create post !!", error)
         }
@@ -291,7 +290,6 @@ export const FirebaseProvider = (props) => {
                 const posts = communitySnap.data().posts || [];
                 const updatedPosts = posts.filter(post => post.id !== postId);
                 await updateDoc(communityRef, { posts: updatedPosts });
-                location.reload();
             }
         } catch (error) {
             console.log("Failed to delete post !!", error);

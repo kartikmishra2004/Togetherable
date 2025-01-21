@@ -1,6 +1,12 @@
 import React from 'react'
 
-const DeletePostModal = ({ setShowDeleteModal, deletePost, communityId, postId }) => {
+const DeletePostModal = ({ setShowDeleteModal, deletePost, communityId, postId, postDone, setPostDone }) => {
+
+    const handleDelete = async () => {
+        setShowDeleteModal(false);
+        await deletePost(communityId, postId);
+        setPostDone(!postDone);
+    }
     return (
         <div className='font-main text-primary'>
             <div className="fixed inset-0 z-40 min-h-full overflow-y-auto overflow-x-hidden transition flex items-center">
@@ -42,7 +48,7 @@ const DeletePostModal = ({ setShowDeleteModal, deletePost, communityId, postId }
                                             </span>
                                         </span>
                                     </button>
-                                    <button onClick={() => { setShowDeleteModal(false); deletePost(communityId, postId) }} type="submit"
+                                    <button onClick={handleDelete} type="submit"
                                         className="inline-flex items-center justify-center py-1 gap-1 rounded-lg outline-none min-h-[2.25rem] px-4 text-sm bg-red-500 hover:bg-red-600">
                                         <span className="flex items-center gap-1">
                                             <span className="">
