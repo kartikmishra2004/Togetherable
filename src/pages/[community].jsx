@@ -19,21 +19,31 @@ const CommunityPage = () => {
     });
     const [photoUploading, setPhotoUploading] = useState(false);
     const [communityData, setcommunityData] = useState({});
-    const [dataLoading, setDataLoading] = useState(false);
+    const [postsLoading, setPostsLoading] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [postId, setPostId] = useState('');
     const [postDone, setPostDone] = useState(false);
+    const [leftbarLoading, setLeftbarLoading] = useState(false);
+    const [postLoading, setPostLoading] = useState(false);
+
+    useEffect(() => {
+        const fetchCommunityDetails = async () => {
+            setLeftbarLoading(true);
+            const res = await fetchPosts(community);
+            setcommunityData(res);
+            setLeftbarLoading(false);
+        }
+        fetchCommunityDetails();
+    }, [community, fetchPosts, getUser])
 
     useEffect(() => {
         // Fetch posts and then fetch user data for each post
         const fetchCommunityPosts = async () => {
-            setDataLoading(true);
+            setPostsLoading(true);
             const res = await fetchPosts(community);
-            setcommunityData(res);
             await getUser(res.createdBy).then((res) => setAdmin(res));
             if (res.posts?.length > 0) {
                 const sortedPosts = res.posts.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-
                 // Fetch user data for each post
                 const postsWithUserData = await Promise.all(
                     sortedPosts.map(async (post) => {
@@ -43,7 +53,7 @@ const CommunityPage = () => {
                 );
                 setPosts(postsWithUserData);
             }
-            setDataLoading(false);
+            setPostsLoading(false);
         };
         fetchCommunityPosts();
     }, [community, fetchPosts, getUser, postDone]);
@@ -67,6 +77,7 @@ const CommunityPage = () => {
     };
 
     const post = async () => {
+        setPostLoading(true);
         await createPost(community, formData);
         setFormData({
             content: '',
@@ -74,6 +85,7 @@ const CommunityPage = () => {
         });
         setPreviewPhoto('');
         setPostDone(!postDone);
+        setPostLoading(false);
     };
 
     const handleDeleteCommunity = async () => {
@@ -109,55 +121,61 @@ const CommunityPage = () => {
                 <div className="w-full py-12 text-center text-4xl font-bold">Welcome to {communityData.name}</div>
                 <div className="flex lg:flex-row flex-col gap-6">
                     {/* Left Sidebar - Community Details */}
-                    <div className="lg:w-1/5 h-max bg-secondary rounded-lg border border-zinc-800 p-6">
-                        <div className="flex items-center gap-3 pb-4">
-                            <img className="w-14 h-14 object-cover rounded-full" src={communityData.communityImage} alt="" />
-                            <h2 className="text-base font-bold text-primary">{communityData.name}</h2>
+                    {leftbarLoading ? (
+                        <div className="lg:w-1/5 h-[60vh] bg-secondary rounded-lg border border-zinc-800 p-6">
+                            <div className='w-full flex justify-center h-full items-center '><span class="loader"></span></div>
                         </div>
-                        <div className="space-y-1">
-                            <div className="flex items-center space-x-2">
-                                <span className="text-gray-400 text-sm">Admin:</span>
-                                <span className="text-primary text-sm">{admin?.fullName}</span>
+                    ) : (
+                        <div className="lg:w-1/5 h-max bg-secondary rounded-lg border border-zinc-800 p-6">
+                            <div className="flex items-center gap-3 pb-4">
+                                <img className="w-14 h-14 object-cover rounded-full" src={communityData.communityImage} alt="" />
+                                <h2 className="text-base font-bold text-primary">{communityData.name}</h2>
                             </div>
-                            <div className="flex items-center space-x-2">
-                                <span className="text-gray-400 text-sm">Members:</span>
-                                <span className="text-primary text-sm">{communityData?.members?.length}</span>
-                            </div>
-                            <div className="text-gray-400">
-                                <h3 className="font-semibold text-main mb-1">About</h3>
-                                <p className='text-sm'>{communityData.description}</p>
-                            </div>
-                            <div className="text-gray-400">
-                                <h3 className="font-semibold text-main mb-1">Rules</h3>
-                                <ul className="list-disc list-inside text-sm">
-                                    <li>Be respectful to others</li>
-                                    <li>No spam or self-promotion</li>
-                                </ul>
-                            </div>
-                            {!communityData?.members?.includes(user.uid) ? (
-                                <div className="pt-2 w-full flex py-2 justify-center">
-                                    <button onClick={() => joinCommuniy(community, user.uid)} className='px-6 py-2 bg-main rounded-lg mt-4 hover:bg-[#9036c8] disabled:bg-gray-800'>Join community</button>
+                            <div className="space-y-1">
+                                <div className="flex items-center space-x-2">
+                                    <span className="text-gray-400 text-sm">Admin:</span>
+                                    <span className="text-primary text-sm">{admin?.fullName}</span>
                                 </div>
-                            ) : (communityData.createdBy === user.uid ? (
-                                <div className="pt-2 w-full flex py-2 justify-center">
-                                    <button onClick={handleDeleteCommunity} className=' text-red-400 rounded-lg hover:text-red-500'>Delete community</button>
+                                <div className="flex items-center space-x-2">
+                                    <span className="text-gray-400 text-sm">Members:</span>
+                                    <span className="text-primary text-sm">{communityData?.members?.length}</span>
                                 </div>
-                            ) : (<div className="pt-2 w-full flex lg:justify-start justify-center">
-                                <button onClick={() => leaveCommuniy(community, user.uid)} className=' text-red-400 rounded-lg hover:text-red-500'>Leave community</button>
-                            </div>
-                            ))}
-                            <div title='Make a phone call in community.' className="flex items-center lg:space-x-2 w-full lg:justify-start justify-center">
-                                {communityData?.members?.includes(user.uid) &&
-                                    (
-                                        <Link className='w-full flex justify-center' to={`/communities/${community}/call`}>
-                                            <div className='bg-main rounded-lg px-4 mt-4 py-2 hover:bg-[#9036c8]'>
-                                                Group call
-                                            </div>
-                                        </Link>
-                                    )}
+                                <div className="text-gray-400">
+                                    <h3 className="font-semibold text-main mb-1">About</h3>
+                                    <p className='text-sm'>{communityData.description}</p>
+                                </div>
+                                <div className="text-gray-400">
+                                    <h3 className="font-semibold text-main mb-1">Rules</h3>
+                                    <ul className="list-disc list-inside text-sm">
+                                        <li>Be respectful to others</li>
+                                        <li>No spam or self-promotion</li>
+                                    </ul>
+                                </div>
+                                {!communityData?.members?.includes(user.uid) ? (
+                                    <div className="pt-2 w-full flex py-2 justify-center">
+                                        <button onClick={() => joinCommuniy(community, user.uid)} className='px-6 py-2 bg-main rounded-lg mt-4 hover:bg-[#9036c8] disabled:bg-gray-800'>Join community</button>
+                                    </div>
+                                ) : (communityData.createdBy === user.uid ? (
+                                    <div className="pt-2 w-full flex py-2 justify-center">
+                                        <button onClick={handleDeleteCommunity} className=' text-red-400 rounded-lg hover:text-red-500'>Delete community</button>
+                                    </div>
+                                ) : (<div className="pt-2 w-full flex lg:justify-start justify-center">
+                                    <button onClick={() => leaveCommuniy(community, user.uid)} className=' text-red-400 rounded-lg hover:text-red-500'>Leave community</button>
+                                </div>
+                                ))}
+                                <div title='Make a phone call in community.' className="flex items-center lg:space-x-2 w-full lg:justify-start justify-center">
+                                    {communityData?.members?.includes(user.uid) &&
+                                        (
+                                            <Link className='w-full flex justify-center' to={`/communities/${community}/call`}>
+                                                <div className='bg-main rounded-lg px-4 mt-4 py-2 hover:bg-[#9036c8]'>
+                                                    Group call
+                                                </div>
+                                            </Link>
+                                        )}
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    )}
                     {/* Right Content Area */}
                     <div className="lg:w-3/5 space-y-6">
                         {/* Create Post Box */}
@@ -195,10 +213,10 @@ const CommunityPage = () => {
                                         </label>
                                     </div>
                                     <button
-                                        disabled={photoUploading || !formData.content}
+                                        disabled={photoUploading || postLoading || !formData.content}
                                         onClick={post}
                                         className={`px-6 disabled:cursor-not-allowed py-2 bg-main rounded-lg hover:bg-[#9036c8] disabled:bg-gray-800`}>
-                                        {photoUploading ? 'Please wait...' : 'Post'}
+                                        {photoUploading || postLoading ? 'Please wait...' : 'Post'}
                                     </button>
                                 </div>
                             </div>
@@ -206,7 +224,7 @@ const CommunityPage = () => {
                         {/* Posts Feed */}
 
                         {/* Posts */}
-                        {dataLoading ? (<div className='w-full flex justify-center h-[20vh] items-center '><span class="loader"></span></div>) : (posts.length > 0 ? (
+                        {postsLoading ? (<div className='w-full flex justify-center h-[20vh] items-center '><span class="loader"></span></div>) : (posts.length > 0 ? (
                             posts.map((post, key) => (
                                 <div key={key} className="mb-6 last:mb-0 p-4 bg-[#14141c] rounded-lg border border-zinc-800">
                                     <div className="flex items-center space-x-3 mb-4">
