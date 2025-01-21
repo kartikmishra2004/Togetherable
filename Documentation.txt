@@ -16,3 +16,4 @@ Features:
 10.	Realtime sign language translation.
 11. Navigate locaions of community members with map.
 12. Fill the input fields with voice commands.
+13. Speech on clicking any text in the website.
