@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { useFirebase } from '../context/firebase';
+import { useScript } from '../context/TTScontext';
 
 const CreateCommunityModal = ({ setShowModal }) => {
 
     const { uploadImage, createCommunity } = useFirebase();
-
+    const { isScriptAdded } = useScript();
     const [photoUploading, setPhotoUploading] = useState(false);
     const [previewPhoto, setPreviewPhoto] = useState('');
     const [formData, setFormData] = useState({
@@ -65,7 +66,7 @@ const CreateCommunityModal = ({ setShowModal }) => {
                             <div className="flex justify-evenly items-center">
                                 <img src={previewPhoto || 'https://placehold.co/100'} className={`rounded-full brightness-75 w-24 h-24 object-cover bg-primary ${photoUploading ? 'animate-pulse' : ''}`} />
                                 <input accept="image/*" id='editPhoto' type="file" className='hidden' onChange={handlePhotoChange} />
-                                <label onMouseEnter={() => responsiveVoice.speak("Select photo")} htmlFor={`${photoUploading ? '' : 'editPhoto'}`}>
+                                <label onMouseEnter={isScriptAdded ? () => responsiveVoice.speak("Select photo") : ''} htmlFor={`${photoUploading ? '' : 'editPhoto'}`}>
                                     <div className={`w-max ${photoUploading ? 'bg-gray-800 cursor-not-allowed' : 'bg-main hover:bg-[#9036c8]'} h-max  text-white px-4 py-2 rounded-lg`}>Select photo</div>
                                 </label>
                             </div>
