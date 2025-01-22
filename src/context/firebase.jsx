@@ -317,7 +317,6 @@ export const FirebaseProvider = (props) => {
             await updateDoc(doc(firestore, 'users', userId), {
                 joinedCommunities: arrayUnion(communityId)
             })
-            location.reload();
         } catch (error) {
             console.log("Failed to join community!!", error)
         }
@@ -332,7 +331,6 @@ export const FirebaseProvider = (props) => {
             await updateDoc(doc(firestore, 'users', userId), {
                 joinedCommunities: arrayRemove(communityId)
             })
-            location.reload();
         } catch (error) {
             console.log("Failed to join community!!", error)
         }

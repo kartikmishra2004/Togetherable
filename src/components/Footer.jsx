@@ -70,7 +70,7 @@ const Footer = () => {
                             name='message'
                             onChange={handleChange}
                         ></textarea>
-                        <button disabled={loading ? true : false || messageData.email === '' || messageData.message === ''} onClick={handleSend} className={`px-4 ${messageData.email === '' || messageData.message === '' ? 'cursor-not-allowed' : 'cursor-pointer'} w-full py-3 bg-main rounded-lg hover:bg-[#9036c8] focus:outline-none disabled:bg-gray-800`}>{loading ? 'Please wait...' : 'Send'}</button>
+                        <button onMouseEnter={() => responsiveVoice.speak("Send")} disabled={loading ? true : false || messageData.email === '' || messageData.message === ''} onClick={handleSend} className={`px-4 ${messageData.email === '' || messageData.message === '' ? 'cursor-not-allowed' : 'cursor-pointer'} w-full py-3 bg-main rounded-lg hover:bg-[#9036c8] focus:outline-none disabled:bg-gray-800`}>{loading ? 'Please wait...' : 'Send'}</button>
                     </form>
                 </div>
             </div>

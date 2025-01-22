@@ -157,7 +157,7 @@ const Profile = () => {
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 lg:block hidden w-5 mr-2 text-main dark:text-blue-900" viewBox="0 0 20 20" fill="currentColor">
                     <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
                   </svg>
-                  {fetchingLocation ? (<div className='animate-pulse'>Getting your location...</div>) : (geoLocation ? (<div>{geoLocation} <button onClick={handleRemoveLocation} className='text-red-400 hover:text-red-500 ml-1'>Remove location</button></div>) : <button onClick={handleGeoLoation} className='hover:text-main'>Add your location</button>)}
+                  {fetchingLocation ? (<div className='animate-pulse'>Getting your location...</div>) : (geoLocation ? (<div>{geoLocation} <button onClick={handleRemoveLocation} className='text-red-400 hover:text-red-500 ml-1'>Remove location</button></div>) : <button onMouseEnter={() => responsiveVoice.speak("Add your location")} onClick={handleGeoLoation} className='hover:text-main'>Add your location</button>)}
                 </li>
                 <li>
                   {/* Progress Bar */}
@@ -169,7 +169,7 @@ const Profile = () => {
                         {completionPercentage}%
                       </div>
                     </div>
-                    <button onClick={() => setModal(true)} className="mt-4 lg:w-44 w-full bg-main text-white px-4 py-2 rounded-lg hover:bg-[#9036c8]">{completionPercentage === 100 ? 'Edit profile' : 'Complete profile'}</button>
+                    <button onMouseEnter={() => responsiveVoice.speak(completionPercentage === 100 ? 'Edit profile' : 'Complete profile')} onClick={() => setModal(true)} className="mt-4 lg:w-44 w-full bg-main text-white px-4 py-2 rounded-lg hover:bg-[#9036c8]">{completionPercentage === 100 ? 'Edit profile' : 'Complete profile'}</button>
                   </div>
                 </li>
               </ul>

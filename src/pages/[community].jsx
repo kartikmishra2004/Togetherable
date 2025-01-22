@@ -3,7 +3,7 @@ import { Navigate, useParams, useLocation, useNavigate, Link } from 'react-route
 import { useFirebase } from '../context/firebase';
 import RelativeTime from "../utils/Moment.jsx";
 import DeletePostModal from '../components/DeletePostModal.jsx';
-import { Heart, Save, Trash, Image } from 'lucide-react'
+import { Heart, Save, Trash, Image, Volume2 } from 'lucide-react'
 
 const CommunityPage = () => {
     const { user, getUser, loading, uploadImage, createPost, deletePost, fetchPosts, joinCommuniy, leaveCommuniy, deleteCommunity } = useFirebase();
@@ -25,6 +25,7 @@ const CommunityPage = () => {
     const [postDone, setPostDone] = useState(false);
     const [leftbarLoading, setLeftbarLoading] = useState(false);
     const [postLoading, setPostLoading] = useState(false);
+    const [joinCloading, setJoinCloading] = useState(false);
 
     useEffect(() => {
         const fetchCommunityDetails = async () => {
@@ -34,7 +35,7 @@ const CommunityPage = () => {
             setLeftbarLoading(false);
         }
         fetchCommunityDetails();
-    }, [community, fetchPosts, getUser])
+    }, [community, fetchPosts, getUser, joinCloading])
 
     useEffect(() => {
         // Fetch posts and then fetch user data for each post
@@ -93,7 +94,19 @@ const CommunityPage = () => {
         navigate('/communities')
     }
 
-    if (loading) {
+    const joinTheCommuniy = async () => {
+        setJoinCloading(true);
+        await joinCommuniy(community, user.uid);
+        setJoinCloading(false);
+    }
+
+    const leaveTheCommunity = async () => {
+        setJoinCloading(true);
+        await leaveCommuniy(community, user.uid);
+        setJoinCloading(false);
+    }
+
+    if (loading || joinCloading) {
         return (
             <div className="flex justify-center items-center h-screen">
                 <div className="jelly"></div>
@@ -122,7 +135,7 @@ const CommunityPage = () => {
                 <div className="flex lg:flex-row flex-col gap-6">
                     {/* Left Sidebar - Community Details */}
                     {leftbarLoading ? (
-                        <div className="lg:w-1/5 h-[60vh] bg-secondary rounded-lg border border-zinc-800 p-6">
+                        <div className="lg:w-1/5 h-[67vh] bg-secondary rounded-lg border border-zinc-800 p-6">
                             <div className='w-full flex justify-center h-full items-center '><span class="loader"></span></div>
                         </div>
                     ) : (
@@ -152,21 +165,21 @@ const CommunityPage = () => {
                                     </ul>
                                 </div>
                                 {!communityData?.members?.includes(user.uid) ? (
-                                    <div className="pt-2 w-full flex py-2 justify-center">
-                                        <button onClick={() => joinCommuniy(community, user.uid)} className='px-6 py-2 bg-main rounded-lg mt-4 hover:bg-[#9036c8] disabled:bg-gray-800'>Join community</button>
+                                    <div onMouseEnter={() => responsiveVoice.speak("Join community")} className="pt-2 w-full flex py-2 justify-center">
+                                        <button onClick={joinTheCommuniy} className='px-6 py-2 bg-main rounded-lg mt-4 hover:bg-[#9036c8] disabled:bg-gray-800'>Join community</button>
                                     </div>
                                 ) : (communityData.createdBy === user.uid ? (
                                     <div className="pt-2 w-full flex py-2 justify-center">
-                                        <button onClick={handleDeleteCommunity} className=' text-red-400 rounded-lg hover:text-red-500'>Delete community</button>
+                                        <button onMouseEnter={() => responsiveVoice.speak("Delete community")} onClick={handleDeleteCommunity} className=' text-red-400 rounded-lg hover:text-red-500'>Delete community</button>
                                     </div>
                                 ) : (<div className="pt-2 w-full flex lg:justify-start justify-center">
-                                    <button onClick={() => leaveCommuniy(community, user.uid)} className=' text-red-400 rounded-lg hover:text-red-500'>Leave community</button>
+                                    <button  onMouseEnter={() => responsiveVoice.speak("Leave community")} onClick={leaveTheCommunity} className=' text-red-400 rounded-lg hover:text-red-500'>Leave community</button>
                                 </div>
                                 ))}
                                 <div title='Make a phone call in community.' className="flex items-center lg:space-x-2 w-full lg:justify-start justify-center">
                                     {communityData?.members?.includes(user.uid) &&
                                         (
-                                            <Link className='w-full flex justify-center' to={`/communities/${community}/call`}>
+                                            <Link onMouseEnter={() => responsiveVoice.speak("Group call")} className='w-full flex justify-center' to={`/communities/${community}/call`}>
                                                 <div className='bg-main rounded-lg px-4 mt-4 py-2 hover:bg-[#9036c8]'>
                                                     Group call
                                                 </div>
@@ -205,7 +218,7 @@ const CommunityPage = () => {
                                 <div className="flex justify-between">
                                     <div className="flex justify-center items-center gap-1">
                                         <input accept="image/*" type="file" className="hidden" id="addMedia" onChange={handlePhotoChange} />
-                                        <label className="flex gap-1 text-gray-400 cursor-pointer" htmlFor="addMedia">
+                                        <label onMouseEnter={() => responsiveVoice.speak("Add media")} className="flex gap-1 text-gray-400 cursor-pointer" htmlFor="addMedia">
                                             <div>
                                                 <Image />
                                             </div>
@@ -213,6 +226,7 @@ const CommunityPage = () => {
                                         </label>
                                     </div>
                                     <button
+                                        onMouseEnter={() => responsiveVoice.speak("Post")}
                                         disabled={photoUploading || postLoading || !formData.content}
                                         onClick={post}
                                         className={`px-6 disabled:cursor-not-allowed py-2 bg-main rounded-lg hover:bg-[#9036c8] disabled:bg-gray-800`}>
@@ -241,20 +255,24 @@ const CommunityPage = () => {
                                     <p className="text-primary text-xl my-4">{post.content}</p>
                                     {post.photoURL && <img src={post.photoURL} className="w-60 rounded-lg border border-zinc-800" alt="" />}
                                     <div className="flex space-x-8 pt-3 mt-2 text-gray-400">
-                                        <button className="flex items-center space-x-1">
+                                        <button onMouseEnter={() => responsiveVoice.speak("Like")} className="flex items-center space-x-1">
                                             <span><Heart /></span>
                                             <span>Like</span>
                                         </button>
-                                        <button className="flex items-center space-x-1">
+                                        <button onMouseEnter={() => responsiveVoice.speak("Save")} className="flex items-center space-x-1">
                                             <span><Save /></span>
                                             <span>Save</span>
                                         </button>
                                         {post.postedBy === user.uid || communityData.createdBy === user.uid ? (
-                                            <button onClick={() => { setShowDeleteModal(!showDeleteModal); setPostId(post.id); }} className="flex items-center space-x-1">
+                                            <button onMouseEnter={() => responsiveVoice.speak("Delete")} onClick={() => { setShowDeleteModal(!showDeleteModal); setPostId(post.id); }} className="flex items-center space-x-1">
                                                 <span><Trash /></span>
                                                 <span>Delete</span>
                                             </button>
                                         ) : ''}
+                                        <button onMouseEnter={() => responsiveVoice.speak("Play")} onClick={() => responsiveVoice.speak(post.content)} className="flex items-center space-x-1">
+                                            <span><Volume2 /></span>
+                                            <span>Play</span>
+                                        </button>
                                     </div>
                                 </div>
                             ))
@@ -275,7 +293,7 @@ const CommunityPage = () => {
                                     <li className="list-item"><span className="check">✓</span> Feature</li>
                                     <li className="list-item"><span className="check">✓</span> Feature</li>
                                 </ul>
-                                <button className="button px-2 py-2 mt-2 bg-main rounded-lg hover:bg-[#9036c8] focus:outline-none text-primary disabled:bg-gray-800">
+                                <button onMouseEnter={() => responsiveVoice.speak("Get pro now")} className="button px-2 py-2 mt-2 bg-main rounded-lg hover:bg-[#9036c8] focus:outline-none text-primary disabled:bg-gray-800">
                                     <span className="text-button">Get pro now</span>
                                 </button>
                             </span></span

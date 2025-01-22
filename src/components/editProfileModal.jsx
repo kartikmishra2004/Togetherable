@@ -68,7 +68,7 @@ const Modal = ({ setModal, completionPercentage, userData }) => {
                             <div className="flex justify-evenly items-center">
                                 <img src={previewPhoto || 'https://res.cloudinary.com/dlwudcsu1/image/upload/v1723743051/Picsart_24-08-15_23-00-10-662_bix7iy.png'} className={`rounded-full w-24 h-24 object-cover bg-primary ${photoUploading ? 'animate-pulse' : ''}`} />
                                 <input accept="image/*" id='editPhoto' type="file" className='hidden' onChange={handlePhotoChange} />
-                                <label htmlFor={`${photoUploading ? '' : 'editPhoto'}`}>
+                                <label onMouseEnter={() => responsiveVoice.speak("Select photo")} htmlFor={`${photoUploading ? '' : 'editPhoto'}`}>
                                     <div className={`w-max ${photoUploading ? 'bg-gray-800 cursor-not-allowed' : 'bg-main hover:bg-[#9036c8]'} h-max  text-white px-4 py-2 rounded-lg`}>Select photo</div>
                                 </label>
                             </div>
@@ -114,13 +114,13 @@ const Modal = ({ setModal, completionPercentage, userData }) => {
 
                             <div aria-hidden="true" className="border-b border-gray-700 px-2"></div>
                             <div className="px-6 py-2">
-                                <div className="grid gap-2 grid-cols-[repeat(auto-fit,minmax(0,1fr))]">
+                                <div onMouseEnter={() => responsiveVoice.speak("Cancel")} className="grid gap-2 grid-cols-[repeat(auto-fit,minmax(0,1fr))]">
                                     <button onClick={() => setModal(false)} type="button"
                                         className="inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border border-zinc-500 min-h-[2.25rem] px-4 text-sm text-primary bg-secondary">
                                         Cancel
                                     </button>
 
-                                    <button disabled={photoUploading ? true : false} onClick={() => { setModal(false); updateProfile(data); }} type="submit"
+                                    <button onMouseEnter={() => responsiveVoice.speak("Save")} disabled={photoUploading ? true : false} onClick={() => { setModal(false); updateProfile(data); }} type="submit"
                                         className="inline-flex items-center disabled:bg-gray-800 disabled:cursor-not-allowed justify-center py-1 gap-1 font-medium rounded-lg min-h-[2.25rem] px-4 text-sm text-primary shadow bg-main hover:bg-[#9036c8]">
                                         <span className="flex items-center gap-1">
                                             <span className="">
