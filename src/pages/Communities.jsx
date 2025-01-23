@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react'
 import { Link, Navigate } from 'react-router-dom';
 import { useFirebase } from '../context/firebase';
 import CreateCommunityModal from '../components/CreateCommunityModal.jsx';
+import { useScript } from '../context/TTScontext.jsx';
 
 const Communities = () => {
 
   const [showModal, setShowModal] = useState(false);
 
   const { user, fetchCommunities, loading } = useFirebase();
+  const { isScriptAdded } = useScript();
   const [communities, setCommunities] = useState([]);
 
   useEffect(() => {
@@ -81,7 +83,7 @@ const Communities = () => {
           </ul>
           <div className="w-full h-[1px] bg-zinc-700 my-10 flex justify-center items-center"></div>
           <div className="flex justify-evenly w-full items-center">
-            <button onMouseEnter={() => responsiveVoice.speak("Create community")} onClick={() => setShowModal(true)} className='inline-flex text-primary bg-main border-0 hover:bg-[#9036c8] py-2 px-6 focus:outline-none rounded-lg lg:text-lg'>Create Communituy</button>
+            <button onMouseEnter={isScriptAdded ? () => responsiveVoice.speak("Create community") : null} onClick={() => setShowModal(true)} className='inline-flex text-primary bg-main border-0 hover:bg-[#9036c8] py-2 px-6 focus:outline-none rounded-lg lg:text-lg'>Create Communituy</button>
           </div>
         </div>
       </section>

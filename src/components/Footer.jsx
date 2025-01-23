@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { useFirebase } from '../context/firebase';
 import { collection, addDoc } from "firebase/firestore";
+import { useScript } from '../context/TTScontext';
 
 const Footer = () => {
     const { user, firestore } = useFirebase();
+    const { isScriptAdded } = useScript()
+
     const [messageData, setMessageData] = useState({
         email: '',
         message: '',
@@ -70,7 +73,7 @@ const Footer = () => {
                             name='message'
                             onChange={handleChange}
                         ></textarea>
-                        <button onMouseEnter={() => responsiveVoice.speak("Send")} disabled={loading ? true : false || messageData.email === '' || messageData.message === ''} onClick={handleSend} className={`px-4 ${messageData.email === '' || messageData.message === '' ? 'cursor-not-allowed' : 'cursor-pointer'} w-full py-3 bg-main rounded-lg hover:bg-[#9036c8] focus:outline-none disabled:bg-gray-800`}>{loading ? 'Please wait...' : 'Send'}</button>
+                        <button onMouseEnter={isScriptAdded ? () => responsiveVoice.speak("Send") : null} disabled={loading ? true : false || messageData.email === '' || messageData.message === ''} onClick={handleSend} className={`px-4 ${messageData.email === '' || messageData.message === '' ? 'cursor-not-allowed' : 'cursor-pointer'} w-full py-3 bg-main rounded-lg hover:bg-[#9036c8] focus:outline-none disabled:bg-gray-800`}>{loading ? 'Please wait...' : 'Send'}</button>
                     </form>
                 </div>
             </div>

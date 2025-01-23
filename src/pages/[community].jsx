@@ -4,10 +4,12 @@ import { useFirebase } from '../context/firebase';
 import RelativeTime from "../utils/Moment.jsx";
 import DeletePostModal from '../components/DeletePostModal.jsx';
 import { Heart, Save, Trash, Image, Volume2 } from 'lucide-react'
+import { useScript } from '../context/TTScontext';
 
 const CommunityPage = () => {
     const { user, getUser, loading, uploadImage, createPost, deletePost, fetchPosts, joinCommuniy, leaveCommuniy, deleteCommunity } = useFirebase();
     const navigate = useNavigate();
+    const { isScriptAdded } = useScript(); 
     const { community } = useParams();
     const location = useLocation();
     const [posts, setPosts] = useState([]);
@@ -165,21 +167,21 @@ const CommunityPage = () => {
                                     </ul>
                                 </div>
                                 {!communityData?.members?.includes(user.uid) ? (
-                                    <div onMouseEnter={() => responsiveVoice.speak("Join community")} className="pt-2 w-full flex py-2 justify-center">
+                                    <div onMouseEnter={isScriptAdded ? () => responsiveVoice.speak("Join community") : null} className="pt-2 w-full flex py-2 justify-center">
                                         <button onClick={joinTheCommuniy} className='px-6 py-2 bg-main rounded-lg mt-4 hover:bg-[#9036c8] disabled:bg-gray-800'>Join community</button>
                                     </div>
                                 ) : (communityData.createdBy === user.uid ? (
                                     <div className="pt-2 w-full flex py-2 justify-center">
-                                        <button onMouseEnter={() => responsiveVoice.speak("Delete community")} onClick={handleDeleteCommunity} className=' text-red-400 rounded-lg hover:text-red-500'>Delete community</button>
+                                        <button onMouseEnter={isScriptAdded ? () => responsiveVoice.speak("Delete community") : null} onClick={handleDeleteCommunity} className=' text-red-400 rounded-lg hover:text-red-500'>Delete community</button>
                                     </div>
                                 ) : (<div className="pt-2 w-full flex lg:justify-start justify-center">
-                                    <button  onMouseEnter={() => responsiveVoice.speak("Leave community")} onClick={leaveTheCommunity} className=' text-red-400 rounded-lg hover:text-red-500'>Leave community</button>
+                                    <button  onMouseEnter={isScriptAdded ? () => responsiveVoice.speak("Leave community") : null} onClick={leaveTheCommunity} className=' text-red-400 rounded-lg hover:text-red-500'>Leave community</button>
                                 </div>
                                 ))}
                                 <div title='Make a phone call in community.' className="flex items-center lg:space-x-2 w-full lg:justify-start justify-center">
                                     {communityData?.members?.includes(user.uid) &&
                                         (
-                                            <Link onMouseEnter={() => responsiveVoice.speak("Group call")} className='w-full flex justify-center' to={`/communities/${community}/call`}>
+                                            <Link onMouseEnter={isScriptAdded ? () => responsiveVoice.speak("Group call") : null} className='w-full flex justify-center' to={`/communities/${community}/call`}>
                                                 <div className='bg-main rounded-lg px-4 mt-4 py-2 hover:bg-[#9036c8]'>
                                                     Group call
                                                 </div>
@@ -218,7 +220,7 @@ const CommunityPage = () => {
                                 <div className="flex justify-between">
                                     <div className="flex justify-center items-center gap-1">
                                         <input accept="image/*" type="file" className="hidden" id="addMedia" onChange={handlePhotoChange} />
-                                        <label onMouseEnter={() => responsiveVoice.speak("Add media")} className="flex gap-1 text-gray-400 cursor-pointer" htmlFor="addMedia">
+                                        <label onMouseEnter={isScriptAdded ? () => responsiveVoice.speak("Add media") : null} className="flex gap-1 text-gray-400 cursor-pointer" htmlFor="addMedia">
                                             <div>
                                                 <Image />
                                             </div>
@@ -226,7 +228,7 @@ const CommunityPage = () => {
                                         </label>
                                     </div>
                                     <button
-                                        onMouseEnter={() => responsiveVoice.speak("Post")}
+                                        onMouseEnter={isScriptAdded ? () => responsiveVoice.speak("Post") : null}
                                         disabled={photoUploading || postLoading || !formData.content}
                                         onClick={post}
                                         className={`px-6 disabled:cursor-not-allowed py-2 bg-main rounded-lg hover:bg-[#9036c8] disabled:bg-gray-800`}>
@@ -255,24 +257,24 @@ const CommunityPage = () => {
                                     <p className="text-primary text-xl my-4">{post.content}</p>
                                     {post.photoURL && <img src={post.photoURL} className="w-60 rounded-lg border border-zinc-800" alt="" />}
                                     <div className="flex space-x-8 pt-3 mt-2 text-gray-400">
-                                        <button onMouseEnter={() => responsiveVoice.speak("Like")} className="flex items-center space-x-1">
+                                        <button onMouseEnter={isScriptAdded ? () => responsiveVoice.speak("Like") : null} className="flex items-center space-x-1">
                                             <span><Heart /></span>
                                             <span>Like</span>
                                         </button>
-                                        <button onMouseEnter={() => responsiveVoice.speak("Save")} className="flex items-center space-x-1">
+                                        <button onMouseEnter={isScriptAdded ? () => responsiveVoice.speak("Save") : null} className="flex items-center space-x-1">
                                             <span><Save /></span>
                                             <span>Save</span>
                                         </button>
                                         {post.postedBy === user.uid || communityData.createdBy === user.uid ? (
-                                            <button onMouseEnter={() => responsiveVoice.speak("Delete")} onClick={() => { setShowDeleteModal(!showDeleteModal); setPostId(post.id); }} className="flex items-center space-x-1">
+                                            <button onMouseEnter={isScriptAdded ? () => responsiveVoice.speak("Delete") : null} onClick={() => { setShowDeleteModal(!showDeleteModal); setPostId(post.id); }} className="flex items-center space-x-1">
                                                 <span><Trash /></span>
                                                 <span>Delete</span>
                                             </button>
                                         ) : ''}
-                                        <button onMouseEnter={() => responsiveVoice.speak("Play")} onClick={() => responsiveVoice.speak(post.content)} className="flex items-center space-x-1">
+                                        {isScriptAdded ? (<button onMouseEnter={isScriptAdded ? () => responsiveVoice.speak("Play") : null} onClick={() => responsiveVoice.speak(post.content)} className="flex items-center space-x-1">
                                             <span><Volume2 /></span>
                                             <span>Play</span>
-                                        </button>
+                                        </button>) : ''}
                                     </div>
                                 </div>
                             ))
@@ -293,7 +295,7 @@ const CommunityPage = () => {
                                     <li className="list-item"><span className="check">✓</span> Feature</li>
                                     <li className="list-item"><span className="check">✓</span> Feature</li>
                                 </ul>
-                                <button onMouseEnter={() => responsiveVoice.speak("Get pro now")} className="button px-2 py-2 mt-2 bg-main rounded-lg hover:bg-[#9036c8] focus:outline-none text-primary disabled:bg-gray-800">
+                                <button onMouseEnter={isScriptAdded ? () => responsiveVoice.speak("Get pro now") : null} className="button px-2 py-2 mt-2 bg-main rounded-lg hover:bg-[#9036c8] focus:outline-none text-primary disabled:bg-gray-800">
                                     <span className="text-button">Get pro now</span>
                                 </button>
                             </span></span

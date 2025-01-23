@@ -8,11 +8,12 @@ import { PiPlugsConnectedBold } from "react-icons/pi";
 import { TbCirclesRelation } from "react-icons/tb";
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
+import { useScript } from '../context/TTScontext';
 
 const Home = () => {
   const [isUnityLoaded, setIsUnityLoaded] = useState(false);
   const [isCallLoaded, setIsCallLoaded] = useState(false);
-
+  const { isScriptAdded } = useScript();
   const { user } = useFirebase();
 
   useEffect(() => {
@@ -54,8 +55,8 @@ const Home = () => {
               </h1>}
             <p className="mb-8 leading-relaxed text-gray-400">A safe space for individuals with diverse abilities to connect, share their journeys, and support each other. Join a community that thrives on empathy, empowerment, and inclusivity.</p>
             <div className="flex lg:flex-row flex-col lg:gap-0 gap-5 justify-center">
-              <Link onMouseEnter={() => responsiveVoice.speak("Join the community")} to={user === null ? '/login' : '/communities'} className="inline-flex text-white bg-main border-0 hover:bg-[#9036c8] py-2 px-6 focus:outline-none rounded-lg lg:text-lg">Join the Community</Link>
-              <Link onMouseEnter={() => responsiveVoice.speak("Learn more")} to={'/about'} className="lg:ml-4 flex justify-center lg:inline-flex text-center text-gray-700 bg-gray-100 border-0 py-2 px-6 focus:outline-none hover:bg-gray-200 rounded-lg lg:text-lg">Learn More</Link>
+              <Link onMouseEnter={isScriptAdded ? () => responsiveVoice.speak("Join the community") : null} to={user === null ? '/login' : '/communities'} className="inline-flex text-white bg-main border-0 hover:bg-[#9036c8] py-2 px-6 focus:outline-none rounded-lg lg:text-lg">Join the Community</Link>
+              <Link onMouseEnter={isScriptAdded ? () => responsiveVoice.speak("Learn more") : null} to={'/about'} className="lg:ml-4 flex justify-center lg:inline-flex text-center text-gray-700 bg-gray-100 border-0 py-2 px-6 focus:outline-none hover:bg-gray-200 rounded-lg lg:text-lg">Learn More</Link>
             </div>
           </div>
         </div>
@@ -70,7 +71,7 @@ const Home = () => {
               </div>
               <div className="flex-shrink-0 w-6 h-6 rounded-full mt-10 sm:mt-0 inline-flex items-center justify-center bg-main text-white relative z-10 title-font font-medium text-sm">1</div>
               <div className="flex-grow md:pl-8 pl-6 flex sm:items-center items-start flex-col sm:flex-row">
-                <Link onMouseEnter={() => responsiveVoice.speak("Step 1, Sign up and create your profile.")} to={user === null ? '/login' : '/profile'} className="flex-shrink-0 w-24 h-24 bg-indigo-100 text-main rounded-full inline-flex items-center justify-center cursor-pointer">
+                <Link onMouseEnter={isScriptAdded ? () => responsiveVoice.speak("Step 1, Sign up and create your profile.") : null} to={user === null ? '/login' : '/profile'} className="flex-shrink-0 w-24 h-24 bg-indigo-100 text-main rounded-full inline-flex items-center justify-center cursor-pointer">
                   <FaRegUser size={40} />
                 </Link>
                 <div className="flex-grow sm:pl-6 mt-6 sm:mt-0">
@@ -85,7 +86,7 @@ const Home = () => {
               </div>
               <div className="flex-shrink-0 w-6 h-6 rounded-full mt-10 sm:mt-0 inline-flex items-center justify-center bg-main text-white relative z-10 title-font font-medium text-sm">2</div>
               <div className="flex-grow md:pl-8 pl-6 flex sm:items-center items-start flex-col sm:flex-row">
-                <Link onMouseEnter={() => responsiveVoice.speak("Step 2, Join communities or start a new one.")} to={user === null ? '/login' : '/communities'} className="flex-shrink-0 w-24 h-24 bg-indigo-100 text-main rounded-full inline-flex items-center justify-center cursor-pointer">
+                <Link onMouseEnter={isScriptAdded ? () => responsiveVoice.speak("Step 2, Join communities or start a new one.") : null} to={user === null ? '/login' : '/communities'} className="flex-shrink-0 w-24 h-24 bg-indigo-100 text-main rounded-full inline-flex items-center justify-center cursor-pointer">
                   <svg fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-12 h-12" viewBox="0 0 24 24">
                     <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
                   </svg>
@@ -102,7 +103,7 @@ const Home = () => {
               </div>
               <div className="flex-shrink-0 w-6 h-6 rounded-full mt-10 sm:mt-0 inline-flex items-center justify-center bg-main text-white relative z-10 title-font font-medium text-sm">3</div>
               <div className="flex-grow md:pl-8 pl-6 flex sm:items-center items-start flex-col sm:flex-row">
-                <Link onMouseEnter={() => responsiveVoice.speak("Step 3, Connect with peers via chat or video.")} to={user === null ? '/login' : '/explore'} className="flex-shrink-0 w-24 h-24 bg-indigo-100 text-main rounded-full inline-flex items-center justify-center cursor-pointer">
+                <Link onMouseEnter={isScriptAdded ? () => responsiveVoice.speak("Step 3, Connect with peers via chat or video.") : null} to={user === null ? '/login' : '/explore'} className="flex-shrink-0 w-24 h-24 bg-indigo-100 text-main rounded-full inline-flex items-center justify-center cursor-pointer">
                   <PiPlugsConnectedBold size={40} />
                 </Link>
                 <div className="flex-grow sm:pl-6 mt-6 sm:mt-0">
@@ -117,7 +118,7 @@ const Home = () => {
               </div>
               <div className="flex-shrink-0 w-6 h-6 rounded-full mt-10 sm:mt-0 inline-flex items-center justify-center bg-main text-white relative z-10 title-font font-medium text-sm">4</div>
               <div className="flex-grow md:pl-8 pl-6 flex sm:items-center items-start flex-col sm:flex-row">
-                <Link onMouseEnter={() => responsiveVoice.speak("Step 4, Build lasting relationships and grow together.")} to={user === null ? '/login' : '/explore'} className="flex-shrink-0 w-24 h-24 bg-indigo-100 text-main rounded-full inline-flex items-center justify-center cursor-pointer">
+                <Link onMouseEnter={isScriptAdded ? () => responsiveVoice.speak("Step 4, Build lasting relationships and grow together.") : null} to={user === null ? '/login' : '/explore'} className="flex-shrink-0 w-24 h-24 bg-indigo-100 text-main rounded-full inline-flex items-center justify-center cursor-pointer">
                   <TbCirclesRelation size={40} />
                 </Link>
                 <div className="flex-grow sm:pl-6 mt-6 sm:mt-0">

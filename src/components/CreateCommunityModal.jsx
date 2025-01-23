@@ -66,7 +66,7 @@ const CreateCommunityModal = ({ setShowModal }) => {
                             <div className="flex justify-evenly items-center">
                                 <img src={previewPhoto || 'https://placehold.co/100'} className={`rounded-full brightness-75 w-24 h-24 object-cover bg-primary ${photoUploading ? 'animate-pulse' : ''}`} />
                                 <input accept="image/*" id='editPhoto' type="file" className='hidden' onChange={handlePhotoChange} />
-                                <label onMouseEnter={isScriptAdded ? () => responsiveVoice.speak("Select photo") : ''} htmlFor={`${photoUploading ? '' : 'editPhoto'}`}>
+                                <label onMouseEnter={isScriptAdded ? () => responsiveVoice.speak("Select photo") : null} htmlFor={`${photoUploading ? '' : 'editPhoto'}`}>
                                     <div className={`w-max ${photoUploading ? 'bg-gray-800 cursor-not-allowed' : 'bg-main hover:bg-[#9036c8]'} h-max  text-white px-4 py-2 rounded-lg`}>Select photo</div>
                                 </label>
                             </div>
@@ -93,11 +93,11 @@ const CreateCommunityModal = ({ setShowModal }) => {
                             <div aria-hidden="true" className="border-b border-gray-700 px-2"></div>
                             <div className="px-6 py-2">
                                 <div className="grid gap-2 grid-cols-[repeat(auto-fit,minmax(0,1fr))]">
-                                    <button onMouseEnter={() => responsiveVoice.speak("Cancel")} onClick={() => setShowModal(false)} type="button"
+                                    <button onMouseEnter={isScriptAdded ? () => responsiveVoice.speak("Cancel") : null} onClick={() => setShowModal(false)} type="button"
                                         className="inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border border-zinc-500 min-h-[2.25rem] px-4 text-sm text-primary bg-secondary">
                                         Cancel
                                     </button>
-                                    <button onMouseEnter={() => responsiveVoice.speak("Create")} disabled={photoUploading || !formData.name || !formData.description ? true : false} onClick={() => { setShowModal(false); createCommunity(formData) }} type="submit"
+                                    <button onMouseEnter={isScriptAdded ? () => responsiveVoice.speak("Create") : null} disabled={photoUploading || !formData.name || !formData.description ? true : false} onClick={() => { setShowModal(false); createCommunity(formData) }} type="submit"
                                         className="inline-flex items-center disabled:bg-gray-800 disabled:cursor-not-allowed justify-center py-1 gap-1 font-medium rounded-lg min-h-[2.25rem] px-4 text-sm text-primary shadow bg-main hover:bg-[#9036c8]">
                                         <span className="flex items-center gap-1">
                                             <span className="">

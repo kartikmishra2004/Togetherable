@@ -1,6 +1,9 @@
 import React from 'react'
+import { useScript } from '../context/TTScontext';
 
 const DeletePostModal = ({ setShowDeleteModal, deletePost, communityId, postId, postDone, setPostDone }) => {
+
+    const { isScriptAdded } = useScript();
 
     const handleDelete = async () => {
         setShowDeleteModal(false);
@@ -40,7 +43,7 @@ const DeletePostModal = ({ setShowDeleteModal, deletePost, communityId, postId, 
                             <div aria-hidden="true" className="border-t border-zinc-500 px-2"></div>
                             <div className="px-6 py-2">
                                 <div className="grid gap-2 grid-cols-[repeat(auto-fit,minmax(0,1fr))]">
-                                    <button onMouseEnter={() => responsiveVoice.speak("Cancel")} onClick={() => setShowDeleteModal(false)} type="button"
+                                    <button onMouseEnter={isScriptAdded ? () => responsiveVoice.speak("Cancel") : null} onClick={() => setShowDeleteModal(false)} type="button"
                                         className="inline-flex items-center justify-center py-1 gap-1 rounded-lg border outline-none min-h-[2.25rem] px-4 text-sm border-zinc-500 bg-secondary">
                                         <span className="flex items-center gap-1">
                                             <span className="">
@@ -48,7 +51,7 @@ const DeletePostModal = ({ setShowDeleteModal, deletePost, communityId, postId, 
                                             </span>
                                         </span>
                                     </button>
-                                    <button onMouseEnter={() => responsiveVoice.speak("Delete")} onClick={handleDelete} type="submit"
+                                    <button onMouseEnter={isScriptAdded ? () => responsiveVoice.speak("Delete") : null} onClick={handleDelete} type="submit"
                                         className="inline-flex items-center justify-center py-1 gap-1 rounded-lg outline-none min-h-[2.25rem] px-4 text-sm bg-red-500 hover:bg-red-600">
                                         <span className="flex items-center gap-1">
                                             <span className="">
