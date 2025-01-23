@@ -6,15 +6,16 @@ Features:
 
 1.	Create / join existing communities. ✅
 2.	Post (text and media) in the communities. ✅
-3.	Group chat (text and media) in communities.
-4.	Group audio / video chat in communities.
-5.	Text to speech (TTS) and speech to text (STT) in group chat.
-6.	AI chat assistant for any help or emergency.
-7.	Anonymous chat with a random person.
-8.	Sentimental analysis of the chats.
-9.	AI based motivational quotes image generation.
-10.	Realtime sign language translation.
-11. Navigate locaions of community members with map.
-12. Fill the input fields with voice commands.
-13. Speech on clicking any text in the website. ✅
-12. Pro features (payment gateway).
+3.  Like and save community posts.
+4.	Group chat (text and media) in communities.
+5.	Group audio / video chat in communities.
+6.	Text to speech (TTS) and speech to text (STT) in group chat.
+7.	AI chat assistant for any help or emergency.
+8.	Anonymous chat with a random person.
+9.	Sentimental analysis of the chats.
+10.	AI based motivational quotes image generation.
+11.	Realtime sign language translation.
+12. Navigate locaions of community members with map.
+13. Fill the input fields with voice commands.
+14. Speech on clicking any text in the website. ✅
+15. Pro features (payment gateway).
