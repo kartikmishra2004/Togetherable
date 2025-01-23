@@ -1,14 +1,14 @@
 import React from 'react'
 import { useScript } from '../context/TTScontext';
 
-const DeletePostModal = ({ setShowDeleteModal, deletePost, communityId, postId, postDone, setPostDone }) => {
+const DeletePostModal = ({ setShowDeleteModal, deletePost, communityId, postId, setCommunityTriggers }) => {
 
     const { isScriptAdded } = useScript();
 
     const handleDelete = async () => {
         setShowDeleteModal(false);
         await deletePost(communityId, postId);
-        setPostDone(!postDone);
+        setCommunityTriggers(prev => ({ ...prev, postDone: !prev.postDone }));
     }
     return (
         <div className='font-main text-primary'>

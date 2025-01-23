@@ -336,6 +336,38 @@ export const FirebaseProvider = (props) => {
         }
     }
 
+    // Method for saving post 
+    const savePost = async (userId, postId) => {
+        try {
+            await updateDoc(doc(firestore, "users", userId), {
+                savedPosts: arrayUnion(postId),
+            });
+            const updatedUserDoc = await getDoc(doc(firestore, "users", userId));
+            setUserData(prevUserData => ({
+                ...prevUserData,
+                savedPosts: updatedUserDoc.data().savedPosts
+            }));
+        } catch (error) {
+            console.log("Failed to save post", error)
+        }
+    }
+
+    // Method for unsaving post 
+    const unsavePost = async (userId, postId) => {
+        try {
+            await updateDoc(doc(firestore, "users", userId), {
+                savedPosts: arrayRemove(postId),
+            });
+            const updatedUserDoc = await getDoc(doc(firestore, "users", userId));
+            setUserData(prevUserData => ({
+                ...prevUserData,
+                savedPosts: updatedUserDoc.data().savedPosts
+            }));
+        } catch (error) {
+            console.log("Failed to unsave post", error)
+        }
+    }
+
     return (
         <FirebaseContext.Provider
             value={{
@@ -357,6 +389,8 @@ export const FirebaseProvider = (props) => {
                 joinCommuniy,
                 leaveCommuniy,
                 fetchJoinedCommunities,
+                savePost,
+                unsavePost,
                 user,
                 userData,
                 loading,

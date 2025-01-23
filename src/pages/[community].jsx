@@ -3,13 +3,13 @@ import { Navigate, useParams, useLocation, useNavigate, Link } from 'react-route
 import { useFirebase } from '../context/firebase';
 import RelativeTime from "../utils/Moment.jsx";
 import DeletePostModal from '../components/DeletePostModal.jsx';
-import { Heart, Save, Trash, Image, Volume2 } from 'lucide-react'
+import { Heart, Save, Trash, Image, Volume2, SaveOff } from 'lucide-react';
 import { useScript } from '../context/TTScontext';
 
 const CommunityPage = () => {
-    const { user, getUser, loading, uploadImage, createPost, deletePost, fetchPosts, joinCommuniy, leaveCommuniy, deleteCommunity } = useFirebase();
+    const { user, getUser, userData, loading, uploadImage, createPost, deletePost, fetchPosts, joinCommuniy, leaveCommuniy, deleteCommunity, savePost, unsavePost } = useFirebase();
     const navigate = useNavigate();
-    const { isScriptAdded } = useScript(); 
+    const { isScriptAdded } = useScript();
     const { community } = useParams();
     const location = useLocation();
     const [posts, setPosts] = useState([]);
@@ -24,20 +24,25 @@ const CommunityPage = () => {
     const [postsLoading, setPostsLoading] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [postId, setPostId] = useState('');
-    const [postDone, setPostDone] = useState(false);
     const [leftbarLoading, setLeftbarLoading] = useState(false);
     const [postLoading, setPostLoading] = useState(false);
-    const [joinCloading, setJoinCloading] = useState(false);
+    const joinCloading = false;
+    const [communityTriggers, setCommunityTriggers] = useState({
+        postDone: false,
+        joinCloading: false,
+        leftbarLoading: false,
+    });
+    const [saveLoading, setSaveLoading] = useState(false);
 
     useEffect(() => {
         const fetchCommunityDetails = async () => {
-            setLeftbarLoading(true);
+            setCommunityTriggers(prev => ({ ...prev, leftbarLoading: true }));
             const res = await fetchPosts(community);
             setcommunityData(res);
-            setLeftbarLoading(false);
+            setCommunityTriggers(prev => ({ ...prev, leftbarLoading: false }));
         }
         fetchCommunityDetails();
-    }, [community, fetchPosts, getUser, joinCloading])
+    }, [community, communityTriggers.joinCloading])
 
     useEffect(() => {
         // Fetch posts and then fetch user data for each post
@@ -59,7 +64,7 @@ const CommunityPage = () => {
             setPostsLoading(false);
         };
         fetchCommunityPosts();
-    }, [community, fetchPosts, getUser, postDone]);
+    }, [community, communityTriggers.postDone]);
 
     useEffect(() => {
         window.scroll(0, 0);
@@ -87,7 +92,7 @@ const CommunityPage = () => {
             photoURL: '',
         });
         setPreviewPhoto('');
-        setPostDone(!postDone);
+        setCommunityTriggers(prev => ({ ...prev, postDone: !prev.postDone }));
         setPostLoading(false);
     };
 
@@ -97,15 +102,27 @@ const CommunityPage = () => {
     }
 
     const joinTheCommuniy = async () => {
-        setJoinCloading(true);
+        setCommunityTriggers(prev => ({ ...prev, joinCloading: true }));
         await joinCommuniy(community, user.uid);
-        setJoinCloading(false);
+        setCommunityTriggers(prev => ({ ...prev, joinCloading: false }));
     }
 
     const leaveTheCommunity = async () => {
-        setJoinCloading(true);
+        setCommunityTriggers(prev => ({ ...prev, joinCloading: true }));
         await leaveCommuniy(community, user.uid);
-        setJoinCloading(false);
+        setCommunityTriggers(prev => ({ ...prev, joinCloading: false }));
+    }
+
+    const save = async (userID, postID) => {
+        setSaveLoading(true);
+        await savePost(userID, postID)
+        setSaveLoading(false);
+    }
+
+    const unsave = async (userID, postID) => {
+        setSaveLoading(true);
+        await unsavePost(userID, postID)
+        setSaveLoading(false);
     }
 
     if (loading || joinCloading) {
@@ -131,14 +148,14 @@ const CommunityPage = () => {
 
     return (
         <>
-            {showDeleteModal && <DeletePostModal setShowDeleteModal={setShowDeleteModal} deletePost={deletePost} communityId={community} postId={postId} postDone={postDone} setPostDone={setPostDone} />}
+            {showDeleteModal && <DeletePostModal setShowDeleteModal={setShowDeleteModal} deletePost={deletePost} communityId={community} postId={postId} setCommunityTriggers={setCommunityTriggers} />}
             <div className="container lg:w-[80vw] lg:px-0 px-2 mx-auto py-16 font-main">
                 <div className="w-full py-12 text-center text-4xl font-bold">Welcome to {communityData.name}</div>
                 <div className="flex lg:flex-row flex-col gap-6">
                     {/* Left Sidebar - Community Details */}
                     {leftbarLoading ? (
                         <div className="lg:w-1/5 h-[67vh] bg-secondary rounded-lg border border-zinc-800 p-6">
-                            <div className='w-full flex justify-center h-full items-center '><span class="loader"></span></div>
+                            <div className='w-full flex justify-center h-full items-center '><span className="loader"></span></div>
                         </div>
                     ) : (
                         <div className="lg:w-1/5 h-max bg-secondary rounded-lg border border-zinc-800 p-6">
@@ -175,7 +192,7 @@ const CommunityPage = () => {
                                         <button onMouseEnter={isScriptAdded ? () => responsiveVoice.speak("Delete community") : null} onClick={handleDeleteCommunity} className=' text-red-400 rounded-lg hover:text-red-500'>Delete community</button>
                                     </div>
                                 ) : (<div className="pt-2 w-full flex lg:justify-start justify-center">
-                                    <button  onMouseEnter={isScriptAdded ? () => responsiveVoice.speak("Leave community") : null} onClick={leaveTheCommunity} className=' text-red-400 rounded-lg hover:text-red-500'>Leave community</button>
+                                    <button onMouseEnter={isScriptAdded ? () => responsiveVoice.speak("Leave community") : null} onClick={leaveTheCommunity} className=' text-red-400 rounded-lg hover:text-red-500'>Leave community</button>
                                 </div>
                                 ))}
                                 <div title='Make a phone call in community.' className="flex items-center lg:space-x-2 w-full lg:justify-start justify-center">
@@ -240,7 +257,7 @@ const CommunityPage = () => {
                         {/* Posts Feed */}
 
                         {/* Posts */}
-                        {postsLoading ? (<div className='w-full flex justify-center h-[20vh] items-center '><span class="loader"></span></div>) : (posts.length > 0 ? (
+                        {postsLoading ? (<div className='w-full flex justify-center h-[20vh] items-center '><span className="loader"></span></div>) : (posts.length > 0 ? (
                             posts.map((post, key) => (
                                 <div key={key} className="mb-6 last:mb-0 p-4 bg-[#14141c] rounded-lg border border-zinc-800">
                                     <div className="flex items-center space-x-3 mb-4">
@@ -261,10 +278,31 @@ const CommunityPage = () => {
                                             <span><Heart /></span>
                                             <span>Like</span>
                                         </button>
-                                        <button onMouseEnter={isScriptAdded ? () => responsiveVoice.speak("Save") : null} className="flex items-center space-x-1">
-                                            <span><Save /></span>
-                                            <span>Save</span>
-                                        </button>
+                                        {userData?.savedPosts?.includes(post.id) ? (saveLoading ? (
+                                            <div className='flex items-center space-x-1'><div role="status">
+                                                <svg aria-hidden="true" class="inline w-5 h-5 text-gray-200 animate-spin dark:text-gray-600 fill-main" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
+                                                    <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill" />
+                                                </svg><span className='ml-2'>Unsave</span>
+                                            </div></div>
+                                        ) :
+                                            (<button onClick={() => unsave(user.uid, post.id)} onMouseEnter={isScriptAdded ? () => responsiveVoice.speak("Unsave") : null} className="flex items-center space-x-1">
+                                                <span><SaveOff /></span>
+                                                <span>Unsave</span>
+                                            </button>)
+                                        ) : (saveLoading ? (
+                                            <div className='flex items-center space-x-1'><div role="status">
+                                                <svg aria-hidden="true" class="inline w-5 h-5 text-gray-200 animate-spin dark:text-gray-600 fill-main" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
+                                                    <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill" />
+                                                </svg><span className='ml-2'>Save</span>
+                                            </div></div>
+                                        ) :
+                                            (<button onClick={() => save(user.uid, post.id)} onMouseEnter={isScriptAdded ? () => responsiveVoice.speak("Save") : null} className="flex items-center space-x-1">
+                                                <span><Save /></span>
+                                                <span>Save</span>
+                                            </button>)
+                                        )}
                                         {post.postedBy === user.uid || communityData.createdBy === user.uid ? (
                                             <button onMouseEnter={isScriptAdded ? () => responsiveVoice.speak("Delete") : null} onClick={() => { setShowDeleteModal(!showDeleteModal); setPostId(post.id); }} className="flex items-center space-x-1">
                                                 <span><Trash /></span>
