@@ -24,15 +24,12 @@ const CommunityPage = () => {
     const [postsLoading, setPostsLoading] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [postId, setPostId] = useState('');
-    const [leftbarLoading, setLeftbarLoading] = useState(false);
     const [postLoading, setPostLoading] = useState(false);
-    const joinCloading = false;
     const [communityTriggers, setCommunityTriggers] = useState({
         postDone: false,
         joinCloading: false,
         leftbarLoading: false,
     });
-    const [saveLoading, setSaveLoading] = useState(false);
 
     useEffect(() => {
         const fetchCommunityDetails = async () => {
@@ -113,19 +110,25 @@ const CommunityPage = () => {
         setCommunityTriggers(prev => ({ ...prev, joinCloading: false }));
     }
 
+    const [saveLoadingMap, setSaveLoadingMap] = useState({});
+
     const save = async (userID, postID) => {
-        setSaveLoading(true);
+        setSaveLoadingMap(prev => ({ ...prev, [postID]: true }));
+        // setSaveLoading(true);
         await savePost(userID, postID)
-        setSaveLoading(false);
+        // setSaveLoading(false);
+        setSaveLoadingMap(prev => ({ ...prev, [postID]: false }));
     }
 
     const unsave = async (userID, postID) => {
-        setSaveLoading(true);
+        setSaveLoadingMap(prev => ({ ...prev, [postID]: true }));
+        // setSaveLoading(true);
         await unsavePost(userID, postID)
-        setSaveLoading(false);
+        // setSaveLoading(false);
+        setSaveLoadingMap(prev => ({ ...prev, [postID]: false }));
     }
 
-    if (loading || joinCloading) {
+    if (loading || communityTriggers.joinCloading) {
         return (
             <div className="flex justify-center items-center h-screen">
                 <div className="jelly"></div>
@@ -153,7 +156,7 @@ const CommunityPage = () => {
                 <div className="w-full py-12 text-center text-4xl font-bold">Welcome to {communityData.name}</div>
                 <div className="flex lg:flex-row flex-col gap-6">
                     {/* Left Sidebar - Community Details */}
-                    {leftbarLoading ? (
+                    {communityTriggers.leftbarLoading ? (
                         <div className="lg:w-1/5 h-[67vh] bg-secondary rounded-lg border border-zinc-800 p-6">
                             <div className='w-full flex justify-center h-full items-center '><span className="loader"></span></div>
                         </div>
@@ -278,7 +281,7 @@ const CommunityPage = () => {
                                             <span><Heart /></span>
                                             <span>Like</span>
                                         </button>
-                                        {userData?.savedPosts?.includes(post.id) ? (saveLoading ? (
+                                        {userData?.savedPosts?.includes(post.id) ? (saveLoadingMap[post.id] ? (
                                             <div className='flex items-center space-x-1'><div role="status">
                                                 <svg aria-hidden="true" class="inline w-5 h-5 text-gray-200 animate-spin dark:text-gray-600 fill-main" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                     <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
@@ -290,7 +293,7 @@ const CommunityPage = () => {
                                                 <span><SaveOff /></span>
                                                 <span>Unsave</span>
                                             </button>)
-                                        ) : (saveLoading ? (
+                                        ) : (saveLoadingMap[post.id] ? (
                                             <div className='flex items-center space-x-1'><div role="status">
                                                 <svg aria-hidden="true" class="inline w-5 h-5 text-gray-200 animate-spin dark:text-gray-600 fill-main" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                     <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
@@ -336,8 +339,8 @@ const CommunityPage = () => {
                                 <button onMouseEnter={isScriptAdded ? () => responsiveVoice.speak("Get pro now") : null} className="button px-2 py-2 mt-2 bg-main rounded-lg hover:bg-[#9036c8] focus:outline-none text-primary disabled:bg-gray-800">
                                     <span className="text-button">Get pro now</span>
                                 </button>
-                            </span></span
-                        >
+                            </span>
+                        </span>
                     </div>
                 </div>
             </div >
