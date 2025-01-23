@@ -1,21 +1,34 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Link, Navigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { useFirebase } from '../context/firebase';
 import Modal from '../components/editProfileModal.jsx';
 import Offline from '../components/Offline.jsx';
 import { useScript } from '../context/TTScontext';
+import YourCommunities from "../components/YourCommunities.jsx";
+import SavedPosts from "../components/SavedPosts.jsx";
 
 const Profile = () => {
-  const { user, loading, userData, putLocation, deleteLocation, fetchJoinedCommunities } = useFirebase();
+  const { user, loading, userData, putLocation, deleteLocation } = useFirebase();
 
   const { isScriptAdded } = useScript();
-  
+
   // Fetching the location
   const [geoLocation, setGeoLocation] = useState('');
   const [completionPercentage, setCompletionPercentage] = useState(0);
   const [modal, setModal] = useState(false);
   const [fetchingLocation, setFetchingLocation] = useState(false);
-  const [joinedCommunities, setJoinnedCommunities] = useState([])
+  const [activeTab, setActiveTab] = useState('yourCommunities');
+
+  const renderComponent = () => {
+    switch (activeTab) {
+      case 'savedPosts':
+        return <SavedPosts />;
+      case 'yourCommunities':
+        return <YourCommunities />;
+      default:
+        return null;
+    }
+  }
 
   // Profile % bar
   const updateCompletionPercentage = (data) => {
@@ -34,9 +47,6 @@ const Profile = () => {
   useEffect(() => {
     setGeoLocation(userData?.location);
     updateCompletionPercentage(userData);
-    if (user) {
-      fetchJoinedCommunities(user?.uid).then((res) => setJoinnedCommunities(res))
-    }
   }, [userData, user]);
 
   const handleGeoLoation = () => {
@@ -180,36 +190,22 @@ const Profile = () => {
           </div>
         </div>
         <div className="transition duration-500 ease-in-out transform scale-100 translate-x-0 translate-y-0 opacity-100">
-          <div className="my-12 md:text-center">
-            <h1 className="my-5 lg:text-4xl text-2xl text-center font-bold text-primary md:text-center">
-              Your Communities
-            </h1>
-          </div>
-        </div>
-        <ul className="space-y-8 max-w-[80vw] mx-auto">
-          {joinedCommunities.map((data, key) => (
-            <li key={key} className="text-sm leading-6">
-              <div className="relative group">
-                <div
-                  className="absolute transition rounded-lg opacity-25 inset-1 bg-gradient-to-r from-purple-600 to-[#9036c8] duration-400 group-hover:opacity-100 group-hover:duration-200">
-                </div><Link to={`/communities/${data.id}`} state={{ createdBy: data.createdBy }} className="cursor-pointer">
-                  <div
-                    className="relative p-6 space-y-6 leading-none rounded-lg bg-secondary border border-zinc-800 hover:shadow-sm hover:shadow-main transition-all duration-300 ease-in-out">
-                    <div className="flex items-center space-x-4"><img
-                      src={data.communityImage}
-                      className="w-12 h-12 bg-center bg-primary object-cover rounded-full" alt="Kanye West" />
-                      <div>
-                        <h3 className="text-lg font-semibold text-primary">{data.name}</h3>
-                        <p className="text-gray-500 text-md">{data.members.length} members</p>
-                      </div>
-                    </div>
-                    <p className="leading-normal text-gray-300 text-md">{data.description}</p>
-                  </div>
-                </Link>
+          <div className="my-12 md:text-center text-primary font-main">
+            <div className="w-full">
+              <div className="flex justify-evenly max-w-[32rem] gap-1 p-2 mx-auto my-2 bg-secondary border border-zinc-800 rounded-lg" role="group">
+                <button onClick={() => setActiveTab('yourCommunities')} type="button" className={`px-5 ${activeTab === 'yourCommunities' ? 'bg-gray-800' : ''} py-2 w-[15rem] rounded-lg`}>
+                  Your communities
+                </button>
+                <button onClick={() => setActiveTab('savedPosts')} type="button" className={`px-5 ${activeTab === 'savedPosts' ? 'bg-gray-800' : ''} py-2 w-[15rem] rounded-lg`}>
+                  Saved posts
+                </button>
               </div>
-            </li>
-          ))}
-        </ul>
+            </div>
+          </div>
+          {
+            renderComponent()
+          }
+        </div>
       </div>
     </>
   );

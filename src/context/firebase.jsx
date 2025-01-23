@@ -8,7 +8,7 @@ import {
     GoogleAuthProvider,
     signInWithPopup
 } from "firebase/auth";
-import { getFirestore, doc, setDoc, getDoc, updateDoc, deleteField, addDoc, collection, arrayUnion, getDocs, Timestamp, arrayRemove, deleteDoc, query, where } from "firebase/firestore";
+import { getFirestore, doc, setDoc, getDoc, updateDoc, deleteField, addDoc, collection, arrayUnion, getDocs, arrayRemove, deleteDoc, query, where } from "firebase/firestore";
 import { v4 as uuidv4 } from 'uuid';
 
 const firebaseConfig = {
@@ -265,11 +265,11 @@ export const FirebaseProvider = (props) => {
         }
     }
 
-    // Method for creating post in community 
     const createPost = async (communityId, data) => {
         try {
+            const postId = uuidv4();
             const post = {
-                id: uuidv4(),
+                id: postId,
                 ...data,
                 postedBy: user.uid,
                 timestamp: new Date().toISOString(),
@@ -277,6 +277,7 @@ export const FirebaseProvider = (props) => {
             await updateDoc(doc(firestore, 'communities', communityId), {
                 posts: arrayUnion(post),
             });
+            await setDoc(doc(firestore, 'posts', postId), post);
         } catch (error) {
             console.log("Failed to create post !!", error)
         }
@@ -290,6 +291,7 @@ export const FirebaseProvider = (props) => {
                 const posts = communitySnap.data().posts || [];
                 const updatedPosts = posts.filter(post => post.id !== postId);
                 await updateDoc(communityRef, { posts: updatedPosts });
+                await deleteDoc(doc(firestore, 'posts', postId));
             }
         } catch (error) {
             console.log("Failed to delete post !!", error);
@@ -368,6 +370,27 @@ export const FirebaseProvider = (props) => {
         }
     }
 
+    const getSavedPosts = async () => {
+        const savedPosts = [];
+        const postsIdArray = userData?.savedPosts;
+        try {
+            const posts = await Promise.all(
+                postsIdArray.map(postId =>
+                    getDoc(doc(firestore, 'posts', postId))
+                )
+            );
+            posts.forEach(post => {
+                if (post.exists()) {
+                    savedPosts.push({ id: post.id, ...post.data() });
+                }
+            });
+            return savedPosts;
+        } catch (error) {
+            console.log("Failed to get saved posts!!", error);
+            return [];
+        }
+    };
+
     return (
         <FirebaseContext.Provider
             value={{
@@ -391,6 +414,7 @@ export const FirebaseProvider = (props) => {
                 fetchJoinedCommunities,
                 savePost,
                 unsavePost,
+                getSavedPosts,
                 user,
                 userData,
                 loading,
