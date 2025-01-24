@@ -391,6 +391,58 @@ export const FirebaseProvider = (props) => {
         }
     };
 
+    // Method for liking a post 
+    async function likePost(communityId, postId, userId) {
+        const communityRef = doc(firestore, "communities", communityId);
+        try {
+            const communitySnap = await getDoc(communityRef);
+
+            if (communitySnap.exists()) {
+                const communityData = communitySnap.data();
+                const posts = communityData.posts;
+                const updatedPosts = posts.map((post) => {
+                    if (post.id === postId) {
+                        return {
+                            ...post,
+                            likedBy: post.likedBy ? [...post.likedBy, userId] : [userId],
+                        };
+                    }
+                    return post;
+                });
+                await updateDoc(communityRef, { posts: updatedPosts });
+            } else {
+                console.log("Community document not found!");
+            }
+        } catch (error) {
+            console.error("Error adding likedBy field:", error);
+        }
+    }
+
+    async function unlikePost(communityId, postId, userId) {
+        const communityRef = doc(firestore, "communities", communityId);
+        try {
+            const communitySnap = await getDoc(communityRef);
+            if (communitySnap.exists()) {
+                const communityData = communitySnap.data();
+                const posts = communityData.posts;
+                const updatedPosts = posts.map((post) => {
+                    if (post.id === postId) {
+                        return {
+                            ...post,
+                            likedBy: post.likedBy ? post.likedBy.filter((id) => id !== userId) : [],
+                        };
+                    }
+                    return post;
+                });
+                await updateDoc(communityRef, { posts: updatedPosts });
+            } else {
+                console.log("Community document not found!");
+            }
+        } catch (err) {
+            console.error("Error removing user from likedBy field:", err);
+        }
+    }
+
     return (
         <FirebaseContext.Provider
             value={{
@@ -415,6 +467,8 @@ export const FirebaseProvider = (props) => {
                 savePost,
                 unsavePost,
                 getSavedPosts,
+                likePost,
+                unlikePost,
                 user,
                 userData,
                 loading,
