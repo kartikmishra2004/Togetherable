@@ -192,11 +192,11 @@ const Profile = () => {
         <div className="transition duration-500 ease-in-out transform scale-100 translate-x-0 translate-y-0 opacity-100">
           <div className="my-12 md:text-center text-primary font-main">
             <div className="w-full">
-              <div className="flex justify-evenly max-w-[32rem] gap-1 p-2 mx-auto my-2 bg-secondary border border-zinc-800 rounded-lg" role="group">
-                <button onClick={() => setActiveTab('yourCommunities')} type="button" className={`px-5 ${activeTab === 'yourCommunities' ? 'bg-gray-800' : ''} py-2 w-[15rem] rounded-lg`}>
-                  Your communities
+              <div className="flex justify-evenly lg:max-w-[32rem] max-w-[80vw] gap-1 p-2 mx-auto my-2 bg-secondary border border-zinc-800 rounded-lg" role="group">
+                <button onClick={() => setActiveTab('yourCommunities')} type="button" className={`px-5 ${activeTab === 'yourCommunities' ? 'bg-gray-800' : ''} py-2 w-[15rem] rounded-lg lg:text-base text-xs`}>
+                  Communities
                 </button>
-                <button onClick={() => setActiveTab('savedPosts')} type="button" className={`px-5 ${activeTab === 'savedPosts' ? 'bg-gray-800' : ''} py-2 w-[15rem] rounded-lg`}>
+                <button onClick={() => setActiveTab('savedPosts')} type="button" className={`px-5 ${activeTab === 'savedPosts' ? 'bg-gray-800' : ''} py-2 w-[15rem] rounded-lg lg:text-base text-xs`}>
                   Saved posts
                 </button>
               </div>

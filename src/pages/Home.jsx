@@ -28,7 +28,7 @@ const Home = () => {
   return (
     <main className=''>
       <section className="text-primary body-font font-main">
-        <div className="container mx-auto flex px-5 w-[80vw] lg:py-44 py-32 md:flex-row flex-col items-center">
+        <div className="container mx-auto flex lg:px-5 px-3 lg:w-[80vw] lg:py-44 py-28 md:flex-row flex-col items-center">
           <div className="lg:max-w-lg lg:w-full md:w-1/2 w-5/6 mb-10 md:mb-0 lg:block hidden">
             {!isUnityLoaded && (
               <SkeletonTheme baseColor="#14141c" highlightColor="#232234">

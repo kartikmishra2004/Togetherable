@@ -152,7 +152,7 @@ const CommunityPage = () => {
     return (
         <>
             {showDeleteModal && <DeletePostModal setShowDeleteModal={setShowDeleteModal} deletePost={deletePost} communityId={community} postId={postId} setCommunityTriggers={setCommunityTriggers} />}
-            <div className="container lg:w-[80vw] lg:px-0 px-2 mx-auto py-16 font-main">
+            <div className="container lg:w-[80vw] lg:px-0 px-3 mx-auto py-16 font-main">
                 <div className="w-full py-12 text-center text-4xl font-bold">Welcome to {communityData.name}</div>
                 <div className="flex lg:flex-row flex-col gap-6">
                     {/* Left Sidebar - Community Details */}

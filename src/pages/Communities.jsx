@@ -46,13 +46,13 @@ const Communities = () => {
     return (
       <section id="testimonies" className="flex justify-center min-h-screen py-16 w-full font-main">
         {showModal && <CreateCommunityModal setShowModal={setShowModal} />}
-        <div className="w-[80vw] flex flex-col justify-center items-center py-12">
+        <div className="lg:w-[80vw] lg:px-0 px-3 flex flex-col justify-center items-center py-12">
           <div className="transition duration-500 ease-in-out transform scale-100 translate-x-0 translate-y-0 opacity-100">
             <div className="mb-12 space-y-5 md:mb-16 md:text-center">
-              <h1 className="mb-5 text-4xl font-bold text-primary md:text-center">
+              <h1 className="mb-5 text-center lg:text-left text-4xl font-bold text-primary md:text-center">
                 Become Part of Communities
               </h1>
-              <p className="text-xl text-gray-100 md:text-center md:text-2xl">
+              <p className="text-xl text-center text-gray-100 md:text-center md:text-2xl">
                 Find your support network.
               </p>
             </div>
