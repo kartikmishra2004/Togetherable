@@ -78,10 +78,6 @@ const SavedPosts = () => {
                             {post.photoURL && <img src={post.photoURL} className="w-60 rounded-lg border border-zinc-800" alt="" />}
 
                             <div className="flex space-x-8 pt-3 mt-2 text-gray-400">
-                                <button onMouseEnter={isScriptAdded ? () => responsiveVoice.speak("Like") : null} className="flex items-center space-x-1">
-                                    <span><Heart /></span>
-                                    <span>Like</span>
-                                </button>
                                 {saveLoadingMap[post.id] ? (
                                     <div className='flex items-center space-x-1'>
                                         <div role="status">
