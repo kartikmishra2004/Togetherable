@@ -7,6 +7,7 @@ import { Heart, Save, Trash, Image, Volume2, SaveOff, HeartOff } from 'lucide-re
 import { useScript } from '../context/TTScontext';
 import Chat from '../components/Chat.jsx';
 import Call from '../components/Call.jsx';
+import Map from '../components/Map.jsx';
 
 const CommunityPage = () => {
     const { user, getUser, userData, loading, uploadImage, createPost, deletePost, fetchPosts, joinCommuniy, leaveCommuniy, deleteCommunity, savePost, unsavePost, likePost, unlikePost } = useFirebase();
@@ -201,6 +202,9 @@ const CommunityPage = () => {
                             </button>
                             <button onClick={() => setActiveTab('call')} type="button" className={`px-5 ${activeTab === 'call' ? 'bg-gray-800' : ''} py-2 w-[15rem] rounded-lg lg:text-base text-xs`}>
                                 Call
+                            </button>
+                            <button onClick={() => setActiveTab('map')} type="button" className={`px-5 ${activeTab === 'map' ? 'bg-gray-800' : ''} py-2 w-[15rem] rounded-lg lg:text-base text-xs`}>
+                                Map
                             </button>
                         </div>
                     </div>
@@ -419,8 +423,9 @@ const CommunityPage = () => {
                             </span>
                         </div>
                     </div>) : ''}
-                {activeTab === 'chat' ? (<Chat />) : ''}
+                {activeTab === 'chat' ? (<Chat communityId={community} userData={userData} />) : ''}
                 {activeTab === 'call' ? (<Call />) : ''}
+                {activeTab === 'map' ? (<Map />) : ''}
             </div>
         </>
     );

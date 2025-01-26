@@ -7,7 +7,7 @@ Features:
 1.	Create / join existing communities. ✅
 2.	Post (text and media) in the communities. ✅
 3.  Like and save community posts. ✅
-4.	Group chat (text and media) in communities.
+4.	Group chat in communities. ✅
 5.	Group audio / video chat in communities.
 6.	Text to speech (TTS) and speech to text (STT) in group chat.
 7.	AI chat assistant for any help or emergency.

@@ -8,7 +8,7 @@ import {
     GoogleAuthProvider,
     signInWithPopup
 } from "firebase/auth";
-import { getFirestore, doc, setDoc, getDoc, updateDoc, deleteField, addDoc, collection, arrayUnion, getDocs, arrayRemove, deleteDoc, query, where } from "firebase/firestore";
+import { getFirestore, doc, setDoc, getDoc, updateDoc, deleteField, serverTimestamp, addDoc, collection, arrayUnion, getDocs, arrayRemove, deleteDoc, query, startAfter, where, orderBy, onSnapshot, limit } from "firebase/firestore";
 import { v4 as uuidv4 } from 'uuid';
 
 const firebaseConfig = {
@@ -443,6 +443,52 @@ export const FirebaseProvider = (props) => {
         }
     }
 
+    // Method for send chat
+    const sendMessageToCommunity = async (communityId, message, sender, senderName, type) => {
+        try {
+            const messageRef = doc(collection(firestore, `communities/${communityId}/chats`));
+            await setDoc(messageRef, {
+                message,
+                sender,
+                senderName,
+                type,
+                timestamp: serverTimestamp(),
+            });
+        } catch (error) {
+            console.error("Error sending message to community chat:", error);
+        }
+    };
+
+
+    // Method for fetching chat 
+    const fetchCommunityChats = (communityId, setMessages, loadMore = false, lastVisible = null) => {
+        try {
+            const chatsRef = collection(firestore, `communities/${communityId}/chats`);
+            let q;
+            if (loadMore && lastVisible) {
+                q = query(chatsRef, orderBy("timestamp", "asc"), startAfter(lastVisible), limit(50));
+            } else {
+                q = query(chatsRef, orderBy("timestamp", "asc"), limit(50));
+            }
+            const unsubscribe = onSnapshot(q, (snapshot) => {
+                if (!snapshot.empty) {
+                    const chats = snapshot.docs.map(doc => ({
+                        id: doc.id,
+                        ...doc.data(),
+                        isOwn: doc.data().sender === user.uid,
+                    }));
+                    lastVisible = snapshot.docs[snapshot.docs.length - 1];
+                    setMessages(prevMessages => (loadMore ? [...prevMessages, ...chats] : chats));
+                }
+            });
+            return unsubscribe;
+        } catch (error) {
+            console.error("Error fetching community chats:", error);
+            return () => { };
+        }
+    };
+
+
     return (
         <FirebaseContext.Provider
             value={{
@@ -469,6 +515,8 @@ export const FirebaseProvider = (props) => {
                 getSavedPosts,
                 likePost,
                 unlikePost,
+                sendMessageToCommunity,
+                fetchCommunityChats,
                 user,
                 userData,
                 loading,
