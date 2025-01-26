@@ -1,8 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
-import { FiSend } from 'react-icons/fi';
 import { Volume2 } from 'lucide-react'
 import { useFirebase } from '../context/firebase';
 import { useScript } from '../context/TTScontext';
+import { Mic } from 'lucide-react';
 
 function Chat({ communityId, userData }) {
     const [messages, setMessages] = useState([]);
@@ -51,6 +51,30 @@ function Chat({ communityId, userData }) {
         return date ? date.toLocaleString() : "Loading...";
     };
 
+    const [listning, setListning] = useState(false);
+    const handleSTT = () => {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+
+        if (listning) {
+            recognition.stop();
+            setListning(false);
+        } else {
+            setListning(true);
+            if (SpeechRecognition) {
+                recognition.lang = 'en-US';
+                recognition.onresult = (event) => {
+                    const transcript = event.results[0][0].transcript;
+                    setMessage(message + transcript);
+                    setListning(false);
+                };
+                recognition.start();
+            } else {
+                console.log("SpeechRecognition API is not supported in your browser.");
+            }
+        }
+    }
+
     return (
         <div className="flex flex-col lg:h-[80vh] h-[65vh] bg-secondary pb-4 rounded-lg border border-zinc-800">
             <div className="bg-secondary border-b border-zinc-800 shadow-sm p-4">
@@ -62,7 +86,7 @@ function Chat({ communityId, userData }) {
                         <div key={msg.id} className={`flex flex-col ${msg.sender === user.uid ? 'items-end' : 'items-start'} mb-4`}>
                             {msg.sender !== user.uid && (
                                 <div className="flex items-start mr-2 gap-2">
-                                    <span className="text-xs text-gray-500">{msg.senderName}</span>
+                                    <span className="text-sm text-gray-500">{msg.senderName}</span>
                                 </div>
                             )}
                             <div
@@ -98,8 +122,11 @@ function Chat({ communityId, userData }) {
                         <button
                             disabled={!message ? true : false}
                             onClick={handleSendMessage}
-                            className="p-2 bg-main disabled:bg-gray-800 disabled:cursor-not-allowed text-white rounded-full hover:bg-[#9036c8]">
-                            <FiSend className="w-6 h-6" />
+                            className={`px-3 py-2 mx-2 bg-main rounded-lg hover:bg-[#9036c8] focus:outline-none disabled:bg-gray-800 ${!message ? 'cursor-not-allowed' : 'cursor-pointer'}`}>
+                            Send
+                        </button>
+                        <button onClick={handleSTT} className={`p-2 ${listning ? 'bg-red-500 animate-pulse' : 'bg-main hover:bg-[#9036c8]'} disabled:bg-gray-800 disabled:cursor-not-allowed text-white rounded-full`}>
+                            <Mic />
                         </button>
                     </div>
                 </div>
