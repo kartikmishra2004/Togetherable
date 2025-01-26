@@ -193,17 +193,17 @@ const CommunityPage = () => {
                 <div className="w-full py-12 text-center text-4xl font-bold">Welcome to {communityData.name}</div>
                 <div className="mb-12 md:text-center text-primary font-main">
                     <div className="w-full">
-                        <div className="flex justify-evenly lg:max-w-[32rem] max-w-[80vw] gap-1 p-2 mx-auto my-2 bg-secondary border border-zinc-800 rounded-lg" role="group">
-                            <button onClick={() => { setActiveTab('dashboard'); isScriptAdded ? responsiveVoice.speak("dashboard") : null }} type="button" className={`px-5 ${activeTab === 'dashboard' ? 'bg-gray-800' : ''} py-2 w-[15rem] rounded-lg lg:text-base text-xs`}>
+                        <div className="flex justify-evenly lg:max-w-[32rem] gap-1 p-2 mx-auto my-2 bg-secondary border border-zinc-800 rounded-lg" role="group">
+                            <button onClick={() => { setActiveTab('dashboard'); isScriptAdded ? responsiveVoice.speak("dashboard") : null }} type="button" className={`px-3 ${activeTab === 'dashboard' ? 'bg-gray-800' : ''} py-2 w-[15rem] rounded-lg lg:text-base text-xs`}>
                                 Dashboard
                             </button>
-                            <button onClick={() => { setActiveTab('chat'); isScriptAdded ? responsiveVoice.speak("chat") : null }} type="button" className={`px-5 ${activeTab === 'chat' ? 'bg-gray-800' : ''} py-2 w-[15rem] rounded-lg lg:text-base text-xs`}>
+                            <button onClick={() => { setActiveTab('chat'); isScriptAdded ? responsiveVoice.speak("chat") : null }} type="button" className={`px-3 ${activeTab === 'chat' ? 'bg-gray-800' : ''} py-2 w-[15rem] rounded-lg lg:text-base text-xs`}>
                                 Chat
                             </button>
-                            <button onClick={() => { setActiveTab('call'); isScriptAdded ? responsiveVoice.speak("call") : null }} type="button" className={`px-5 ${activeTab === 'call' ? 'bg-gray-800' : ''} py-2 w-[15rem] rounded-lg lg:text-base text-xs`}>
+                            <button onClick={() => { setActiveTab('call'); isScriptAdded ? responsiveVoice.speak("call") : null }} type="button" className={`px-3 ${activeTab === 'call' ? 'bg-gray-800' : ''} py-2 w-[15rem] rounded-lg lg:text-base text-xs`}>
                                 Call
                             </button>
-                            <button onClick={() => { setActiveTab('map'); isScriptAdded ? responsiveVoice.speak("map") : null }} type="button" className={`px-5 ${activeTab === 'map' ? 'bg-gray-800' : ''} py-2 w-[15rem] rounded-lg lg:text-base text-xs`}>
+                            <button onClick={() => { setActiveTab('map'); isScriptAdded ? responsiveVoice.speak("map") : null }} type="button" className={`px-3 ${activeTab === 'map' ? 'bg-gray-800' : ''} py-2 w-[15rem] rounded-lg lg:text-base text-xs`}>
                                 Map
                             </button>
                         </div>

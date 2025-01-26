@@ -25,7 +25,7 @@ function Chat({ communityId, userData }) {
     const MessageContent = ({ message }) => {
         switch (message.type) {
             case 'text':
-                return <p className="text-sm">{message.message}</p>;
+                return <p className="text-sm lg:text-base">{message.message}</p>;
             case 'image':
                 return (
                     <img
@@ -52,7 +52,7 @@ function Chat({ communityId, userData }) {
     };
 
     return (
-        <div className="flex flex-col h-[80vh] bg-secondary rounded-lg border border-zinc-800">
+        <div className="flex flex-col lg:h-[80vh] h-[65vh] bg-secondary rounded-lg border border-zinc-800">
             <div className="bg-secondary border-b border-zinc-800 shadow-sm p-4">
                 <h1 className="text-xl font-semibold">Community Chat</h1>
             </div>
@@ -66,13 +66,13 @@ function Chat({ communityId, userData }) {
                                 </div>
                             )}
                             <div
-                                className={`w-max max-w-[50%] rounded-lg p-3 ${msg.sender === user.uid
+                                className={`w-max lg:max-w-[50%] max-w-[90%] rounded-lg p-3 ${msg.sender === user.uid
                                     ? 'bg-main'
                                     : 'bg-gray-800'
                                     }`}>
                                 <MessageContent message={msg} />
                                 <div className="flex gap-3">
-                                    <span className="text-xs opacity-70 mt-1 block">
+                                    <span className="lg:text-xs text-xs opacity-70 mt-1 block">
                                         {formatTimestamp(msg.timestamp)}
                                     </span>
                                     <button className={isScriptAdded ? 'block' : 'hidden'} onClick={isScriptAdded ? () => responsiveVoice.speak(msg.message) : null}>
