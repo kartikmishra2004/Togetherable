@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Volume2 } from 'lucide-react'
+import { Volume2 } from 'lucide-react';
 import { useFirebase } from '../context/firebase';
 import { useScript } from '../context/TTScontext';
 import { Mic } from 'lucide-react';
@@ -120,6 +120,7 @@ function Chat({ communityId, userData }) {
                             className="px-2 py-3 border rounded-lg focus:outline-none bg-transparent text-primary placeholder:text-zinc-700 border-zinc-800 w-full"
                         />
                         <button
+                            onMouseEnter={isScriptAdded ? () => responsiveVoice.speak('send') : null}
                             disabled={!message ? true : false}
                             onClick={handleSendMessage}
                             className={`px-3 py-2 mx-2 bg-main rounded-lg hover:bg-[#9036c8] focus:outline-none disabled:bg-gray-800 ${!message ? 'cursor-not-allowed' : 'cursor-pointer'}`}>
