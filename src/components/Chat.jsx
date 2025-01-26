@@ -52,7 +52,7 @@ function Chat({ communityId, userData }) {
     };
 
     return (
-        <div className="flex flex-col lg:h-[80vh] h-[65vh] bg-secondary rounded-lg border border-zinc-800">
+        <div className="flex flex-col lg:h-[80vh] h-[65vh] bg-secondary pb-4 rounded-lg border border-zinc-800">
             <div className="bg-secondary border-b border-zinc-800 shadow-sm p-4">
                 <h1 className="text-xl font-semibold">Community Chat</h1>
             </div>
@@ -86,14 +86,14 @@ function Chat({ communityId, userData }) {
                 </div>
             </div>
             <div className="max-w-3xl mx-auto w-full">
-                <div className="border-t border-r border-l p-4 bg-secondary border-zinc-800">
+                <div className="border rounded-lg p-4 bg-secondary border-zinc-700">
                     <div className="flex items-center gap-2">
                         <input
                             type="text"
                             value={message}
                             onChange={(e) => setMessage(e.target.value)}
                             placeholder="Type a message..."
-                            className="px-2 py-3 border rounded-lg focus:outline-none bg-transparent text-primary placeholder:text-zinc-700 border-zinc-500 w-full"
+                            className="px-2 py-3 border rounded-lg focus:outline-none bg-transparent text-primary placeholder:text-zinc-700 border-zinc-800 w-full"
                         />
                         <button
                             disabled={!message ? true : false}
