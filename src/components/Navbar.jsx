@@ -79,32 +79,32 @@ const Navbar = () => {
             className={`text-gray-500 body-font font-main fixed w-full z-50 ${scrolled ? 'bg-secondary border-b border-zinc-800' : 'bg-transparent'
                 }`}>
             <div className="container mx-auto flex flex-wrap p-5 flex-row justify-between xl:px-52 items-center">
-                <Link onMouseEnter={isScriptAdded ? () => responsiveVoice.speak("Togetherable") : null} to={'/'} className="flex justify-center title-font font-medium items-center text-gray-900 md:mb-0">
+                <Link onClick={isScriptAdded ? () => responsiveVoice.speak("Togetherable") : null} to={'/'} className="flex justify-center title-font font-medium items-center text-gray-900 md:mb-0">
                     <img className="w-8" src={logo} alt="logo" />
                     <span className="ml-2 text-primary text-2xl font-logo">Togetherable</span>
                 </Link>
                 <nav className="md:mr-auto md:ml-10 md:py-1 md:pl-10 md:border-l md:border-gray-400 lg:flex hidden flex-wrap items-center text-base justify-center gap-10">
-                    <Link onMouseEnter={isScriptAdded ? () => responsiveVoice.speak("Home") : null} to={'/'} className={`mr-5 ${isActive('/') ? `text-primary` : ''}`}>
+                    <Link onClick={isScriptAdded ? () => responsiveVoice.speak("Home") : null} to={'/'} className={`mr-5 ${isActive('/') ? `text-primary` : ''}`}>
                         Home
                     </Link>
-                    <Link onMouseEnter={isScriptAdded ? () => responsiveVoice.speak("About") : null} to={'/about'} className={`mr-5 ${isActive('/about') ? 'text-primary' : ''}`}>
+                    <Link onClick={isScriptAdded ? () => responsiveVoice.speak("About") : null} to={'/about'} className={`mr-5 ${isActive('/about') ? 'text-primary' : ''}`}>
                         About
                     </Link>
                     {user === null ? (
                         <>
-                            <Link onMouseEnter={isScriptAdded ? () => responsiveVoice.speak("Login") : null} to={'/login'} className={`mr-5 ${isActive('/login') ? 'text-primary' : ''}`}>
+                            <Link onClick={isScriptAdded ? () => responsiveVoice.speak("Login") : null} to={'/login'} className={`mr-5 ${isActive('/login') ? 'text-primary' : ''}`}>
                                 Login
                             </Link>
                         </>
                     ) : (
                         <>
-                            <Link onMouseEnter={isScriptAdded ? () => responsiveVoice.speak("Communities") : null} to={'/communities'} className={`mr-5 ${isActive('/communities') ? 'text-primary' : ''}`}>
+                            <Link onClick={isScriptAdded ? () => responsiveVoice.speak("Communities") : null} to={'/communities'} className={`mr-5 ${isActive('/communities') ? 'text-primary' : ''}`}>
                                 Communities
                             </Link>
-                            <Link onMouseEnter={isScriptAdded ? () => responsiveVoice.speak("Profile") : null} to={'/profile'} className={`mr-5 ${isActive('/profile') ? 'text-primary' : ''}`}>
+                            <Link onClick={isScriptAdded ? () => responsiveVoice.speak("Profile") : null} to={'/profile'} className={`mr-5 ${isActive('/profile') ? 'text-primary' : ''}`}>
                                 Profile
                             </Link>
-                            <Link onMouseEnter={isScriptAdded ? () => responsiveVoice.speak("Settings") : null} to={'/settings'} className={`mr-5 ${isActive('/settings') ? 'text-primary' : ''}`}>
+                            <Link onClick={isScriptAdded ? () => responsiveVoice.speak("Settings") : null} to={'/settings'} className={`mr-5 ${isActive('/settings') ? 'text-primary' : ''}`}>
                                 Settings
                             </Link>
                         </>
@@ -139,23 +139,23 @@ const Navbar = () => {
                         </div>
                         <div aria-label="navigation" className="py-2">
                             <nav className="grid gap-4 py-3 px-2 justify-center text-center">
-                                <Link onMouseEnter={isScriptAdded ? () => responsiveVoice.speak("Home") : null} onClick={handleMenu} to={'/'}>
+                                <Link onClick={() => { handleMenu(); isScriptAdded ? responsiveVoice.speak("Home") : null }} to={'/'}>
                                     Home
                                 </Link>
-                                <Link onMouseEnter={isScriptAdded ? () => responsiveVoice.speak("About") : null} onClick={handleMenu} to={'/about'}>
+                                <Link onClick={() => { handleMenu(); isScriptAdded ? responsiveVoice.speak("About") : null }} to={'/about'}>
                                     About
                                 </Link>
                                 {user === null ?
                                     (<>
-                                        <Link onMouseEnter={isScriptAdded ? () => responsiveVoice.speak("Login") : null} onClick={handleMenu} to={'/login'}>
+                                        <Link onClick={() => { handleMenu(); isScriptAdded ? responsiveVoice.speak("Login") : null }} to={'/login'}>
                                             Login
                                         </Link>
                                     </>) :
                                     (<>
-                                        <Link onMouseEnter={isScriptAdded ? () => responsiveVoice.speak("Comminities") : null} onClick={handleMenu} to={'/communities'}>
+                                        <Link onClick={() => { handleMenu(); isScriptAdded ? responsiveVoice.speak("Comminities") : null }} to={'/communities'}>
                                             Communities
                                         </Link>
-                                        <Link onMouseEnter={isScriptAdded ? () => responsiveVoice.speak("Settings") : null} onClick={handleMenu} to={'/settings'}>
+                                        <Link onClick={() => { handleMenu(); isScriptAdded ? responsiveVoice.speak("Settings") : null }} to={'/settings'}>
                                             Settings
                                         </Link>
                                     </>)}
@@ -166,10 +166,11 @@ const Navbar = () => {
                             {user === null ? (
                                 ''
                             ) : (
-                                <button onMouseEnter={isScriptAdded ? () => responsiveVoice.speak("Logout") : null}
+                                <button
                                     onClick={() => {
                                         signOut(firebaseAuth);
                                         handleMenu();
+                                        isScriptAdded ? responsiveVoice.speak("Logout") : null
                                     }}
                                     className={
                                         'mr-5 rounded-lg px-2 py-1 text-red-400 hover:text-red-500 text-center justify-center w-full'
