@@ -3,6 +3,7 @@ import { Volume2 } from 'lucide-react';
 import { useFirebase } from '../context/firebase';
 import { useScript } from '../context/TTScontext';
 import { Mic } from 'lucide-react';
+import useSpeechToText from '../utils/STT.jsx'
 
 function Chat({ communityId, userData }) {
     const [messages, setMessages] = useState([]);
@@ -10,6 +11,7 @@ function Chat({ communityId, userData }) {
     const messagesEndRef = useRef(null);
     const { user, sendMessageToCommunity, fetchCommunityChats } = useFirebase();
     const { isScriptAdded } = useScript();
+    const { transcript, isListening, startListening, stopListening } = useSpeechToText();
 
     useEffect(() => {
         fetchCommunityChats(communityId, setMessages)
@@ -51,29 +53,21 @@ function Chat({ communityId, userData }) {
         return date ? date.toLocaleString() : "Loading...";
     };
 
-    const [listning, setListning] = useState(false);
+    // const [listning, setListning] = useState(false);
     const handleSTT = () => {
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        const recognition = new SpeechRecognition();
-
-        if (listning) {
-            recognition.stop();
-            setListning(false);
+        if (isListening) {
+            stopListening();
         } else {
-            setListning(true);
-            if (SpeechRecognition) {
-                recognition.lang = 'en-US';
-                recognition.onresult = (event) => {
-                    const transcript = event.results[0][0].transcript;
-                    setMessage(message + transcript);
-                    setListning(false);
-                };
-                recognition.start();
-            } else {
-                console.log("SpeechRecognition API is not supported in your browser.");
-            }
+            startListening();
         }
     }
+
+    useEffect(() => {
+        if (transcript) {
+            setMessage(message + ' ' + transcript);
+        }
+    }, [transcript]);
+
 
     return (
         <div className="flex flex-col lg:h-[80vh] h-[65vh] bg-secondary pb-4 rounded-lg border border-zinc-800">
@@ -126,7 +120,7 @@ function Chat({ communityId, userData }) {
                             className={`px-3 py-2 mx-2 bg-main rounded-lg hover:bg-[#9036c8] focus:outline-none disabled:bg-gray-800 ${!message ? 'cursor-not-allowed' : 'cursor-pointer'}`}>
                             Send
                         </button>
-                        <button onClick={handleSTT} className={`p-2 ${listning ? 'bg-red-500 animate-pulse' : 'bg-main hover:bg-[#9036c8]'} disabled:bg-gray-800 disabled:cursor-not-allowed text-white rounded-full`}>
+                        <button onClick={handleSTT} className={`p-2 ${isListening ? 'bg-red-500 animate-pulse' : 'bg-main hover:bg-[#9036c8]'} disabled:bg-gray-800 disabled:cursor-not-allowed text-white rounded-full`}>
                             <Mic />
                         </button>
                     </div>
