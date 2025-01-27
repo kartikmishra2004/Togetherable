@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useFirebase } from '../context/firebase';
 import { useScript } from '../context/TTScontext';
+import { Mic } from 'lucide-react';
+import useSpeechToText from '../utils/STT.jsx'
 
 const CreateCommunityModal = ({ setShowModal }) => {
 
@@ -8,11 +10,40 @@ const CreateCommunityModal = ({ setShowModal }) => {
     const { isScriptAdded } = useScript();
     const [photoUploading, setPhotoUploading] = useState(false);
     const [previewPhoto, setPreviewPhoto] = useState('');
+    const [currentField, setCurrentField] = useState(null);
     const [formData, setFormData] = useState({
         name: '',
         description: '',
         communityImage: 'https://res.cloudinary.com/dlwudcsu1/image/upload/v1735655701/icons-5235125_1920_mj1l74.png'
     })
+    const { transcript, isListening, startListening, stopListening } = useSpeechToText();
+
+    const handleSTT = (field) => {
+        setCurrentField(field)
+        if (isListening) {
+            stopListening();
+        } else {
+            startListening();
+        }
+    }
+
+    useEffect(() => {
+        if (transcript && currentField) {
+            if (currentField === 'name') {
+                setFormData({
+                    ...formData,
+                    name: formData.name + ' ' + transcript,
+                });
+            }
+            if (currentField === 'description') {
+                setFormData({
+                    ...formData,
+                    description: formData.description + ' ' + transcript,
+                });
+            }
+
+        }
+    }, [transcript]);
 
     const handlePhotoChange = async (e) => {
         setPhotoUploading(true);
@@ -71,23 +102,34 @@ const CreateCommunityModal = ({ setShowModal }) => {
                                 </label>
                             </div>
                             <div className="grid grid-cols-1 place-items-center px-4 py-2">
-                                <form noValidate className="space-y-4">
-                                    <input
-                                        autoComplete="off"
-                                        type="text"
-                                        name="name"
-                                        placeholder="Community name"
-                                        value={formData.name}
-                                        onChange={handleChange}
-                                        className="px-2 w-full py-3 border rounded-lg focus:outline-none bg-transparent text-primary placeholder:text-zinc-700 border-zinc-500" />
-                                    <textarea
-                                        autoComplete='off'
-                                        name='description'
-                                        placeholder="Community description"
-                                        value={formData.description}
-                                        onChange={handleChange}
-                                        className="border focus:outline-none resize-none my-4 placeholder:text-zinc-700 border-zinc-500 h-24 rounded-lg w-full px-2 py-3 bg-secondary leading-tight"
-                                    ></textarea>
+                                <form noValidate className="w-[85%]">
+                                    <div className="relative w-full">
+                                        <input
+                                            autoComplete="off"
+                                            type="text"
+                                            name="name"
+                                            placeholder="Community name"
+                                            value={formData.name}
+                                            onChange={handleChange}
+                                            className="px-2 pr-12 w-full py-3 border rounded-lg focus:outline-none bg-transparent text-primary placeholder:text-zinc-700 border-zinc-500" />
+                                        <span onClick={() => handleSTT('name')} className={`absolute inset-y-0 right-3 flex items-center text-zinc-500 cursor-pointer rounded-full ${isListening ? 'animate-pulse' : ''}`} >
+                                            <Mic width={25} color={`${(isListening && currentField === 'name') ? '#ef4444' : '#bababa'}`} />
+                                        </span>
+                                    </div>
+                                    <div className="relative w-full">
+                                        <textarea
+                                            maxLength={190}
+                                            autoComplete='off'
+                                            name='description'
+                                            placeholder="Community description"
+                                            value={formData.description}
+                                            onChange={handleChange}
+                                            className="border pr-12 overflow-visible focus:outline-none resize-none my-4 placeholder:text-zinc-700 border-zinc-500 h-32 rounded-lg w-full px-2 py-3 bg-secondary leading-tight"
+                                        ></textarea>
+                                        <span onClick={() => handleSTT('description')} className={`absolute inset-y-0 right-3 flex items-center text-zinc-500 cursor-pointer rounded-full ${isListening ? 'animate-pulse' : ''}`} >
+                                            <Mic width={25} color={`${(isListening && currentField === 'description') ? '#ef4444' : '#bababa'}`} />
+                                        </span>
+                                    </div>
                                 </form>
                             </div>
                             <div aria-hidden="true" className="border-b border-gray-700 px-2"></div>

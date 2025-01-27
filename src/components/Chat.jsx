@@ -53,7 +53,6 @@ function Chat({ communityId, userData }) {
         return date ? date.toLocaleString() : "Loading...";
     };
 
-    // const [listning, setListning] = useState(false);
     const handleSTT = () => {
         if (isListening) {
             stopListening();
@@ -67,8 +66,7 @@ function Chat({ communityId, userData }) {
             setMessage(message + ' ' + transcript);
         }
     }, [transcript]);
-
-
+    
     return (
         <div className="flex flex-col lg:h-[80vh] h-[65vh] bg-secondary pb-4 rounded-lg border border-zinc-800">
             <div className="bg-secondary border-b border-zinc-800 shadow-sm p-4">
