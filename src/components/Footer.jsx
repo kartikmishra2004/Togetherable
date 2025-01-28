@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { useFirebase } from '../context/firebase';
 import { collection, addDoc } from "firebase/firestore";
 import { useScript } from '../context/TTScontext';
+import useSpeechToText from '../utils/STT';
+import { Mic } from 'lucide-react';
 
 const Footer = () => {
     const { user, firestore } = useFirebase();
@@ -12,6 +14,29 @@ const Footer = () => {
         message: '',
     });
     const [loading, setLoading] = useState(false);
+    const [currentField, setCurrentField] = useState(null);
+
+    const { transcript, isListening, startListening, stopListening } = useSpeechToText();
+
+    const handleSTT = (field) => {
+        setCurrentField(field)
+        if (isListening) {
+            stopListening();
+        } else {
+            startListening();
+        }
+    }
+
+    useEffect(() => {
+        if (transcript && currentField) {
+            if (currentField === 'message') {
+                setMessageData({
+                    ...messageData,
+                    message: messageData.message + ' ' + transcript,
+                });
+            }
+        }
+    }, [transcript]);
 
     useEffect(() => {
         if (user) {
@@ -59,20 +84,26 @@ const Footer = () => {
                         <input
                             autoComplete='off'
                             value={messageData.email}
-                            className="border focus:outline-none placeholder:text-zinc-700 border-zinc-500 rounded-lg w-full px-2 py-3 bg-secondary text-zinc-500 leading-tight"
+                            className="border focus:outline-none placeholder:text-zinc-700 border-zinc-500 rounded-lg w-full px-2 py-3 bg-secondary text-zinc-400 leading-tight"
                             type="email"
                             name='email'
                             placeholder="username@email.com"
                             onChange={handleChange}
                         />
-                        <textarea
-                            autoComplete='off'
-                            value={messageData.message}
-                            className="border focus:outline-none resize-none my-4 placeholder:text-zinc-700 border-zinc-500 h-24 rounded-lg w-full px-2 py-3 bg-secondary text-zinc-500 leading-tight"
-                            placeholder="Type your message..."
-                            name='message'
-                            onChange={handleChange}
-                        ></textarea>
+                        <div className="relative w-full">
+                            <textarea
+                            maxLength={110}
+                                autoComplete='off'
+                                value={messageData.message}
+                                className="border focus:outline-none pr-12 resize-none my-4 placeholder:text-zinc-700 border-zinc-500 h-24 rounded-lg w-full px-2 py-3 bg-secondary text-zinc-400 leading-tight"
+                                placeholder="Type your message..."
+                                name='message'
+                                onChange={handleChange}
+                            ></textarea>
+                            <span onClick={() => handleSTT('message')} className={`absolute inset-y-0 right-3 flex items-center text-zinc-500 cursor-pointer rounded-full ${(isListening && currentField === 'message') ? 'animate-pulse' : ''}`} >
+                                <Mic width={25} color={`${(isListening && currentField === 'message') ? '#ef4444' : '#bababa'}`} />
+                            </span>
+                        </div>
                         <button onMouseEnter={isScriptAdded ? () => responsiveVoice.speak("Send") : null} disabled={loading ? true : false || messageData.email === '' || messageData.message === ''} onClick={handleSend} className={`px-4 ${messageData.email === '' || messageData.message === '' ? 'cursor-not-allowed' : 'cursor-pointer'} w-full py-3 bg-main rounded-lg hover:bg-[#9036c8] focus:outline-none disabled:bg-gray-800`}>{loading ? 'Please wait...' : 'Send'}</button>
                     </form>
                 </div>

@@ -109,7 +109,7 @@ function Chat({ communityId, userData }) {
                             value={message}
                             onChange={(e) => setMessage(e.target.value)}
                             placeholder="Type a message..."
-                            className="px-2 py-3 border rounded-lg focus:outline-none bg-transparent text-primary placeholder:text-zinc-700 border-zinc-800 w-full"
+                            className="px-2 py-3 border rounded-lg focus:outline-none bg-transparent text-zinc-400 placeholder:text-zinc-700 border-zinc-800 w-full"
                         />
                         <button
                             onMouseEnter={isScriptAdded ? () => responsiveVoice.speak('send') : null}

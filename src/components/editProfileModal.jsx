@@ -1,6 +1,8 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useFirebase } from '../context/firebase';
 import { useScript } from '../context/TTScontext';
+import useSpeechToText from '../utils/STT';
+import { Mic } from 'lucide-react';
 
 const Modal = ({ setModal, completionPercentage, userData }) => {
     const { updateProfile, uploadImage } = useFirebase();
@@ -15,6 +17,37 @@ const Modal = ({ setModal, completionPercentage, userData }) => {
     });
     const [previewPhoto, setPreviewPhoto] = useState(userData.photoURL);
     const [photoUploading, setPhotoUploading] = useState(false);
+    const [currentField, setCurrentField] = useState(null);
+
+    const { transcript, isListening, startListening, stopListening } = useSpeechToText();
+
+    const handleSTT = (field) => {
+        setCurrentField(field)
+        if (isListening) {
+            stopListening();
+        } else {
+            startListening();
+        }
+    }
+
+    useEffect(() => {
+        if (transcript && currentField) {
+            if (currentField === 'fullName') {
+                setData({
+                    ...data,
+                    fullName: data.fullName + ' ' + transcript,
+                });
+            }
+        }
+        if (transcript && currentField) {
+            if (currentField === 'bio') {
+                setData({
+                    ...data,
+                    bio: data.bio + ' ' + transcript,
+                });
+            }
+        }
+    }, [transcript]);
 
     const handleChange = (e) => {
         const value = e.target.value;
@@ -34,7 +67,7 @@ const Modal = ({ setModal, completionPercentage, userData }) => {
             setPhotoUploading(false);
             setData({
                 ...data,
-                photoURL: url ,
+                photoURL: url,
             });
         }
     };
@@ -75,42 +108,57 @@ const Modal = ({ setModal, completionPercentage, userData }) => {
                                 </label>
                             </div>
                             <div className="grid grid-cols-1 place-items-center px-4 py-2">
-                                <form noValidate className="space-y-4">
-                                    <input
-                                        autoComplete="off"
-                                        type="text"
-                                        name="fullName"
-                                        placeholder="Full name"
-                                        value={data.fullName}
-                                        onChange={handleChange}
-                                        className="px-2 w-full py-3 border rounded-lg focus:outline-none bg-transparent text-primary placeholder:text-zinc-700 border-zinc-500"
-                                    />
-                                    <input
-                                        autoComplete="off"
-                                        type="email"
-                                        name="email"
-                                        placeholder="Email"
-                                        value={data.email}
-                                        onChange={handleChange}
-                                        className="px-2 w-full py-3 border rounded-lg focus:outline-none bg-transparent text-primary placeholder:text-zinc-700 border-zinc-500"
-                                    />
-                                    <input
-                                        autoComplete="off"
-                                        type="text"
-                                        name="phone"
-                                        placeholder="Phone"
-                                        value={data.phone}
-                                        onChange={handleChange}
-                                        className="px-2 w-full py-3 border rounded-lg focus:outline-none bg-transparent text-primary placeholder:text-zinc-700 border-zinc-500"
-                                    />
-                                    <textarea
-                                        autoComplete='off'
-                                        name='bio'
-                                        value={data.bio}
-                                        onChange={handleChange}
-                                        className="border focus:outline-none resize-none my-4 placeholder:text-zinc-700 border-zinc-500 h-24 rounded-lg w-full px-2 py-3 bg-secondary leading-tight"
-                                        placeholder="Write something about you..."
-                                    ></textarea>
+                                <form noValidate className="space-y-2 w-full">
+                                    <div className="relative w-full">
+                                        <input
+                                            autoComplete="off"
+                                            type="text"
+                                            name="fullName"
+                                            placeholder="Full name"
+                                            value={data.fullName}
+                                            onChange={handleChange}
+                                            className="px-2 text-zinc-400 pr-12 w-full py-3 border rounded-lg focus:outline-none bg-transparent placeholder:text-zinc-700 border-zinc-500"
+                                        />
+                                        <span onClick={() => handleSTT('fullName')} className={`absolute inset-y-0 right-3 flex items-center text-zinc-500 cursor-pointer rounded-full ${(isListening && currentField === 'fullName') ? 'animate-pulse' : ''}`} >
+                                            <Mic width={25} color={`${(isListening && currentField === 'fullName') ? '#ef4444' : '#bababa'}`} />
+                                        </span>
+                                    </div>
+                                    <div className="relative w-full">
+                                        <input
+                                            autoComplete="off"
+                                            type="email"
+                                            name="email"
+                                            placeholder="Email"
+                                            value={data.email}
+                                            onChange={handleChange}
+                                            className="px-2 text-zinc-400 pr-12 w-full py-3 border rounded-lg focus:outline-none bg-transparent placeholder:text-zinc-700 border-zinc-500"
+                                        />
+                                    </div>
+                                    <div className="relative w-full">
+                                        <input
+                                            autoComplete="off"
+                                            type="text"
+                                            name="phone"
+                                            placeholder="Phone"
+                                            value={data.phone}
+                                            onChange={handleChange}
+                                            className="px-2 text-zinc-400 pr-12 w-full py-3 border rounded-lg focus:outline-none bg-transparent placeholder:text-zinc-700 border-zinc-500"
+                                        />
+                                    </div>
+                                    <div className="relative w-full">
+                                        <textarea
+                                            maxLength={230}
+                                            autoComplete='off'
+                                            name='bio'
+                                            value={data.bio}
+                                            onChange={handleChange}
+                                            className="border text-zinc-400 pr-12 focus:outline-none resize-none my- placeholder:text-zinc-700 border-zinc-500 h-32 rounded-lg w-full px-2 py-3 bg-secondary leading-tight"
+                                            placeholder="Write something about you..."
+                                        ></textarea>
+                                        <span onClick={() => handleSTT('bio')} className={`absolute inset-y-0 right-3 flex items-center text-zinc-500 cursor-pointer rounded-full ${(isListening && currentField === 'bio') ? 'animate-pulse' : ''}`} >
+                                            <Mic width={25} color={`${(isListening && currentField === 'bio') ? '#ef4444' : '#bababa'}`} />
+                                        </span>
+                                    </div>
                                 </form>
                             </div>
 

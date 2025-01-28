@@ -8,6 +8,8 @@ import { useScript } from '../context/TTScontext';
 import Chat from '../components/Chat.jsx';
 import Call from '../components/Call.jsx';
 import Map from '../components/Map.jsx';
+import useSpeechToText from '../utils/STT';
+import { Mic } from 'lucide-react';
 
 const CommunityPage = () => {
     const { user, getUser, userData, loading, uploadImage, createPost, deletePost, fetchPosts, joinCommuniy, leaveCommuniy, deleteCommunity, savePost, unsavePost, likePost, unlikePost } = useFirebase();
@@ -22,6 +24,7 @@ const CommunityPage = () => {
         content: '',
         photoURL: '',
     });
+    const [currentField, setCurrentField] = useState(null);
     const [photoUploading, setPhotoUploading] = useState(false);
     const [communityData, setcommunityData] = useState({});
     const [postsLoading, setPostsLoading] = useState(false);
@@ -34,6 +37,28 @@ const CommunityPage = () => {
         leftbarLoading: false,
     });
     const [activeTab, setActiveTab] = useState('dashboard');
+
+    const { transcript, isListening, startListening, stopListening } = useSpeechToText();
+
+    const handleSTT = (field) => {
+        setCurrentField(field)
+        if (isListening) {
+            stopListening();
+        } else {
+            startListening();
+        }
+    }
+
+    useEffect(() => {
+        if (transcript && currentField) {
+            if (currentField === 'content') {
+                setFormData({
+                    ...formData,
+                    content: formData.content + ' ' + transcript,
+                });
+            }
+        }
+    }, [transcript]);
 
     useEffect(() => {
         const fetchCommunityDetails = async () => {
@@ -275,14 +300,20 @@ const CommunityPage = () => {
                                         </div>
                                     </div>
                                     <h3 className="text-xl font-semibold text-primary">Create a Post</h3>
-                                    <textarea
-                                        disabled={photoUploading ? true : false}
-                                        onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                                        name="content"
-                                        value={formData.content}
-                                        className="border focus:outline-none resize-none my-2 placeholder:text-zinc-700 border-zinc-500 h-20 rounded-lg w-full px-2 py-3 bg-secondary leading-tight"
-                                        placeholder="What's on your mind?"
-                                    />
+                                    <div className="relative w-full">
+                                        <textarea
+                                            maxLength={220}
+                                            disabled={photoUploading ? true : false}
+                                            onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+                                            name="content"
+                                            value={formData.content}
+                                            className="border text-zinc-400 h-24 pr-12 focus:outline-none resize-none my-2 placeholder:text-zinc-700 border-zinc-500 rounded-lg w-full px-2 py-3 bg-secondary leading-tight"
+                                            placeholder="What's on your mind?"
+                                        />
+                                        <span onClick={() => handleSTT('content')} className={`absolute inset-y-0 right-3 flex items-center text-zinc-500 cursor-pointer rounded-full ${(isListening && currentField === 'content') ? 'animate-pulse' : ''}`} >
+                                            <Mic width={25} color={`${(isListening && currentField === 'content') ? '#ef4444' : '#bababa'}`} />
+                                        </span>
+                                    </div>
                                     <div className="flex justify-between">
                                         <div className="flex justify-center items-center gap-1">
                                             <input accept="image/*" type="file" className="hidden" id="addMedia" onChange={handlePhotoChange} />

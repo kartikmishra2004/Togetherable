@@ -111,8 +111,8 @@ const CreateCommunityModal = ({ setShowModal }) => {
                                             placeholder="Community name"
                                             value={formData.name}
                                             onChange={handleChange}
-                                            className="px-2 pr-12 w-full py-3 border rounded-lg focus:outline-none bg-transparent text-primary placeholder:text-zinc-700 border-zinc-500" />
-                                        <span onClick={() => handleSTT('name')} className={`absolute inset-y-0 right-3 flex items-center text-zinc-500 cursor-pointer rounded-full ${isListening ? 'animate-pulse' : ''}`} >
+                                            className="px-2 text-zinc-400 pr-12 w-full py-3 border rounded-lg focus:outline-none bg-transparent placeholder:text-zinc-700 border-zinc-500" />
+                                        <span onClick={() => handleSTT('name')} className={`absolute inset-y-0 right-3 flex items-center text-zinc-500 cursor-pointer rounded-full ${(isListening && currentField === 'name') ? 'animate-pulse' : ''}`} >
                                             <Mic width={25} color={`${(isListening && currentField === 'name') ? '#ef4444' : '#bababa'}`} />
                                         </span>
                                     </div>
@@ -124,9 +124,9 @@ const CreateCommunityModal = ({ setShowModal }) => {
                                             placeholder="Community description"
                                             value={formData.description}
                                             onChange={handleChange}
-                                            className="border pr-12 overflow-visible focus:outline-none resize-none my-4 placeholder:text-zinc-700 border-zinc-500 h-32 rounded-lg w-full px-2 py-3 bg-secondary leading-tight"
+                                            className="border text-zinc-400 pr-12 overflow-visible focus:outline-none resize-none my-4 placeholder:text-zinc-700 border-zinc-500 h-32 rounded-lg w-full px-2 py-3 bg-secondary leading-tight"
                                         ></textarea>
-                                        <span onClick={() => handleSTT('description')} className={`absolute inset-y-0 right-3 flex items-center text-zinc-500 cursor-pointer rounded-full ${isListening ? 'animate-pulse' : ''}`} >
+                                        <span onClick={() => handleSTT('description')} className={`absolute inset-y-0 right-3 flex items-center text-zinc-500 cursor-pointer rounded-full ${(isListening && currentField === 'description') ? 'animate-pulse' : ''}`} >
                                             <Mic width={25} color={`${(isListening && currentField === 'description') ? '#ef4444' : '#bababa'}`} />
                                         </span>
                                     </div>
