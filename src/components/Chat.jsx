@@ -27,7 +27,7 @@ function Chat({ communityId, userData }) {
     const MessageContent = ({ message }) => {
         switch (message.type) {
             case 'text':
-                return <p className="text-sm lg:text-base">{message.message}</p>;
+                return <p className="text-xs lg:text-base">{message.message}</p>;
             case 'image':
                 return (
                     <img
@@ -50,7 +50,10 @@ function Chat({ communityId, userData }) {
 
     const formatTimestamp = (timestamp) => {
         const date = timestamp?.toDate();
-        return date ? date.toLocaleString() : "Loading...";
+        const inputString = date ? date.toLocaleString() : "Loading...";
+        const timePart = inputString.split(',')[1]?.trim();
+        const timeWithoutSeconds = timePart?.split(':').slice(0, 2).join(':') + ' ' + timePart?.split(' ')[1];
+        return timeWithoutSeconds || "Invalid Input";
     };
 
     const handleSTT = () => {
@@ -66,7 +69,7 @@ function Chat({ communityId, userData }) {
             setMessage(message + ' ' + transcript);
         }
     }, [transcript]);
-    
+
     return (
         <div className="flex flex-col lg:h-[80vh] h-[65vh] bg-secondary pb-4 rounded-lg border border-zinc-800">
             <div className="bg-secondary border-b border-zinc-800 shadow-sm p-4">
@@ -77,24 +80,24 @@ function Chat({ communityId, userData }) {
                     {messages.map((msg) => (
                         <div key={msg.id} className={`flex flex-col ${msg.sender === user.uid ? 'items-end' : 'items-start'} mb-4`}>
                             {msg.sender !== user.uid && (
-                                <div className="flex items-start mr-2 gap-2">
-                                    <span className="text-sm text-gray-500">{msg.senderName}</span>
+                                <div className="flex items-start mr-2 gap-2 mb-1">
+                                    <span className="lg:text-sm text-xs text-gray-500">{msg.senderName}</span>
                                 </div>
                             )}
                             <div
-                                className={`w-max lg:max-w-[50%] max-w-[90%] rounded-lg p-3 ${msg.sender === user.uid
+                                className={`w-max lg:max-w-[50%] max-w-[90%] rounded-lg lg:p-3 p-2 ${msg.sender === user.uid
                                     ? 'bg-main'
                                     : 'bg-gray-800'
                                     }`}>
                                 <MessageContent message={msg} />
-                                <div className="flex gap-3">
-                                    <span className="lg:text-xs text-xs opacity-70 mt-1 block">
-                                        {formatTimestamp(msg.timestamp)}
-                                    </span>
-                                    <button className={isScriptAdded ? 'block' : 'hidden'} onClick={isScriptAdded ? () => responsiveVoice.speak(msg.message) : null}>
-                                        <span><Volume2 width={17} /></span>
-                                    </button>
-                                </div>
+                            </div>
+                            <div className={`flex gap-3 mt-1 ${msg.sender === user.uid ? 'flex-row-reverse' : ''}`}>
+                                <span className="text-xs opacity-70 mt-1 block">
+                                    {formatTimestamp(msg.timestamp)}
+                                </span>
+                                <button className={isScriptAdded ? 'block' : 'hidden'} onClick={isScriptAdded ? () => responsiveVoice.speak(msg.message) : null}>
+                                    <span><Volume2 width={17} /></span>
+                                </button>
                             </div>
                         </div>
                     ))}

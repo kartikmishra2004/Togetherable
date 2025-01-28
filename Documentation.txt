@@ -9,13 +9,13 @@ Features:
 3.  Like and save community posts. ✅
 4.	Group chat in communities. ✅
 5.	Text to speech (TTS) and speech to text (STT) in group chat. ✅
-6.  Fill the input fields with voice commands.
-7.	Group audio / video chat in communities.
-8.	AI chat assistant for any help or emergency.
-9.	Anonymous chat with a random person.
-10.	Sentimental analysis of the chats.
-11.	AI based motivational quotes image generation.
-12.	Realtime sign language translation.
-13. Navigate locaions of community members with map.
-14. Speech on clicking any text in the website. ✅
-15. Pro features (payment gateway).
+6.  Fill the input fields with voice commands. ✅
+7.  Speech on selecting any text in the website. ✅
+8.  Navigate locaions of community members with map.
+9.	AI chat assistant for any help or emergency.
+10.	Anonymous chat with a random person.
+11.	Sentimental analysis of the chats.
+12.	AI based motivational quotes image generation.
+13.	Realtime sign language translation.
+14. Pro features (payment gateway).
+15.	Group audio / video chat in communities.
