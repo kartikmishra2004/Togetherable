@@ -24,7 +24,7 @@ const MapUtil = ({ users }) => {
 
     return (
         <div
-            className='mx-auto h-[60vh] w-[70%] z-10 rounded-lg'
+            className='mx-auto h-[60vh] lg:w-[70%] w-full z-10 rounded-lg'
             ref={mapRef}
         />
     );
