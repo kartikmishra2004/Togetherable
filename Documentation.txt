@@ -19,3 +19,4 @@ Features:
 13.	Realtime sign language translation.
 14. Pro features (payment gateway).
 15.	Group audio / video chat in communities.
+16. Data of people with different disabilities in home page.
