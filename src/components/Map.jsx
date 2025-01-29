@@ -13,7 +13,7 @@ const Map = ({ communityId }) => {
     }, [])
 
     return (
-        <div className='w-full flex justify-center items-center'>
+        <div className='w-full h-[80vh] flex justify-center'>
             <MapUtil users={users} />
         </div>
     )
