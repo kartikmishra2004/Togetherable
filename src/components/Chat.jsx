@@ -49,12 +49,16 @@ function Chat({ communityId, userData }) {
     };
 
     const formatTimestamp = (timestamp) => {
+        if (!timestamp) return "Invalid Time";
         const date = timestamp?.toDate();
-        const inputString = date ? date.toLocaleString() : "Loading...";
+        if (!date) return "Invalid Time";
+        const inputString = date.toLocaleString();
         const timePart = inputString.split(',')[1]?.trim();
-        const timeWithoutSeconds = timePart?.split(':').slice(0, 2).join(':') + ' ' + timePart?.split(' ')[1];
-        return timeWithoutSeconds || "Invalid Input";
+        if (!timePart) return "Invalid Time";
+        const timeWithoutSeconds = timePart.split(':').slice(0, 2).join(':') + ' ' + timePart.split(' ')[1];
+        return timeWithoutSeconds || "Invalid Time";
     };
+    
 
     const handleSTT = () => {
         if (isListening) {
