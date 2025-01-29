@@ -129,7 +129,7 @@ export const FirebaseProvider = (props) => {
     };
 
     // saving location
-    const putLocation = async (location) => {
+    const putLocation = async (location, lat, long) => {
         if (!user?.uid) {
             console.log("User not authenticated!");
             return;
@@ -137,6 +137,8 @@ export const FirebaseProvider = (props) => {
         try {
             await updateDoc(doc(firestore, "users", user.uid), {
                 location: location,
+                lat: lat,
+                long: long,
             });
         } catch (error) {
             console.error("Failed to save location:", error);
@@ -152,6 +154,8 @@ export const FirebaseProvider = (props) => {
         try {
             await updateDoc(doc(firestore, "users", user.uid), {
                 location: deleteField(),
+                lat: deleteField(),
+                long: deleteField(),
             });
         } catch (error) {
             console.error("Failed to save location:", error);
@@ -488,6 +492,33 @@ export const FirebaseProvider = (props) => {
         }
     };
 
+    // Method for fetching commuity members
+    const fetchCommunityMembers = async (communityId) => {
+        try {
+            const communityRef = doc(firestore, "communities", communityId);
+            const communitySnap = await getDoc(communityRef);
+            if (!communitySnap.exists()) {
+                console.log("Community not found!");
+                return [];
+            }
+            const membersArray = communitySnap.data().members || [];
+            if (membersArray.length === 0) {
+                console.log("No members found!");
+                return [];
+            }
+            const usersCollection = collection(firestore, "users");
+            const userPromises = membersArray.map(async (userId) => {
+                const userRef = doc(usersCollection, userId);
+                const userSnap = await getDoc(userRef);
+                return userSnap.exists() ? { id: userSnap.id, ...userSnap.data() } : null;
+            });
+            const users = (await Promise.all(userPromises)).filter((user) => user !== null);
+            return users;
+        } catch (error) {
+            console.error("Error fetching community members:", error);
+            return [];
+        }
+    };
 
     return (
         <FirebaseContext.Provider
@@ -517,6 +548,7 @@ export const FirebaseProvider = (props) => {
                 unlikePost,
                 sendMessageToCommunity,
                 fetchCommunityChats,
+                fetchCommunityMembers,
                 user,
                 userData,
                 loading,

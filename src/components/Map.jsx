@@ -1,20 +1,16 @@
-import React from 'react'
-import MapUtil from '../utils/MapUtil'
+import React, { useEffect, useState } from 'react';
+import MapUtil from '../utils/MapUtil';
+import { useFirebase } from '../context/firebase.jsx'
 
-const Map = () => {
+const Map = ({ communityId }) => {
 
-        const users = [
-            {
-                name: "Kartik",
-                lat: 23.166976,
-                long: 75.7956608,
-            },
-            {
-                name: "Sanidhya",
-                lat: 23.185024189089155,
-                long: 75.77596664428712,
-            },
-        ]
+    const { fetchCommunityMembers } = useFirebase();
+    const [users, setUsers] = useState();
+
+    useEffect(() => {
+        fetchCommunityMembers(communityId)
+            .then((res) => setUsers(res))
+    }, [])
 
     return (
         <div className='w-full flex justify-center items-center'>

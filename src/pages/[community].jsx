@@ -456,7 +456,7 @@ const CommunityPage = () => {
                     </div>) : ''}
                 {activeTab === 'chat' ? (<Chat communityId={community} userData={userData} />) : ''}
                 {activeTab === 'call' ? (<Call />) : ''}
-                {activeTab === 'map' ? (<Map />) : ''}
+                {activeTab === 'map' ? (<Map communityId={community} />) : ''}
             </div>
         </>
     );

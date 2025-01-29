@@ -64,7 +64,7 @@ const Profile = () => {
           if (json_resp.features && json_resp.features.length > 0) {
             const newLocation = json_resp.features[0].properties.formatted;
             setGeoLocation(newLocation);
-            await putLocation(newLocation);
+            await putLocation(newLocation, lat, lon);
 
             // Update progress bar with new location
             updateCompletionPercentage({
