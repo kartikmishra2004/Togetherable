@@ -58,7 +58,6 @@ function Chat({ communityId, userData }) {
         const timeWithoutSeconds = timePart.split(':').slice(0, 2).join(':') + ' ' + timePart.split(' ')[1];
         return timeWithoutSeconds || "Invalid Time";
     };
-    
 
     const handleSTT = () => {
         if (isListening) {
@@ -96,7 +95,7 @@ function Chat({ communityId, userData }) {
                                 <MessageContent message={msg} />
                             </div>
                             <div className={`flex gap-3 mt-1 ${msg.sender === user.uid ? 'flex-row-reverse' : ''}`}>
-                                <span className="text-xs opacity-70 mt-1 block">
+                                <span className="text-xs text-gray-500 opacity-70 mt-1 block">
                                     {formatTimestamp(msg.timestamp)}
                                 </span>
                                 <button className={isScriptAdded ? 'block' : 'hidden'} onClick={isScriptAdded ? () => responsiveVoice.speak(msg.message) : null}>
