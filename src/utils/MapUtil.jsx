@@ -63,9 +63,9 @@ const MapUtil = ({ users }) => {
     }
 
     return (
-        <div className="flex w-full justify-between font-main text-primary">
-            <div className="h-[60vh] lg:w-[65%] w-full z-10 rounded-lg" ref={mapRef} />
-            <div className="flex flex-col w-[30%] h-[60vh]">
+        <div className="flex w-full lg:gap-0 gap-5 lg:flex-row flex-col justify-between font-main text-primary">
+            <div className="lg:h-[60vh] h-[50vh] lg:w-[65%] w-full z-10 rounded-lg" ref={mapRef} />
+            <div className="flex flex-col lg:w-[30%] lg:h-[60vh]">
                     <h1 className="w-full pb-4 text-2xl font-semibold">Map type</h1>
                 <div className="w-full flex justify-center">
                     <select
@@ -77,7 +77,7 @@ const MapUtil = ({ users }) => {
                     </select>
                 </div>
                 <h1 className="w-full py-4 text-2xl font-semibold">Community members</h1>
-                <div className="overflow-y-auto">
+                <div className="lg:overflow-y-auto">
                     {users?.map((user) => (
                         <div
                             key={user.id}
