@@ -63,10 +63,10 @@ const MapUtil = ({ users }) => {
     }
 
     return (
-        <div className="flex mx-auto w-full justify-center font-main text-primary">
-            <div className="mx-auto h-[60vh] lg:w-[60%] w-full z-10 rounded-lg" ref={mapRef} />
+        <div className="flex w-full justify-between font-main text-primary">
+            <div className="h-[60vh] lg:w-[65%] w-full z-10 rounded-lg" ref={mapRef} />
             <div className="flex flex-col w-[30%] h-[60vh]">
-                    <h1 className="w-full py-4 text-2xl font-semibold">Map type</h1>
+                    <h1 className="w-full pb-4 text-2xl font-semibold">Map type</h1>
                 <div className="w-full flex justify-center">
                     <select
                         className="bg-secondary w-full px-4 py-2 rounded-lg outline-none border border-zinc-800"
