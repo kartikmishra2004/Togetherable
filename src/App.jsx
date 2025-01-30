@@ -12,6 +12,7 @@ import Settings from './pages/Settings.jsx';
 import NotFound from './components/Notfound.jsx';
 import CommunityPage from './pages/[community].jsx';
 import Call from './pages/Call.jsx';
+import Assistant from './pages/Assistant.jsx';
 
 const Layout = ({ children }) => {
   const location = useLocation();
@@ -40,6 +41,7 @@ const App = () => (
         <Route path="*" element={<NotFound />} />
         <Route path="/communities/:community" element={<CommunityPage />} />
         <Route path="/communities/:community/call" element={<Call />} />
+        <Route path="/assistant" element={<Assistant />} />
       </Routes>
     </Layout>
   </Router>
