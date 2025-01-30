@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { Bot, Send, User } from 'lucide-react';
 
-const apiKey = 'AIzaSyDtJYx_Wo8jjILJ4nVIaeQX9-jFG58OLuI';
+const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
 const genAI = new GoogleGenerativeAI(apiKey);
 
 function App() {
@@ -87,7 +87,7 @@ function App() {
             <button
               onClick={handleSend}
               disabled={!input.trim() || isLoading}
-              className="p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50">
+              className="p-2 bg-main text-white rounded-lg hover:bg-[#9036c8] disabled:opacity-50">
               <Send size={20} />
             </button>
           </div>
