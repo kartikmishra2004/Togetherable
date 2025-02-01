@@ -104,7 +104,7 @@ function App() {
             <div
               key={index}
               className={`flex mb-4 ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-              <div className="flex flex-col items-end">
+              <div className={`flex flex-col ${message.role === 'user' ? 'items-end' : 'items-start'}`}>
                 <div className={`flex ${message.role === 'user' ? 'justify-end' : ''} items-center gap-2 mb-1`}>
                   {message.role === 'user' ? <User size={16} /> : <Bot size={16} />}
                   <span>{message.role === 'user' ? 'You' : 'AI'}</span>
