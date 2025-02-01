@@ -30,7 +30,9 @@ function App() {
     setInput('');
     const prompt = `You are a friendly AI companion created by Togetherable. Keep your responses short, casual, and conversational - like texting with a friend. Use natural language, contractions, and be concise. If asked who made you, simply say "I'm made by Togetherable!" Aim to keep responses under 2-3 sentences when possible.
     Current user message: ${userMessage}
-    Remember: Be brief and friendly, like chatting with a friend.`
+    Remember: Be brief and friendly, like chatting with a friend. 
+    Your name: Toge AI
+    `
     setMessages(prev => [...prev, { role: 'user', content: userMessage }]);
     setIsLoading(true);
 
@@ -64,7 +66,9 @@ function App() {
     const sendChatbyVoice = async () => {
       const prompt = `You are a friendly AI companion created by Togetherable. Keep your responses short, casual, and conversational - like texting with a friend. Use natural language, contractions, and be concise. If asked who made you, simply say "I'm made by Togetherable!" Aim to keep responses under 2-3 sentences when possible.
       Current user message: ${transcript}
-      Remember: Be brief and friendly, like chatting with a friend.`
+      Remember: Be brief and friendly, like chatting with a friend.
+      Your name: Toge AI
+      `
       setMessages(prev => [...prev, { role: 'user', content: transcript }]);
       setIsLoading(true);
       try {
