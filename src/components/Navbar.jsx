@@ -107,6 +107,9 @@ const Navbar = () => {
                             <Link onClick={isScriptAdded ? () => responsiveVoice.speak("Settings") : null} to={'/settings'} className={`mr-5 ${isActive('/settings') ? 'text-primary' : ''}`}>
                                 Settings
                             </Link>
+                            <Link onClick={isScriptAdded ? () => responsiveVoice.speak("AI - Assistant") : null} to={'/assistant'} className={`mr-5 ${isActive('/assistant') ? 'text-primary' : ''}`}>
+                                AI - Assistant
+                            </Link>
                         </>
                     )}
                 </nav>
@@ -158,8 +161,10 @@ const Navbar = () => {
                                         <Link onClick={() => { handleMenu(); isScriptAdded ? responsiveVoice.speak("Settings") : null }} to={'/settings'}>
                                             Settings
                                         </Link>
+                                        <Link onClick={() => { handleMenu(); isScriptAdded ? responsiveVoice.speak("AI - Assistant") : null }} to={'/assistant'}>
+                                            AI - Assistant
+                                        </Link>
                                     </>)}
-
                             </nav>
                         </div>
                         <div className="pt-2">

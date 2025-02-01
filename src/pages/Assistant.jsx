@@ -4,6 +4,8 @@ import { Bot, Send, User } from 'lucide-react';
 import useSpeechToText from '../utils/STT';
 import { Mic } from 'lucide-react';
 import { useScript } from '../context/TTScontext';
+import { useFirebase } from '../context/firebase';
+import { Navigate } from 'react-router-dom';
 
 const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
 const genAI = new GoogleGenerativeAI(apiKey);
@@ -15,6 +17,7 @@ function App() {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { isScriptAdded } = useScript();
+  const { user } = useFirebase();
 
   const handleSend = async () => {
     if (!input.trim() || isLoading) return;
@@ -83,6 +86,9 @@ function App() {
     }
   }, [transcript]);
 
+  if (!user) {
+    return <Navigate to="/login" />;
+  }
 
   return (
     <div className="w-full flex justify-center py-28">
@@ -98,7 +104,7 @@ function App() {
             <div
               key={index}
               className={`flex mb-4 ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-              <div className="flex flex-col">
+              <div className="flex flex-col items-end">
                 <div className={`flex ${message.role === 'user' ? 'justify-end' : ''} items-center gap-2 mb-1`}>
                   {message.role === 'user' ? <User size={16} /> : <Bot size={16} />}
                   <span>{message.role === 'user' ? 'You' : 'AI'}</span>

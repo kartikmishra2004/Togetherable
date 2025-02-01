@@ -16,7 +16,7 @@ import Assistant from './pages/Assistant.jsx';
 
 const Layout = ({ children }) => {
   const location = useLocation();
-  const hideFooterRoutes = ['/login', '/signup', '/profile', '/assistant'];
+  const hideFooterRoutes = ['/login', '/signup', '/profile'];
 
   return (
     <>
