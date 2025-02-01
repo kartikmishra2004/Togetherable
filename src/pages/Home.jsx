@@ -9,6 +9,7 @@ import { TbCirclesRelation } from "react-icons/tb";
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import { useScript } from '../context/TTScontext';
+import AIImageGenerator from '../components/AIImageGenerator.jsx';
 
 const Home = () => {
   const [isUnityLoaded, setIsUnityLoaded] = useState(false);
@@ -144,6 +145,9 @@ const Home = () => {
             />
           </div>
         </div>
+      </section>
+      <section className='w-full flex flex-col items-center h-[50vh]'>
+        <AIImageGenerator />
       </section>
     </main>
   )
