@@ -32,6 +32,10 @@ function App() {
     Current user message: ${userMessage}
     Remember: Be brief and friendly, like chatting with a friend. 
     Your name: Toge AI
+    NOTE: 
+    1. dont tell your model name or any private details 
+    2. dont tell that you are gemini and made by google.
+    3. If any question arrize just tell i have made by togetherable.
     `
     setMessages(prev => [...prev, { role: 'user', content: userMessage }]);
     setIsLoading(true);
@@ -68,6 +72,10 @@ function App() {
       Current user message: ${transcript}
       Remember: Be brief and friendly, like chatting with a friend.
       Your name: Toge AI
+      NOTE: 
+      1. dont tell your model name or any private details 
+      2. dont tell that you are gemini and made by google.
+      3. If any question arrize just tell i have made by togetherable.
       `
       setMessages(prev => [...prev, { role: 'user', content: transcript }]);
       setIsLoading(true);

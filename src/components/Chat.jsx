@@ -2,8 +2,12 @@ import { useState, useRef, useEffect } from 'react';
 import { Volume2 } from 'lucide-react';
 import { useFirebase } from '../context/firebase';
 import { useScript } from '../context/TTScontext';
-import { Mic } from 'lucide-react';
+import { Mic, Smile } from 'lucide-react';
 import useSpeechToText from '../utils/STT.jsx'
+import { GoogleGenerativeAI } from '@google/generative-ai';
+
+const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+const genAI = new GoogleGenerativeAI(apiKey);
 
 function Chat({ communityId, userData }) {
     const [messages, setMessages] = useState([]);
@@ -28,21 +32,6 @@ function Chat({ communityId, userData }) {
         switch (message.type) {
             case 'text':
                 return <p className="text-xs lg:text-base">{message.message}</p>;
-            case 'image':
-                return (
-                    <img
-                        src={message.message}
-                        alt="Shared image"
-                        className="max-w-[200px] rounded-lg"
-                    />
-                );
-            case 'voice':
-                return (
-                    <audio controls className="max-w-[200px]">
-                        <source src={message.message} type="audio/wav" />
-                        Your browser does not support the audio element.
-                    </audio>
-                );
             default:
                 return null;
         }
@@ -73,12 +62,34 @@ function Chat({ communityId, userData }) {
         }
     }, [transcript]);
 
+    const [sentiment, setSentiment] = useState('')
+    const [showSentment, setShowSentment] = useState(false)
+    const sentAnalysis = async (prompt) => {
+        const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+        const result = await model.generateContent(`Analyize the sentements of the given prompt and give the appropriate emoji and the sentement in brackets. Example : 😡 (Negative)
+            prompt: ${prompt}`);
+        const response = result.response;
+        const emoji = response.text();
+        setSentiment(emoji);
+        setShowSentment(true);
+        setTimeout(() => {
+            setShowSentment(false)
+        }, 2500);
+    }
+
     return (
         <div className="flex flex-col lg:h-[80vh] h-[65vh] bg-secondary pb-4 rounded-lg border border-zinc-800">
-            <div className="bg-secondary border-b border-zinc-800 shadow-sm p-4">
+            <div className="bg-secondary border-b flex justify-between border-zinc-800 shadow-sm p-4">
                 <h1 className="text-xl font-semibold">Community Chat</h1>
+                {showSentment && <div className='w-max px-3 flex justify-center items-center rounded-lg bg-gray-800'>Sentment : {sentiment}</div>}
             </div>
-            <div className="flex-1 overflow-y-auto p-4">
+            <div
+                style={{
+                    scrollbarWidth: 'thin',
+                    scrollbarColor: '#9b4dca transparent',
+                    msOverflowStyle: 'none'
+                }}
+                className="flex-1 overflow-y-auto p-4">
                 <div className="max-w-3xl mx-auto">
                     {messages.map((msg) => (
                         <div key={msg.id} className={`flex flex-col ${msg.sender === user.uid ? 'items-end' : 'items-start'} mb-4`}>
@@ -87,12 +98,17 @@ function Chat({ communityId, userData }) {
                                     <span className="lg:text-sm text-xs text-gray-500">{msg.senderName}</span>
                                 </div>
                             )}
-                            <div
-                                className={`w-max lg:max-w-[50%] max-w-[90%] rounded-lg lg:p-3 p-2 ${msg.sender === user.uid
-                                    ? 'bg-main'
-                                    : 'bg-gray-800'
-                                    }`}>
-                                <MessageContent message={msg} />
+                            <div className="flex items-center">
+                                <div
+                                    className={`w-max lg:max-w-[80%] max-w-[70%] rounded-lg lg:p-3 p-2 ${msg.sender === user.uid
+                                        ? 'bg-main'
+                                        : 'bg-gray-800'
+                                        }`}>
+                                    <MessageContent message={msg} />
+                                </div>
+                                <button title='Get the sentimental analysis of this chat.' className='px-2 h-max my-auto' onClick={() => sentAnalysis(msg.message)}>
+                                    <Smile color='#bababa' />
+                                </button>
                             </div>
                             <div className={`flex gap-3 mt-1 ${msg.sender === user.uid ? 'flex-row-reverse' : ''}`}>
                                 <span className="text-xs text-gray-500 opacity-70 mt-1 block">
