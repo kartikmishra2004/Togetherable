@@ -22,7 +22,7 @@ const AIQuoteGenerator = () => {
         setQuoteLoading(false);
     }
     return (
-        <div className={`text-primary font-main p-10 rounded-2xl shadow-xl max-w-2xl w-full`}>
+        <div className={`text-primary font-main lg:p-10 lg:text-base text-xs rounded-2xl shadow-xl lg:max-w-2xl w-full`}>
             {quoteLoading ? '' : (
                 <div className="mb-8">
                     <div className="text-2xl md:text-3xl text-center mb-4 leading-relaxed">

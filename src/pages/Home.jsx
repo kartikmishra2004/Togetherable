@@ -10,6 +10,7 @@ import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import { useScript } from '../context/TTScontext';
 import AIQuoteGenerator from '../components/AIQuoteGenerator.jsx';
+import people from '../assets/people.webp'
 
 const Home = () => {
   const [isUnityLoaded, setIsUnityLoaded] = useState(false);
@@ -146,8 +147,22 @@ const Home = () => {
           </div>
         </div>
       </section>
-      <section className='w-full flex flex-col items-center h-[50vh]'>
-        <AIQuoteGenerator />
+      <section className='lg:px-5 lg:py-20 py-10 px-3 lg:w-[80vw] mx-auto lg:border-t lg:border-b border-zinc-500'>
+        <div className="w-full flex lg:flex-row-reverse flex-col-reverse justify-center items-center">
+          <div className="flex flex-col items-center lg:w-1/2">
+            <AIQuoteGenerator />
+          </div>
+          <div className="flex flex-col items-center lg:w-1/2">
+            <img className='lg:w-[35vw] rounded-lg lg:my-0 my-4' src={people} alt="img" />
+          </div>
+        </div>
+      </section>
+      <section className='lg:px-5 lg:py-20 py-10 px-3 lg:w-[80vw] mx-auto'>
+        <h1 className="title-font sm:text-4xl text-3xl mb-4 font-bold w-full text-center text-primary">Learn Sign language</h1>
+        <div className="flex lg:flex-row flex-col justify-center items-center gap-16 py-20">
+          <iframe className='rounded-lg lg:w-[540px] lg:h-[304px] w-[240px] h-[135px] border border-zinc-800' width="560" height="315" src="https://www.youtube.com/embed/0FcwzMq4iWg?si=xEY8PwxX8RLR0u73" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
+          <iframe className='rounded-lg lg:w-[540px] lg:h-[304px] w-[240px] h-[135px] border border-zinc-800' width="560" height="315" src="https://www.youtube.com/embed/Vj_13bdU4dU?si=1VtzOfxh_obJPQCE" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
+        </div>
       </section>
     </main>
   )
