@@ -13,8 +13,7 @@ Features:
 7.  Speech on selecting any text in the website. ✅
 8.  Navigate locaions of community members with map. ✅
 9.	AI chat assistant for any help or emergency. ✅
-10.	Anonymous chat with a random person.
-11.	Sentimental analysis of the chats. ✅
-12.	AI based motivational quotes generation. ✅
-13.	Group audio / video chat in communities.
-14. Data of people with different disabilities in home page.
+10.	Sentimental analysis of the chats. ✅
+11.	AI based motivational quotes generation. ✅
+12.	Group audio / video chat in communities.
+13. Data of people with different disabilities in home page.

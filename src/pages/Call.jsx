@@ -13,7 +13,7 @@ import { Mic, Video, Subtitles, PhoneOff, Info, Users, MessageSquare, Settings, 
 
 const Call = () => {
     const navigate = useNavigate();
-    const appId = '17dcb55f4a1947f795073f276178f08a';
+    const appId = import.meta.env.VITE_AGORA_APP_ID;
     const { community } = useParams();
     const channel = community;
 
