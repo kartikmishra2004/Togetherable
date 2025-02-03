@@ -78,10 +78,10 @@ function Chat({ communityId, userData }) {
     }
 
     return (
-        <div className="flex flex-col lg:h-[80vh] h-[65vh] bg-secondary pb-4 rounded-lg border border-zinc-800">
+        <div className="flex flex-col lg:h-[80vh] h-[80vh] bg-secondary pb-4 rounded-lg border border-zinc-800">
             <div className="bg-secondary border-b flex justify-between border-zinc-800 shadow-sm p-4">
-                <h1 className="text-xl font-semibold">Community Chat</h1>
-                {showSentment && <div className='w-max px-3 flex justify-center items-center rounded-lg bg-gray-800'>Sentment : {sentiment}</div>}
+                <h1 className="lg:text-xl text-sm font-semibold">Community Chat</h1>
+                {showSentment && <div className='w-max px-3 lg:text-base text-sm flex justify-center items-center rounded-lg bg-gray-800'>Sentment : {sentiment}</div>}
             </div>
             <div
                 style={{
@@ -89,8 +89,8 @@ function Chat({ communityId, userData }) {
                     scrollbarColor: '#9b4dca transparent',
                     msOverflowStyle: 'none'
                 }}
-                className="flex-1 overflow-y-auto p-4">
-                <div className="max-w-3xl mx-auto">
+                className="flex-1 px-2 lg:px-28 overflow-y-auto p-4">
+                <div className="w-full">
                     {messages.map((msg) => (
                         <div key={msg.id} className={`flex flex-col ${msg.sender === user.uid ? 'items-end' : 'items-start'} mb-4`}>
                             {msg.sender !== user.uid && (
@@ -98,7 +98,7 @@ function Chat({ communityId, userData }) {
                                     <span className="lg:text-sm text-xs text-gray-500">{msg.senderName}</span>
                                 </div>
                             )}
-                            <div className="flex items-center">
+                            <div className={`flex w-[90%] ${msg.sender === user.uid ? 'justify-end' : ''} items-center`}>
                                 <div
                                     className={`w-max lg:max-w-[80%] max-w-[70%] rounded-lg lg:p-3 p-2 ${msg.sender === user.uid
                                         ? 'bg-main'
