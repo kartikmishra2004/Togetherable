@@ -11,7 +11,6 @@ AgoraRTC.setLogLevel(5);
 const client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <StrictMode>
     <FirebaseProvider>
       <ScriptProvider>
         <AgoraRTCProvider client={client}>
@@ -22,6 +21,5 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         </AgoraRTCProvider>
       </ScriptProvider>
     </FirebaseProvider>
-  </StrictMode>,
 )
 

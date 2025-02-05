@@ -9,19 +9,24 @@ import {
     useRemoteUsers,
 } from "agora-rtc-react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Mic, Video, Subtitles, PhoneOff, Info, Users, MessageSquare, Settings, MicOff, VideoOff } from 'lucide-react'
+import { Mic, Video, Captions, CaptionsOff, PhoneOff, Info, Users, MessageSquare, Settings, MicOff, VideoOff } from 'lucide-react';
+import io from "socket.io-client";
+import useCallStt from "../utils/STTforCall";
+
+const socket = io("https://togetherable-socket-server.onrender.com");
 
 const Call = () => {
     const navigate = useNavigate();
     const appId = import.meta.env.VITE_AGORA_APP_ID;
     const { community } = useParams();
     const channel = community;
-
+    const { transcript, isListening, startListening, stopListening } = useCallStt()
     const [token, setToken] = useState("");
     const [readyToJoin, setReadyToJoin] = useState(false);
-
+    const [messages, setMessages] = useState([])
     const [micOn, setMic] = useState(true);
     const [cameraOn, setCamera] = useState(false);
+    const [showTrans, setShowTrans] = useState(false);
 
     // Always create the microphone track, but control its enabled state
     const { localMicrophoneTrack } = useLocalMicrophoneTrack();
@@ -30,6 +35,20 @@ const Call = () => {
     usePublish([localMicrophoneTrack, localCameraTrack]);
 
     const remoteUsers = useRemoteUsers();
+
+    useEffect(() => {
+        socket.on("receiveMessage", (newMessage) => {
+            setMessages(newMessage);
+            setShowTrans(true)
+            setTimeout(() => {
+                setShowTrans(false)
+            }, 3000);
+        });
+    }, []);
+
+    useEffect(() => {
+        socket.emit("sendMessage", transcript);
+    }, [transcript]);
 
     // Function to fetch token from our server
     const fetchToken = async (channelName) => {
@@ -85,12 +104,21 @@ const Call = () => {
         window.scroll(0, 0)
     }, []);
 
+    const handleSTT = () => {
+        if (isListening) {
+            stopListening();
+        } else {
+            startListening();
+        }
+    }
+
     return (
         <>
             <div className="w-full h-screen flex justify-center pt-28 text-primary font-main">
                 <div className="w-[85vw] flex justify-center gap-5">
                     <div className="aspect-video relative w-[55vw] h-max border border-zinc-800 rounded-lg overflow-hidden bg-secondary text-gray-300">
                         <p className="absolute z-20 flex justify-center items-center bg-black/50 text-white px-3 rounded-br-lg rounded-tl-lg">You</p>
+                        {showTrans && <div className={`${messages ? 'block' : 'hidden'} absolute z-40 end-0 p-2 bg-black/50 rounded-bl-lg `}>{messages}</div>}
                         <LocalUser
                             cameraOn={cameraOn}
                             micOn={micOn}
@@ -106,8 +134,8 @@ const Call = () => {
                                     <button onClick={toggleCamera} className="p-3 rounded-full hover:bg-secondary/40">
                                         {cameraOn ? <Video className="h-6 w-6" /> : <VideoOff className="h-6 w-6" />}
                                     </button>
-                                    <button className="p-3 rounded-full hover:bg-secondary/40">
-                                        <Subtitles className="h-6 w-6" />
+                                    <button onClick={handleSTT} className="p-3 rounded-full hover:bg-secondary/40">
+                                        {isListening ? <Captions className="h-6 w-6" /> : <CaptionsOff className="h-6 w-6" />}
                                     </button>
                                 </div>
                                 <div className="">
