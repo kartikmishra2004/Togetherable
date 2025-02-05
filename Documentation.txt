@@ -15,5 +15,6 @@ Features:
 9.	AI chat assistant for any help or emergency. ✅
 10.	Sentimental analysis of the chats. ✅
 11.	AI based motivational quotes generation. ✅
-12.	Group audio / video chat in communities.
-13. Data of people with different disabilities in home page.
+12.	Group audio / video chat in communities. ✅
+13. Data of people with different disabilities in home and page. ✅
+14. Locate a Hearing Aids Centre Near You.
