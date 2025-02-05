@@ -105,7 +105,7 @@ const Home = () => {
               </div>
               <div className="flex-shrink-0 w-6 h-6 rounded-full mt-10 sm:mt-0 inline-flex items-center justify-center bg-main text-white relative z-10 title-font font-medium text-sm">3</div>
               <div className="flex-grow md:pl-8 pl-6 flex sm:items-center items-start flex-col sm:flex-row">
-                <Link onMouseEnter={isScriptAdded ? () => responsiveVoice.speak("Step 3, Connect with peers via chat or video.") : null} to={user === null ? '/login' : '/explore'} className="flex-shrink-0 w-24 h-24 bg-indigo-100 text-main rounded-full inline-flex items-center justify-center cursor-pointer">
+                <Link onMouseEnter={isScriptAdded ? () => responsiveVoice.speak("Step 3, Connect with peers via chat or video.") : null} to={user === null ? '/login' : '/communities'} className="flex-shrink-0 w-24 h-24 bg-indigo-100 text-main rounded-full inline-flex items-center justify-center cursor-pointer">
                   <PiPlugsConnectedBold size={40} />
                 </Link>
                 <div className="flex-grow sm:pl-6 mt-6 sm:mt-0">
@@ -120,7 +120,7 @@ const Home = () => {
               </div>
               <div className="flex-shrink-0 w-6 h-6 rounded-full mt-10 sm:mt-0 inline-flex items-center justify-center bg-main text-white relative z-10 title-font font-medium text-sm">4</div>
               <div className="flex-grow md:pl-8 pl-6 flex sm:items-center items-start flex-col sm:flex-row">
-                <Link onMouseEnter={isScriptAdded ? () => responsiveVoice.speak("Step 4, Build lasting relationships and grow together.") : null} to={user === null ? '/login' : '/explore'} className="flex-shrink-0 w-24 h-24 bg-indigo-100 text-main rounded-full inline-flex items-center justify-center cursor-pointer">
+                <Link onMouseEnter={isScriptAdded ? () => responsiveVoice.speak("Step 4, Build lasting relationships and grow together.") : null} to={user === null ? '/login' : '/communities'} className="flex-shrink-0 w-24 h-24 bg-indigo-100 text-main rounded-full inline-flex items-center justify-center cursor-pointer">
                   <TbCirclesRelation size={40} />
                 </Link>
                 <div className="flex-grow sm:pl-6 mt-6 sm:mt-0">

@@ -133,7 +133,9 @@ function About() {
           <div className="lg:w-1/2">
             <h1 className='lg:text-3xl text-xl mb-4 text-center lg:text-start text-primary font-bold'>The World Health Organisation estimates that about 63 million Indians have severe hearing impairment. This may hinder their communication and affect their life.</h1>
             <p className='leading-relaxed text-gray-400 text-center lg:text-start'>Hearing aids can greatly improve hearing capabilities and elevate the quality of living. However, choosing the right hearing aid from the top hearing aid brands in India is easier said than done. You require a trustworthy partner that provides cutting-edge assistive technology and consistent pre and post-purchase support.</p>
-            <Link to={'/'} className='inline-flex text-white bg-main border-0 hover:bg-[#9036c8] py-2 px-6 focus:outline-none rounded-lg text-sm lg:text-lg mt-8'>Locate a Hearing Aids Centre Near You</Link>
+            <div className="w-full flex lg:block justify-center lg:justify-start">
+              <Link to={'/'} className='inline-flex mx-auto text-white bg-main border-0 hover:bg-[#9036c8] py-2 px-6 focus:outline-none rounded-lg text-sm lg:text-lg mt-8'>Locate a Hearing Aids Centre Near You</Link>
+            </div>
           </div>
           <div className="lg:w-1/2">
             <img className='lg:w-[40vw] w-[90vw] rounded-lg' src={india} alt="" />
