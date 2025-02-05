@@ -23,8 +23,8 @@ function About() {
   ];
 
   return (
-    <div className="min-h-screen py-20 font-main text-primary">
-      <div className="max-w-[80vw] mx-auto px-4 py-16">
+    <div className="min-h-screen lg:py-20 py-10 font-main text-primary">
+      <div className="lg:max-w-[80vw] mx-auto px-3 py-16">
         <h1 className="text-4xl font-bold text-center text-primary mb-8">
           About Our Community
         </h1>
@@ -57,8 +57,8 @@ function About() {
         </div>
 
         <h2 className="text-2xl text-primary font-bold mb-8 w-full text-center">Platform Features</h2>
-        <div className="bg-secondary w-max border mx-auto px-12 border-gray-800 rounded-lg p-8">
-          <div className="grid md:grid-cols-2 gap-24">
+        <div className="bg-secondary lg:w-max border mx-auto px-12 border-gray-800 rounded-lg p-8">
+          <div className="grid md:grid-cols-2 gap-6 lg:gap-24">
             <div className="space-y-4">
               <h3 className="text-lg font-semibold text-main mb-2">Community & Social</h3>
               <ul className="space-y-3">
@@ -120,23 +120,23 @@ function About() {
             </div>
           </div>
         </div>
-        <div className="w-full py-28 flex items-center justify-between gap-10 font-main">
-          <div className="w-1/2">
-            <h1 className='text-4xl text-primary font-bold mb-4'>Advocating for hearing care</h1>
-            <p className='leading-relaxed text-gray-400'>A person is said to have hearing loss if they are not able to hear as well as someone with normal hearing, meaning hearing thresholds of 20 dB or better in both ears. It can be mild, moderate, moderately severe, severe or profound, and can affect one or both ears. Major causes of hearing loss include congenital or early onset childhood hearing loss, chronic middle ear infections, noise-induced hearing loss, age-related hearing loss, and ototoxic drugs that damage the inner ear.</p>
+        <div className="w-full lg:py-28 py-16 flex flex-col-reverse lg:flex-row items-center justify-between gap-10 font-main">
+          <div className="lg:w-1/2">
+            <h1 className='text-4xl text-primary font-bold mb-4 w-full text-center lg:text-start'>Advocating for hearing care</h1>
+            <p className='leading-relaxed text-gray-400 text-center lg:text-start'>A person is said to have hearing loss if they are not able to hear as well as someone with normal hearing, meaning hearing thresholds of 20 dB or better in both ears. It can be mild, moderate, moderately severe, severe or profound, and can affect one or both ears. Major causes of hearing loss include congenital or early onset childhood hearing loss, chronic middle ear infections, noise-induced hearing loss, age-related hearing loss, and ototoxic drugs that damage the inner ear.</p>
           </div>
-          <div className="w-1/2">
-            <img className='w-[40vw] rounded-lg' src={hearingloss} alt="" />
+          <div className="lg:w-1/2">
+            <img className='lg:w-[40vw] w-[90vw] rounded-lg' src={hearingloss} alt="" />
           </div>
         </div>
-        <div className="w-full py-20 flex flex-row-reverse items-center justify-between gap-10 font-main">
-          <div className="w-1/2">
-            <i className='text-3xl text-primary font-bold mb-4'>The World Health Organisation estimates that about 63 million Indians have severe hearing impairment. This may hinder their communication and affect their quality of life.</i>
-            <p className='leading-relaxed text-gray-400'>Hearing aids can greatly improve hearing capabilities and elevate the quality of living. However, choosing the right hearing aid from the top hearing aid brands in India is easier said than done. You require a trustworthy partner that provides cutting-edge assistive technology and consistent pre and post-purchase support.</p>
-            <Link to={'/'} className='inline-flex text-white bg-main border-0 hover:bg-[#9036c8] py-2 px-6 focus:outline-none rounded-lg lg:text-lg mt-8'>Locate a Hearing Aids Centre Near You</Link>
+        <div className="w-full lg:py-20 flex flex-col-reverse lg:flex-row-reverse items-center justify-between gap-10 font-main">
+          <div className="lg:w-1/2">
+            <h1 className='lg:text-3xl text-xl mb-4 text-center lg:text-start text-primary font-bold'>The World Health Organisation estimates that about 63 million Indians have severe hearing impairment. This may hinder their communication and affect their life.</h1>
+            <p className='leading-relaxed text-gray-400 text-center lg:text-start'>Hearing aids can greatly improve hearing capabilities and elevate the quality of living. However, choosing the right hearing aid from the top hearing aid brands in India is easier said than done. You require a trustworthy partner that provides cutting-edge assistive technology and consistent pre and post-purchase support.</p>
+            <Link to={'/'} className='inline-flex text-white bg-main border-0 hover:bg-[#9036c8] py-2 px-6 focus:outline-none rounded-lg text-sm lg:text-lg mt-8'>Locate a Hearing Aids Centre Near You</Link>
           </div>
-          <div className="w-1/2">
-            <img className='w-[40vw] rounded-lg' src={india} alt="" />
+          <div className="lg:w-1/2">
+            <img className='lg:w-[40vw] w-[90vw] rounded-lg' src={india} alt="" />
           </div>
         </div>
       </div>
