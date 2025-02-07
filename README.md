@@ -38,11 +38,11 @@ A fully accessible online community where people with different disabilities can
 
 1. Clone the repository:
    ```sh
-   git clone https://github.com/yourusername/peer-support-platform.git
+   git clone https://github.com/kartikmishra2004/Togetherable
    ```
 2. Install dependencies:
    ```sh
-   cd peer-support-platform
+   cd Togetherable
    npm install
    ```
 3. Configure environment variables:
@@ -62,21 +62,3 @@ MIT License © 2025 Peer Support Community Platform
 
 ### 🌟 GitHub Description
 **Peer Support Community Platform** – An accessible online space for people with disabilities to connect, share experiences, and support each other. Features include AI chat, TTS/STT, group video/audio chat, real-time sentiment analysis, and more.
-
-## 📌 Installation & Setup
-
-1. Clone the repository:
-   ```sh
-   git clone https://github.com/kartikmishra2004/Togetherable
-   ```
-2. Install dependencies:
-   ```sh
-   cd Togetherable
-   npm install
-   ```
-3. Configure environment variables:
-   - Create a `.env` file and add required API keys & database configurations.
-4. Start the development server:
-   ```sh
-   npm run dev
-   ```
