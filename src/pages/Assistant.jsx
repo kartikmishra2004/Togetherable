@@ -124,7 +124,7 @@ function App() {
   }
 
   return (
-    <div className="w-full flex lg:px-0 px-3 justify-center py-28">
+    <div className="w-full flex lg:px-0 px-3 justify-center py-28 font-main">
       <div className="flex lg:w-[80vw] h-[80vh] flex-col bg-secondary rounded-lg border border-zinc-800">
         <div className="w-full text-2xl text-center font-semibold border-b border-zinc-800 py-3">Togetherable AI Assistant</div>
         {/* Chat messages */}

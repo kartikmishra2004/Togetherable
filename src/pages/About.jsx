@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import hearingloss from '../assets/hearing-loss.jpg'
 import india from '../assets/india-hearingloss.jpg';
 import { Link } from 'react-router-dom';
@@ -21,6 +21,10 @@ function About() {
       source: "WHO, 2021"
     }
   ];
+
+  useEffect(() => {
+    window.scroll(0, 0)
+  }, [])
 
   return (
     <div className="min-h-screen lg:py-20 py-10 font-main text-primary">
@@ -134,7 +138,7 @@ function About() {
             <h1 className='lg:text-3xl text-xl mb-4 text-center lg:text-start text-primary font-bold'>The World Health Organisation estimates that about 63 million Indians have severe hearing impairment. This may hinder their communication and affect their life.</h1>
             <p className='leading-relaxed text-gray-400 text-center lg:text-start'>Hearing aids can greatly improve hearing capabilities and elevate the quality of living. However, choosing the right hearing aid from the top hearing aid brands in India is easier said than done. You require a trustworthy partner that provides cutting-edge assistive technology and consistent pre and post-purchase support.</p>
             <div className="w-full flex lg:block justify-center lg:justify-start">
-              <Link to={'/'} className='inline-flex mx-auto text-white bg-main border-0 hover:bg-[#9036c8] py-2 px-6 focus:outline-none rounded-lg text-sm lg:text-lg mt-8'>Locate a Hearing Aids Centre Near You</Link>
+              <Link target='_blank' to={'https://www.google.com/search?q=hearing+aid+center+near+me&oq=hearing+aid+center+near+me&gs_lcrp=EgZjaHJvbWUqDggAEEUYJxg7GIAEGIoFMg4IABBFGCcYOxiABBiKBTIGCAEQIxgnMg0IAhAAGJECGIAEGIoFMg8IAxAAGEMYsQMYgAQYigUyDwgEEAAYQxixAxiABBiKBTIPCAUQABhDGLEDGIAEGIoFMgwIBhAAGEMYgAQYigUyDwgHEAAYQxixAxiABBiKBTIMCAgQABhDGIAEGIoFMgwICRAAGEMYgAQYigXSAQgyNzEwajBqN6gCALACAA&sourceid=chrome&ie=UTF-8'} className='inline-flex mx-auto text-white bg-main border-0 hover:bg-[#9036c8] py-2 px-6 focus:outline-none rounded-lg text-sm lg:text-lg mt-8'>Locate a Hearing Aids Centre Near You</Link>
             </div>
           </div>
           <div className="lg:w-1/2">

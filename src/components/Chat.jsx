@@ -78,7 +78,7 @@ function Chat({ communityId, userData }) {
     }
 
     return (
-        <div className="flex flex-col lg:h-[80vh] h-[80vh] bg-secondary pb-4 rounded-lg border border-zinc-800">
+        <div className="flex flex-col font-main lg:h-[80vh] h-[80vh] bg-secondary pb-4 rounded-lg border border-zinc-800">
             <div className="bg-secondary border-b flex justify-between border-zinc-800 shadow-sm p-4">
                 <h1 className="lg:text-xl text-sm font-semibold">Community Chat</h1>
                 {showSentment && <div className='w-max px-3 lg:text-base text-sm flex justify-center items-center rounded-lg bg-gray-800'>Sentment : {sentiment}</div>}

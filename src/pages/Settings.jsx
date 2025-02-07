@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Navigate } from 'react-router-dom';
 import { useFirebase } from '../context/firebase';
 import { useScript } from '../context/TTScontext';
@@ -13,6 +13,10 @@ const Settings = () => {
     voiceCommands: isScriptAdded ? true : false,
     language: localStorage.getItem('stt-language') || 'en-US',
   })
+
+  useEffect(() => {
+    window.scroll(0, 0)
+  }, [])
 
   const handleSettingChange = (setting, value) => {
     setSettings(prev => ({

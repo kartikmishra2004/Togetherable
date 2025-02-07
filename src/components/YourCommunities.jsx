@@ -24,7 +24,7 @@ const YourCommunities = () => {
     }
 
     return (
-        <div className='w-full min-h-[50vh]'>
+        <div className='w-full min-h-[50vh] font-main'>
             <ul className="space-y-8 lg:w-[80vw] lg:px-0 px-3 mx-auto">
                 {joinedCommunities.map((data, key) => (
                     <li key={key} className="text-sm leading-6">

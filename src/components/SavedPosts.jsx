@@ -58,7 +58,7 @@ const SavedPosts = () => {
     }
 
     return (
-        <div className='w-full min-h-[50vh] lg:max-w-[46vw] mx-auto'>
+        <div className='w-full min-h-[50vh] lg:max-w-[46vw] font-main mx-auto'>
             <div className="space-y-8 px-3 mx-auto">
                 {posts.length > 0 ? (
                     posts.map((post, key) => (
