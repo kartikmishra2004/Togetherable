@@ -19,8 +19,8 @@ const useSpeechToText = () => {
 
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         const recognition = new SpeechRecognition();
-        const lang = 'en-US'
-        // const lang = ['gu-IN', 'mr-IN', 'bn-IN, ml-IN, te-IN, 'hi-IN', 'en-US'];
+        const sttLanguage = localStorage.getItem('stt-language');
+        const lang = sttLanguage || 'en-US';
         recognition.lang = lang;
 
         recognition.onresult = (event) => {

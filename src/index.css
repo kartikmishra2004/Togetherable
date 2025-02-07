@@ -171,3 +171,21 @@
   100% { transform: rotate(360deg) }
 }
  
+@layer components {
+  .toggle-checkbox {
+    @apply appearance-none w-12 h-6 rounded-full bg-gray-600 cursor-pointer relative transition-colors duration-300 checked:bg-main;
+  }
+  
+  .toggle-checkbox:before {
+    content: '';
+    @apply absolute w-5 h-5 bg-primary rounded-full left-0.5 top-0.5 transition-transform duration-300;
+  }
+  
+  .toggle-checkbox:checked:before {
+    @apply transform translate-x-6;
+  }
+  
+  .select-input {
+    @apply px-2 py-3 w-32 border rounded-lg focus:outline-none bg-transparent text-primary placeholder:text-zinc-700 border-zinc-500;
+  }
+}
