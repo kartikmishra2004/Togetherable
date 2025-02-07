@@ -78,7 +78,7 @@ const Navbar = () => {
         <header
             className={`text-gray-500 body-font font-main fixed w-full z-50 ${scrolled ? 'bg-secondary border-b border-zinc-800' : 'bg-transparent'
                 }`}>
-            <div className="container mx-auto flex flex-wrap p-5 flex-row justify-between lg:px-52 items-center">
+            <div className="container mx-auto flex flex-wrap p-5 flex-row justify-between xl:px-36 items-center">
                 <Link onClick={isScriptAdded ? () => responsiveVoice.speak("Togetherable") : null} to={'/'} className="flex justify-center title-font font-medium items-center text-gray-900 md:mb-0">
                     <img className="w-8" src={logo} alt="logo" />
                     <span className="ml-2 text-primary text-2xl font-logo">Togetherable</span>
