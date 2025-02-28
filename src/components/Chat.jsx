@@ -65,7 +65,7 @@ function Chat({ communityId, userData }) {
     const [sentiment, setSentiment] = useState('')
     const [showSentment, setShowSentment] = useState(false)
     const sentAnalysis = async (prompt) => {
-        const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+        const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
         const result = await model.generateContent(`Analyize the sentements of the given prompt and give the appropriate emoji and the sentement in brackets. Example : 😡 (Negative)
             prompt: ${prompt}`);
         const response = result.response;

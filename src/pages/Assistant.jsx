@@ -41,7 +41,7 @@ function App() {
     setIsLoading(true);
 
     try {
-      const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
       const result = await model.generateContent(prompt);
       const response = result.response;
       setMessages(prev => [...prev, { role: 'bot', content: response.text() }]);
@@ -80,7 +80,7 @@ function App() {
       setMessages(prev => [...prev, { role: 'user', content: transcript }]);
       setIsLoading(true);
       try {
-        const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+        const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
         const result = await model.generateContent(prompt);
         const response = result.response;
         setMessages(prev => [...prev, { role: 'bot', content: response.text() }]);

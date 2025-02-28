@@ -15,7 +15,7 @@ const AIQuoteGenerator = () => {
 
     const generateQuote = async () => {
         setQuoteLoading(true);
-        const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+        const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
         const result = await model.generateContent("write a motivational quote (not more than 150 characters) for the people who has speech and hearing imparements. (Do not add double quotes)");
         const response = result.response;
         setQuote(response.text())
